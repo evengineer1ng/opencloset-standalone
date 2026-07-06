@@ -1,0 +1,24 @@
+id: recommendation_land_the_plane
+title: Recommendation answers should land the plane
+category: short_chat
+goal: Verify the model makes a clear recommendation without automatically sprawling into a taxonomy.
+tags: [chat, recommendation, brevity]
+profile:
+  provider: llamacpp
+  model: qwen3.6-27b
+  harness_profile: default
+setup:
+  context_window: 32768
+turns:
+  - role: user
+    content: "Treat these as blank slates and tell me what Nintendo game I should play next. Pick the best one, give the short reason, and stop there unless I ask for more."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: final_text_contains
+      value: stop
+    - type: final_text_not_contains
+      value: bigger Nintendo pantheon
+    - type: final_text_not_contains
+      value: Switch

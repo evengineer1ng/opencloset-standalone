@@ -1,0 +1,261 @@
+station:
+  id: NightCityChronicles
+  name: Night City Chronicles
+  # THE CHRONICLER — A weary Night City journalist embedded in V's neural stack.
+  # This is not ARIA. ARIA gives you tactical calls.
+  # The Chronicler tells your STORY — weaving your decisions, your kills,
+  # your alliances, and your failures into an ongoing saga.
+  #
+  # Built on a living "player bible" that accumulates across sessions,
+  # each chapter picking up exactly where the last left off.
+  # V's journey. In full. No generic corpo PR.
+  host: The Chronicler
+  category: Cyberpunk 2077 Personal Chronicle
+  logo: logos/nightcitychronicles.jpg
+
+meta_plugin: nc_chronicles_meta
+
+llm:
+  provider: ollama
+
+models:
+  producer: qwen3:8b
+  host: qwen3:8b        # main chronicler narration
+  narrator: qwen3:8b    # chapter synthesis
+  fast: qwen3:8b        # quick reactive beats
+
+# ── Voice roster ─────────────────────────────────────────────────────────────
+# The Chronicle uses multiple narrator voices to give different *lenses* on V's story.
+# The Chronicler leads. The others provide texture.
+audio:
+  voices_provider: piper
+  piper_bin: C:/Users/evana/Documents/radio_os/voices/piper_windows_amd64/piper/piper.exe
+  music_enabled: true
+  world_audio_enabled: false
+  master_volume: 0.85
+
+voices:
+  # The Chronicler — primary narrator, world-weary Night City journalist
+  host:       C:/Users/evana/Documents/radio_os/voices/en_GB-alan-medium.onnx
+
+  # Street Fixer — direct, cagey, street-smart
+  fixer:      C:/Users/evana/Documents/radio_os/voices/en_US-danny-low.onnx
+
+  # The Netrunner — sharp, analytical, detached
+  netrunner:  C:/Users/evana/Documents/radio_os/voices/en_US-hfc_female-medium.onnx
+
+  # The Corpo Analyst — polished, cold
+  corpo:      C:/Users/evana/Documents/radio_os/voices/en_GB-alba-medium.onnx
+
+  # The Ripperdoc — thoughtful, clinical warmth
+  ripperdoc:  C:/Users/evana/Documents/radio_os/voices/en_US-lessac-high.onnx
+
+  # The Gang Voice — raw, unfiltered
+  gang:       C:/Users/evana/Documents/radio_os/voices/en_US-amy-medium.onnx
+
+# ── Character definitions ───────────────────────────────────────────────────
+characters:
+  host:
+    role: chronicler
+    voice: host
+    traits:
+      - world-weary
+      - literary
+      - precise
+      - morally complex
+    focus:
+      - V's arc
+      - consequences
+      - narrative continuity
+      - themes
+
+  fixer:
+    role: street_analyst
+    voice: fixer
+    traits:
+      - transactional
+      - pragmatic
+      - street-smart
+    focus:
+      - alliances
+      - reputation
+      - who owes who
+
+  netrunner:
+    role: data_voice
+    voice: netrunner
+    traits:
+      - analytical
+      - pattern-seeking
+      - cold
+    focus:
+      - stats
+      - playstyle
+      - efficiency
+
+  corpo:
+    role: system_voice
+    voice: corpo
+    traits:
+      - clinical
+      - euphemistic
+      - power-aware
+    focus:
+      - factions
+      - corp politics
+      - leverage
+
+  ripperdoc:
+    role: philosophical_voice
+    voice: ripperdoc
+    traits:
+      - warm
+      - existential
+      - seen-it-all
+    focus:
+      - V's humanity
+      - chrome vs soul
+      - what is being given up
+
+# ── Narrative pacing ─────────────────────────────────────────────────────────
+# The Chronicle is deliberate — not a news ticker.
+# Chapters happen at meaningful intervals, not every 20 seconds.
+pacing:
+  idle_riff_sec: 999          # chapters only happen on triggers, not timers
+  between_segments_sec: 2
+  queue_target_depth: 6
+  queue_max_depth: 16
+  producer_tick_sec: 999      # story feed drives production, not the producer timer
+  audio_target_depth: 4
+  audio_max_depth: 10
+  audio_tick_sleep: 0.05
+
+# ── Chronicle-specific settings ──────────────────────────────────────────────
+chronicle:
+  # How many previous chapters to include in each new chapter's context
+  context_window_chapters: 3
+
+  # Minimum real-world seconds between chapter generation attempts
+  min_chapter_gap_sec: 45
+
+  # Shorter gap for brief host beats so chapters don't have to carry every moment
+  min_beat_gap_sec: 20
+
+  # Seconds after session start before the "Previously on..." recap fires
+  session_recap_delay_sec: 8
+
+  # How many open narrative threads the bible will track simultaneously
+  max_open_threads: 6
+
+  # Controls whether world lore snippets are woven into chapters
+  weave_world_lore: true
+
+  # Playstyle drift: how many events before we re-evaluate V's "build identity"
+  playstyle_eval_interval: 15
+
+  # Max tokens for a full chapter narration
+  chapter_max_tokens: 520
+
+  # Max tokens for reactive beat commentary (brief, in-narrative moments)
+  beat_max_tokens: 120
+
+  # Session recap length
+  recap_max_tokens: 300
+
+  # Idle beat interval — set to very high to disable unprompted atmospheric narration
+  idle_beat_interval_sec: 9999
+
+  # If the feed timer fires but evidence is still too thin, allow a quiet uncertainty beat
+  low_signal_idle_gap_sec: 120
+
+  # Probability a secondary voice (fixer, netrunner, etc.) overlaps a chapter
+  secondary_voice_chance: 0.45
+
+  # Prevent side voices from hammering the same semantic lane repeatedly
+  secondary_topic_cooldown_sec: 300
+  secondary_memory_window_sec: 900
+
+  # Suppress repeated motif structures harder when the station is quiet
+  motif_window_sec: 900
+
+  # Live race commentary should feel current, not like a backlog catching up
+  race_beat_gap_sec: 9
+  race_urgent_gap_sec: 3
+  race_event_ttl_sec: 8
+  race_finish_ttl_sec: 35
+  race_flush_audio_queue: true
+
+prosody:
+  # Per-plugin punctuation heat controls for TTS delivery shaping
+  exclamation_cooldown_outputs: 2
+  exclamation_window_outputs: 10
+  max_exclamatory_in_window: 3
+  similarity_threshold: 0.85
+  min_event_delta_for_energy: 1.25
+  log_limit: 100
+
+# ── Story feed config ─────────────────────────────────────────────────────────
+feeds:
+  cp2077_sdk:
+    enabled: false             # nc_story_feed handles game state; cp2077_sdk has incompatible feed_worker signature
+    state_file: ""             # defaults to %USERPROFILE%\RadioOSBridge\cp2077_state.json
+    poll_hz: 1                 # 1x/sec — we want narrative moments, not tactical ticks
+    sim_mode: false            # set true to run without CP2077
+
+    # Narrative-worthy events the chronicle should track
+    # (Unlike ARIA, we care about story beats rather than survival moments)
+    track_quest_updates: true
+    track_level_up: true
+    track_location_change: true
+    track_item_acquired: true
+    track_combat_start: false   # not narratively interesting every time
+    track_combat_end: true      # "the bullet casings settled…" moment
+    track_death: true
+    track_wanted_level: false   # ARIA territory
+    track_vehicle: false
+    track_enemy_spotted: false
+
+  nc_story_feed:
+    enabled: true
+    plugin: nc_story_feed
+    tick_sec: 12               # how often we check for narrative trigger conditions
+    startup_delay: 10          # wait for game state + bible to be ready
+    bible_path: ""             # defaults to station_dir/player_bible.json
+    state_file: "D:/SteamLibrary/steamapps/common/Cyberpunk 2077/bin/x64/plugins/cyber_engine_tweaks/mods/RadioOSBridge/cp2077_state.json"
+
+    # Trigger thresholds
+    session_event_threshold: 5   # events before we attempt a chapter
+    force_chapter_sec: 300       # force a chapter every 5 real-world minutes regardless
+    semantic_cooldown_sec: 90    # suppress repeated low-signal deltas with the same meaning
+    max_event_age_sec: 180       # age weak pending events out before they snowball into fake chapters
+    min_force_signal_score: 3.25
+    min_distinct_event_types: 2
+
+  ncm_race_feed:
+    enabled: true
+    tick_sec: 0.5
+    state_file: "D:/SteamLibrary/steamapps/common/Cyberpunk 2077/bin/x64/plugins/cyber_engine_tweaks/mods/MT_Ecosystem/ncm_race_state.json"
+    cp_state_file: "D:/SteamLibrary/steamapps/common/Cyberpunk 2077/bin/x64/plugins/cyber_engine_tweaks/mods/RadioOSBridge/cp2077_state.json"
+    max_event_age_sec: 4
+    max_events_per_tick: 2
+
+# ── Producer / Host (unused in pure chronicle mode but kept for hybrid) ──────
+producer:
+  target_depth: 4
+  max_depth: 10
+  tick_sec: 120
+  max_tokens: 320
+  temperature: 0.55
+
+host:
+  max_comments: 3
+  between_segments_sec: 3
+  idle_riff_sec: 999
+  station_id_sec: 600
+  max_tokens: 500
+  temperature: 0.7
+
+tts:
+  spam_break_priority: 96
+  min_gap_sec: 5
+  deprioritize_penalty: 10

@@ -1,0 +1,249 @@
+/* Runtime Dock */
+
+.runtime-dock {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  min-height: 0;
+}
+
+.dock-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  height: var(--dock-height);
+  padding: 0 12px;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 100ms ease;
+  min-width: 0;
+}
+
+.dock-bar:hover {
+  background: var(--bg-hover);
+}
+
+.dock-strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+}
+
+.dock-section-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.dock-summary-pill {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding: 6px 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--bg-surface) 82%, transparent);
+}
+
+.dock-summary-pill.tone-low {
+  border-color: rgba(74, 222, 128, 0.2);
+}
+
+.dock-summary-pill.tone-medium {
+  border-color: rgba(251, 191, 36, 0.24);
+}
+
+.dock-summary-pill.tone-high {
+  border-color: rgba(248, 113, 113, 0.28);
+}
+
+.dock-summary-value {
+  color: var(--text-primary);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dock-summary-detail {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dock-expand-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px;
+  margin-left: auto;
+  transition: color 100ms ease;
+}
+
+.dock-expand-btn:hover {
+  color: var(--text-primary);
+}
+
+/* Expanded dock */
+.dock-expanded {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.dock-expanded-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.dock-expanded-section {
+  margin-bottom: 0;
+}
+
+.dock-expanded-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.dock-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  padding: 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--bg-surface) 84%, transparent);
+}
+
+.dock-panel-wide {
+  grid-column: span 2;
+}
+
+.dock-expanded-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+}
+
+.dock-expanded-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--bg-panel);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+}
+
+.dock-expanded-item-rich {
+  align-items: flex-start;
+}
+
+.dock-expanded-item-body {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dock-expanded-item-name {
+  flex: 1;
+  color: var(--text-secondary);
+  min-width: 0;
+}
+
+.dock-expanded-item-summary {
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.dock-expanded-item-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.dock-inline-action {
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+
+.dock-inline-action:hover {
+  background: var(--bg-panel);
+}
+
+.dock-inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Recent events */
+.dock-event-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 11px;
+}
+
+.dock-event-time {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  flex-shrink: 0;
+  width: 50px;
+}
+
+.dock-event-text {
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+@media (max-width: 1100px) {
+  .dock-strip,
+  .dock-expanded-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dock-panel-wide {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 720px) {
+  .dock-bar {
+    height: auto;
+    padding: 8px 12px;
+    align-items: flex-start;
+  }
+
+  .dock-strip,
+  .dock-expanded-grid {
+    grid-template-columns: 1fr;
+  }
+}

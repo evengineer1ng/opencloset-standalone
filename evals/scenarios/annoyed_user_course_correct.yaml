@@ -1,0 +1,24 @@
+id: annoyed_user_course_correct
+title: Recover after a frustrated user correction
+category: annoyed_user_correction
+goal: Verify the model can shorten and correct course after user frustration.
+tags: [correction, tone, continuity]
+profile:
+  provider: llamacpp
+  model: qwen3.6-27b
+  harness_profile: continuity-stress
+setup:
+  context_window: 32768
+turns:
+  - role: user
+    content: "Reply with `FIRST-OK-21` and one extra sentence."
+  - role: user
+    content: "Stop resituating. Just apologize briefly and give me `SECOND-OK-22`."
+checks:
+  rules:
+    - type: final_text_contains
+      turn: 2
+      value: SECOND-OK-22
+    - type: final_text_not_contains
+      turn: 2
+      value: workspace

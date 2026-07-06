@@ -1,0 +1,1887 @@
+{
+  "schema_version": "eval-run.v1",
+  "artifact_id": "d5b59cd2108b4f409d369279bad7fb1a",
+  "created_at": "2026-05-06T19:07:07.767812Z",
+  "api_base_url": "http://127.0.0.1:5074/api",
+  "scenario": {
+    "id": "repo_exploration_runner_path",
+    "title": "Identify the synchronous run execution path",
+    "category": "repo_exploration",
+    "goal": "Verify the model can explore the repo and identify the real execute path.",
+    "tags": [
+      "repo",
+      "exploration",
+      "api"
+    ],
+    "path": "D:\\openclaw\\opencloset\\evals\\scenarios\\repo_exploration_runner_path.yaml",
+    "notes_path": null
+  },
+  "profile": {
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "harness_profile": "default"
+  },
+  "baseline": {
+    "git_commit": "5a0e9e5a047522fe93a346aabc19aba0f4882284",
+    "harness_profile": "default",
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "scenario_id": "repo_exploration_runner_path",
+    "category": "repo_exploration"
+  },
+  "session": {
+    "id": "1cc1ff65ddba412c9960083ba54957b4"
+  },
+  "summary": {
+    "status": "failed",
+    "finish_reason": "tool_calls",
+    "hard_pass": false,
+    "check_pass_count": 0,
+    "check_fail_count": 2,
+    "final_text_preview": "",
+    "failure_taxonomy": [
+      "run_error",
+      "rule_check_failed",
+      "slow_turn"
+    ]
+  },
+  "turns": [
+    {
+      "turn_index": 1,
+      "role": "user",
+      "content": "Find the file and function that handle the synchronous `POST /api/sessions/<session_id>/runs/<run_id>/execute` path, then answer with the file path and function name only.",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "message_id": "773e5761e72c43a38de6b6e5d2034982",
+      "status": "failed",
+      "finish_reason": "tool_calls",
+      "final_text": "",
+      "transient_text": "\n\nI'll search for the route handler that handles `POST /api/sessions/<session_id>/runs/<run_id>/execute`.\n\nThose are the callers (tests and evals). Now I need to find the actual route handler on the server side.",
+      "error": "cannot access local variable 'last_user_prompt' where it is not associated with a value",
+      "latency_ms": 46525,
+      "input_tokens": 3432,
+      "output_tokens": 52,
+      "tool_results": [
+        {
+          "call_id": "call_e11275a7007f",
+          "content": "Exit code: 0\nElapsed: 0.41s",
+          "error": null,
+          "error_code": null,
+          "status": "success",
+          "token_estimate": 6,
+          "tool_name": "exec"
+        },
+        {
+          "call_id": "call_028b68657177",
+          "content": "Exit code: 0\nElapsed: 0.41s\nOutput:\n\nevals\\runner.py:211:                execute_data = self._post(f\"/sessions/{session_id}/runs/{run_id}/execute\", None, \nexpected=200)\nevals\\runner.py:594:        execute_data = self._post(f\"/sessions/{session_id}/runs/{run_id}/execute\", None, \nexpected=200)\ntests\\test_api.py:702:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:738:        execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:777:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:832:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:914:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1492:        resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/fake-run/execute\")\ntests\\test_api.py:1522:            resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1548:        resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1722:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1760:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1788:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1824:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1869:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1895:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_governor.py:101:            last_user_prompt=\"Find the file and function that handle the synchronous POST \n/api/sessions/<session_id>/runs/<run_id>/execute path, then answer with the file path and function name only.\",\n\n\n",
+          "error": null,
+          "error_code": null,
+          "status": "success",
+          "token_estimate": 553,
+          "tool_name": "exec"
+        },
+        {
+          "call_id": "call_e125af4888fe",
+          "content": "Exit code: 1\nElapsed: 0.21s\nOutput:\n/usr/bin/grep: openclost/: No such file or directory\n",
+          "error": "exit 1:\n/usr/bin/grep: openclost/: No such file or directory",
+          "error_code": "exec.exit_nonzero",
+          "status": "execution_error",
+          "token_estimate": 22,
+          "tool_name": "exec"
+        },
+        {
+          "call_id": "call_198c041ef9c4",
+          "content": "Exit code: 1\nElapsed: 0.21s\nOutput:\n/usr/bin/grep: openclost/: No such file or directory\n",
+          "error": "exit 1:\n/usr/bin/grep: openclost/: No such file or directory",
+          "error_code": "exec.exit_nonzero",
+          "status": "execution_error",
+          "token_estimate": 22,
+          "tool_name": "exec"
+        }
+      ],
+      "provider_route": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 171,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "run_events": [
+        {
+          "created_at": "2026-05-06T19:07:07.834950Z",
+          "data": {
+            "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+            "turn_number": 1
+          },
+          "id": "25c525ee3b7d4e8f9339872f06c7c183",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "run_queued"
+        },
+        {
+          "created_at": "2026-05-06T19:07:07.856937Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 171,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "a0731b90140141c2ad4ed55c08e8d6e1",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-06T19:07:07.909789Z",
+          "data": {
+            "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+            "turn_number": 1
+          },
+          "id": "09071770d9ae4d99ac418809a5c44019",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.355260Z",
+          "data": {
+            "text": "\n\nI"
+          },
+          "id": "3f589578ac6e4d1d81e66cbc7f6b8098",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.416149Z",
+          "data": {
+            "text": "'ll"
+          },
+          "id": "5edcbd4d1ed143778830b2cb2854e4c2",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.469713Z",
+          "data": {
+            "text": " search"
+          },
+          "id": "64b92e23b74b4453840144c5d5245b72",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.517912Z",
+          "data": {
+            "text": " for"
+          },
+          "id": "3d713d696b7b45408e0222f9fa775574",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.565898Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "0842ddec5a2b4eb9ac3ffd7812f6bf52",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.619077Z",
+          "data": {
+            "text": " route"
+          },
+          "id": "65a2cd16a9f6429ca89839235bff7c4c",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.669169Z",
+          "data": {
+            "text": " handler"
+          },
+          "id": "289b2d78198648098987e57c18776d3e",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.718153Z",
+          "data": {
+            "text": " that"
+          },
+          "id": "1c29d3bfd66e42b2af06691fc63ddf84",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.765579Z",
+          "data": {
+            "text": " handles"
+          },
+          "id": "e06de02c42ba40628aae26aaafc2f88a",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.818281Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "8e3d9449298340b89084cfeddf883220",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.868885Z",
+          "data": {
+            "text": "POST"
+          },
+          "id": "fddc11ac827a482581c21bbd43a303ae",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.920898Z",
+          "data": {
+            "text": " /"
+          },
+          "id": "a7d492577c31412cbed7de56f07dcb82",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:11.970764Z",
+          "data": {
+            "text": "api"
+          },
+          "id": "abc6eef024044121a78768f24ae3f99a",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.018970Z",
+          "data": {
+            "text": "/s"
+          },
+          "id": "1e62a5ef03fc406c92691fad7fccaec9",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.067035Z",
+          "data": {
+            "text": "essions"
+          },
+          "id": "ada03ac557514fc4a752a4b9459cbbbb",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.120032Z",
+          "data": {
+            "text": "/"
+          },
+          "id": "e973e3f3fdf24b188b2a7506c6da4c3a",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.170279Z",
+          "data": {
+            "text": "<session"
+          },
+          "id": "a810d4679dd4477fa6775bf6feab3143",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.222277Z",
+          "data": {
+            "text": "_id"
+          },
+          "id": "c21b062ae31d499fafd8fbadab34fce0",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.268252Z",
+          "data": {
+            "text": ">/"
+          },
+          "id": "7470cf6026f84ffe94769ad9c0d17743",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.320358Z",
+          "data": {
+            "text": "runs"
+          },
+          "id": "c8ceae918ea4466fa4636dda581c50cf",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.369345Z",
+          "data": {
+            "text": "/"
+          },
+          "id": "9d94e565a15f4a7887d091072917086b",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.419841Z",
+          "data": {
+            "text": "<run"
+          },
+          "id": "d1237968a8f84b089de4d712ea70be9b",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.472191Z",
+          "data": {
+            "text": "_id"
+          },
+          "id": "da86393360e7494cabde390b3e158e65",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.520029Z",
+          "data": {
+            "text": ">/"
+          },
+          "id": "a4846b5546044bfbbe1960f20ac5dee1",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.568867Z",
+          "data": {
+            "text": "execute"
+          },
+          "id": "173e192e866a4d4ab3653a39ab3a52a8",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.620795Z",
+          "data": {
+            "text": "`."
+          },
+          "id": "2f9bf1fe11544c14828274bd28c425c4",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:12.669434Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "21c978a47ad74c4d8e0528d041675d4d",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:16.091387Z",
+          "data": {
+            "input": {
+              "command": "Select-String -Path \"D:\\openclaw\\opencloset\\**\\*.py\" -Pattern \"run.*execute|execute.*run\" -SimpleMatch | Select-Object -First 30"
+            },
+            "tool_id": "exec"
+          },
+          "id": "d1791c1d604444f28c0835b5beeff936",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-06T19:07:16.095002Z",
+          "data": {
+            "input": {
+              "command": "Select-String -Path \"D:\\openclaw\\opencloset\\**\\*.py\" -Pattern \"run.*execute|execute.*run\" -SimpleMatch | Select-Object -First 30"
+            },
+            "tool_name": "exec"
+          },
+          "id": "165683560c58467f8bce22085b28898e",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_call"
+        },
+        {
+          "created_at": "2026-05-06T19:07:19.618772Z",
+          "data": {
+            "input": {
+              "command": "Select-String -Path \"D:\\openclaw\\opencloset\\**\\*.py\" -Pattern \"runs.*execute|/runs/.*execute\" | Select-Object -First 30"
+            },
+            "tool_id": "exec"
+          },
+          "id": "8ef99a1e20c94abead8236701f8163a4",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-06T19:07:19.622382Z",
+          "data": {
+            "input": {
+              "command": "Select-String -Path \"D:\\openclaw\\opencloset\\**\\*.py\" -Pattern \"runs.*execute|/runs/.*execute\" | Select-Object -First 30"
+            },
+            "tool_name": "exec"
+          },
+          "id": "5f7bbb511b824631bc2d8f471fdb79fe",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_call"
+        },
+        {
+          "created_at": "2026-05-06T19:07:19.722433Z",
+          "data": {
+            "input_tokens": 2592,
+            "output_tokens": 27
+          },
+          "id": "0493496be1804fdf9c81a5e5d913ec33",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "usage"
+        },
+        {
+          "created_at": "2026-05-06T19:07:20.558772Z",
+          "data": {
+            "content": "Exit code: 0\nElapsed: 0.41s",
+            "status": "success",
+            "tool_id": "call_e11275a7007f",
+            "tool_name": "exec"
+          },
+          "id": "5cec0436a77c48b685e91fd36ec221d6",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_result"
+        },
+        {
+          "created_at": "2026-05-06T19:07:20.562028Z",
+          "data": {
+            "content": "Exit code: 0\nElapsed: 0.41s\nOutput:\n\nevals\\runner.py:211:                execute_data = self._post(f\"/sessions/{session_id}/runs/{run_id}/execute\", None, \nexpected=200)\nevals\\runner.py:594:        execute_data = self._post(f\"/sessions/{session_id}/runs/{run_id}/execute\", None, \nexpected=200)\ntests\\test_api.py:702:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:738:        execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:777:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:832:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:914:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1492:        resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/fake-run/execute\")\ntests\\test_api.py:1522:            resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1548:        resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1722:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1760:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1788:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1824:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1869:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1895:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_governor.py:101:            last_user_prompt=\"Find the file and function that handle the synchronous POST \n/api/sessions/<session_id>/runs/<run_id>/execute path, then answer with the file path and function name only.\",\n\n\n",
+            "status": "success",
+            "tool_id": "call_028b68657177",
+            "tool_name": "exec"
+          },
+          "id": "cf6d97f6ddc94647848574f99d35d0ee",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_result"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.147552Z",
+          "data": {
+            "text": "\n\nThose"
+          },
+          "id": "78b294caef664261b5a712a398421e4e",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.210222Z",
+          "data": {
+            "text": " are"
+          },
+          "id": "95e69f120a954e5fa9197dfb52af997c",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.264764Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "6b0fc937009e4ce9af215357ec04e77b",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.315499Z",
+          "data": {
+            "text": " callers"
+          },
+          "id": "34625e57561d48dab03cef7e31e13267",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.362751Z",
+          "data": {
+            "text": " ("
+          },
+          "id": "a488194264c94115975f9a9c1606a685",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.414294Z",
+          "data": {
+            "text": "tests"
+          },
+          "id": "1b17ea366a324237a747e2dd7df0dff5",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.469107Z",
+          "data": {
+            "text": " and"
+          },
+          "id": "986b3c600b8a4fb893e19426bf4ee529",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.517736Z",
+          "data": {
+            "text": " eval"
+          },
+          "id": "65ec9d93dad94b789c18143008c4e62a",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.564563Z",
+          "data": {
+            "text": "s"
+          },
+          "id": "9c518faf91484ee6829ba82c569b882c",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.612198Z",
+          "data": {
+            "text": ")."
+          },
+          "id": "842bfd2ea1e0498ea5ed8741c292b395",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.661950Z",
+          "data": {
+            "text": " Now"
+          },
+          "id": "462eb525e8744f72b756e9a7cfa3da48",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.709766Z",
+          "data": {
+            "text": " I"
+          },
+          "id": "c2ee846ad7614312bd92c0606186050c",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.759108Z",
+          "data": {
+            "text": " need"
+          },
+          "id": "b9aa0cf9f5854df083b173b822f33c80",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.805688Z",
+          "data": {
+            "text": " to"
+          },
+          "id": "b06e88a7b6af475d82973bb04a8c1217",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.851653Z",
+          "data": {
+            "text": " find"
+          },
+          "id": "e8de4d6f29e0410f9a967c24e76ddada",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.904485Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "cdac31b0730843eba809f017a4f27ea4",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:26.954946Z",
+          "data": {
+            "text": " actual"
+          },
+          "id": "8ca798f5e5c047bb85599d61d68d4d09",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:27.004273Z",
+          "data": {
+            "text": " route"
+          },
+          "id": "a6cbf8dd5352478f9c70912015445d56",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:27.055714Z",
+          "data": {
+            "text": " handler"
+          },
+          "id": "510de6e2d80d4a41af79c4827f4bc2f1",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:27.102565Z",
+          "data": {
+            "text": " on"
+          },
+          "id": "2f721b7f410b41d2b10de6fdd2230a8c",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:27.148686Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "7241e349585643aaa59861ca3103aedf",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:27.200078Z",
+          "data": {
+            "text": " server"
+          },
+          "id": "3574993bad3249678b305b3d4a57eace",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:27.252888Z",
+          "data": {
+            "text": " side"
+          },
+          "id": "784df17b0da34648b3236f13845a4790",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:27.302367Z",
+          "data": {
+            "text": "."
+          },
+          "id": "2cc4d6e6212f4d03adb574fe5d8a342e",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:27.348445Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "f751d11addc44073bf3c065c613bb109",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T19:07:30.519967Z",
+          "data": {
+            "input": {
+              "command": "grep -r \"runs.*execute\" --include=\"*.py\" openclost/",
+              "workdir": "D:\\openclaw\\opencloset"
+            },
+            "tool_id": "exec"
+          },
+          "id": "44f5b3562b834190b014bd7b91bcc4b8",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-06T19:07:30.523655Z",
+          "data": {
+            "input": {
+              "command": "grep -r \"runs.*execute\" --include=\"*.py\" openclost/",
+              "workdir": "D:\\openclaw\\opencloset"
+            },
+            "tool_name": "exec"
+          },
+          "id": "58f13fb649f141ac877af4293f1ee382",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_call"
+        },
+        {
+          "created_at": "2026-05-06T19:07:34.008842Z",
+          "data": {
+            "input": {
+              "command": "grep -r \"session_id.*run_id.*execute\" --include=\"*.py\" openclost/",
+              "workdir": "D:\\openclaw\\opencloset"
+            },
+            "tool_id": "exec"
+          },
+          "id": "52d3adb8306f431cae66a0c0e1d34033",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-06T19:07:34.012495Z",
+          "data": {
+            "input": {
+              "command": "grep -r \"session_id.*run_id.*execute\" --include=\"*.py\" openclost/",
+              "workdir": "D:\\openclaw\\opencloset"
+            },
+            "tool_name": "exec"
+          },
+          "id": "731981ad9c5f4f8c89812a75a6ad67bf",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_call"
+        },
+        {
+          "created_at": "2026-05-06T19:07:34.106363Z",
+          "data": {
+            "input_tokens": 3252,
+            "output_tokens": 25
+          },
+          "id": "54b1a6e3a4f8459793d0d992fee01a8b",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "usage"
+        },
+        {
+          "created_at": "2026-05-06T19:07:34.545822Z",
+          "data": {
+            "content": "Exit code: 1\nElapsed: 0.21s\nOutput:\n/usr/bin/grep: openclost/: No such file or directory\n",
+            "error": "exit 1:\n/usr/bin/grep: openclost/: No such file or directory",
+            "error_code": "exec.exit_nonzero",
+            "status": "execution_error",
+            "tool_id": "call_e125af4888fe",
+            "tool_name": "exec"
+          },
+          "id": "0c92fef1e2a5462381a7f4c687d61d34",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_result"
+        },
+        {
+          "created_at": "2026-05-06T19:07:34.549514Z",
+          "data": {
+            "content": "Exit code: 1\nElapsed: 0.21s\nOutput:\n/usr/bin/grep: openclost/: No such file or directory\n",
+            "error": "exit 1:\n/usr/bin/grep: openclost/: No such file or directory",
+            "error_code": "exec.exit_nonzero",
+            "status": "execution_error",
+            "tool_id": "call_198c041ef9c4",
+            "tool_name": "exec"
+          },
+          "id": "5e7f338b4147461f9632c419473bc4da",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "tool_result"
+        },
+        {
+          "created_at": "2026-05-06T19:07:34.552871Z",
+          "data": {
+            "snapshot": {
+              "blocked_strategies": {},
+              "facts": {
+                "exec:grep": [
+                  "Executable or entrypoint missing for command root 'grep'."
+                ]
+              },
+              "frozen_subgoals": [],
+              "pending_action_attempts": 0,
+              "pending_action_signature": "",
+              "pending_action_signature_repeats": 0,
+              "recovery_attempts": {},
+              "subgoal_attempts": {
+                "exec:grep": 1
+              }
+            }
+          },
+          "id": "303dc9a4ad4b484582cb1494f38d91b6",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "run_governor_decision"
+        },
+        {
+          "created_at": "2026-05-06T19:07:34.575153Z",
+          "data": {
+            "error": "cannot access local variable 'last_user_prompt' where it is not associated with a value"
+          },
+          "id": "ad8c136ffd5a420098280fa524e79104",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "run_failed"
+        },
+        {
+          "created_at": "2026-05-06T19:07:34.578336Z",
+          "data": {
+            "code": "agent_error",
+            "message": "cannot access local variable 'last_user_prompt' where it is not associated with a value"
+          },
+          "id": "2ade5b3dd5ad41febc7fa5a58a83e181",
+          "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+          "type": "error"
+        }
+      ],
+      "stream_events": []
+    }
+  ],
+  "checks": [
+    {
+      "type": "final_text_contains",
+      "passed": false,
+      "details": "expected final text to contain 'execute_run'",
+      "turn": null
+    },
+    {
+      "type": "final_text_contains",
+      "passed": false,
+      "details": "expected final text to contain 'routes.py'",
+      "turn": null
+    }
+  ],
+  "metrics": {
+    "turn_count": 1,
+    "latency_ms_total": 46525,
+    "latency_ms_avg": 46525,
+    "input_tokens_total": 3432,
+    "output_tokens_total": 52,
+    "tool_call_count": 4
+  },
+  "judge": {
+    "enabled": true,
+    "status": "judge_error",
+    "model": "qwen3.6-27b",
+    "provider": "llamacpp",
+    "rubric": [
+      "continuity",
+      "correctness",
+      "task_completion",
+      "efficiency"
+    ],
+    "error": "POST /sessions/b54e040d81bb4e84ae15ef91a8e22093/runs/6120d6b8716f4ce2b4519137744abd91/execute -> 500: {\"error\":\"database is locked\"}\n"
+  },
+  "self_critique": {
+    "enabled": true,
+    "status": "self_critique_error",
+    "model": "qwen3.6-27b",
+    "provider": "llamacpp",
+    "error": "POST /sessions/b54e040d81bb4e84ae15ef91a8e22093/runs/6120d6b8716f4ce2b4519137744abd91/execute -> 500: {\"error\":\"database is locked\"}\n"
+  },
+  "replay": {
+    "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\repo_exploration_runner_path.yaml",
+    "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+    "turns": [
+      {
+        "role": "user",
+        "content": "Find the file and function that handle the synchronous `POST /api/sessions/<session_id>/runs/<run_id>/execute` path, then answer with the file path and function name only.",
+        "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+        "tool_results": [
+          {
+            "call_id": "call_e11275a7007f",
+            "content": "Exit code: 0\nElapsed: 0.41s",
+            "error": null,
+            "error_code": null,
+            "status": "success",
+            "token_estimate": 6,
+            "tool_name": "exec"
+          },
+          {
+            "call_id": "call_028b68657177",
+            "content": "Exit code: 0\nElapsed: 0.41s\nOutput:\n\nevals\\runner.py:211:                execute_data = self._post(f\"/sessions/{session_id}/runs/{run_id}/execute\", None, \nexpected=200)\nevals\\runner.py:594:        execute_data = self._post(f\"/sessions/{session_id}/runs/{run_id}/execute\", None, \nexpected=200)\ntests\\test_api.py:702:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:738:        execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:777:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:832:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:914:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1492:        resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/fake-run/execute\")\ntests\\test_api.py:1522:            resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1548:        resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1722:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1760:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1788:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1824:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1869:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1895:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_governor.py:101:            last_user_prompt=\"Find the file and function that handle the synchronous POST \n/api/sessions/<session_id>/runs/<run_id>/execute path, then answer with the file path and function name only.\",\n\n\n",
+            "error": null,
+            "error_code": null,
+            "status": "success",
+            "token_estimate": 553,
+            "tool_name": "exec"
+          },
+          {
+            "call_id": "call_e125af4888fe",
+            "content": "Exit code: 1\nElapsed: 0.21s\nOutput:\n/usr/bin/grep: openclost/: No such file or directory\n",
+            "error": "exit 1:\n/usr/bin/grep: openclost/: No such file or directory",
+            "error_code": "exec.exit_nonzero",
+            "status": "execution_error",
+            "token_estimate": 22,
+            "tool_name": "exec"
+          },
+          {
+            "call_id": "call_198c041ef9c4",
+            "content": "Exit code: 1\nElapsed: 0.21s\nOutput:\n/usr/bin/grep: openclost/: No such file or directory\n",
+            "error": "exit 1:\n/usr/bin/grep: openclost/: No such file or directory",
+            "error_code": "exec.exit_nonzero",
+            "status": "execution_error",
+            "token_estimate": 22,
+            "tool_name": "exec"
+          }
+        ]
+      }
+    ],
+    "messages": [
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "Find the file and function that handle the synchronous `POST /api/sessions/<session_id>/runs/<run_id>/execute` path, then answer with the file path and function name only.",
+        "created_at": "2026-05-06T19:07:07.831Z",
+        "id": "773e5761e72c43a38de6b6e5d2034982",
+        "position": 1,
+        "role": "user",
+        "token_estimate": 42
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_e11275a7007f\\\", \\\"tool_name\\\": \\\"exec\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"Exit code: 0\\\\nElapsed: 0.41s\\\", \\\"error\\\": null}\"}}",
+        "created_at": "2026-05-06T19:07:34.556Z",
+        "id": "02cf77a4116f4f8db236e51f3abd367f",
+        "position": 2,
+        "role": "tool",
+        "token_estimate": 60
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_028b68657177\\\", \\\"tool_name\\\": \\\"exec\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"Exit code: 0\\\\nElapsed: 0.41s\\\\nOutput:\\\\n\\\\nevals\\\\\\\\runner.py:211:                execute_data = self._post(f\\\\\\\"/sessions/{session_id}/runs/{run_id}/execute\\\\\\\", None, \\\\nexpected=200)\\\\nevals\\\\\\\\runner.py:594:        execute_data = self._post(f\\\\\\\"/sessions/{session_id}/runs/{run_id}/execute\\\\\\\", None, \\\\nexpected=200)\\\\ntests\\\\\\\\test_api.py:702:            execute_resp = self.client.post(f\\\\\\\"/api/sessions/{session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:738:        execute_resp = self.client.post(f\\\\\\\"/api/sessions/{session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:777:            execute_resp = self.client.post(f\\\\\\\"/api/sessions/{session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:832:            execute_resp = self.client.post(f\\\\\\\"/api/sessions/{session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:914:            execute_resp = self.client.post(f\\\\\\\"/api/sessions/{session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1492:        resp = self.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/fake-run/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1522:            resp = self.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1548:        resp = self.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1722:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1760:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1788:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1824:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1869:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1895:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_governor.py:101:            last_user_prompt=\\\\\\\"Find the file and function that handle the synchronous POST \\\\n/api/sessions/<session_id>/runs/<run_id>/execute path, then answer with the file path and function name only.\\\\\\\",\\\\n\\\\n\\\\n\\\", \\\"error\\\": null}\"}}",
+        "created_at": "2026-05-06T19:07:34.559Z",
+        "id": "41e193b0c92844488ffbc8e896148f3e",
+        "position": 3,
+        "role": "tool",
+        "token_estimate": 661
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_e125af4888fe\\\", \\\"tool_name\\\": \\\"exec\\\", \\\"status\\\": \\\"execution_error\\\", \\\"content\\\": \\\"Exit code: 1\\\\nElapsed: 0.21s\\\\nOutput:\\\\n/usr/bin/grep: openclost/: No such file or directory\\\\n\\\", \\\"error\\\": \\\"exit 1:\\\\n/usr/bin/grep: openclost/: No such file or directory\\\"}\"}}",
+        "created_at": "2026-05-06T19:07:34.562Z",
+        "id": "94b57678ffd942eca375eb7433b538c8",
+        "position": 4,
+        "role": "tool",
+        "token_estimate": 95
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_198c041ef9c4\\\", \\\"tool_name\\\": \\\"exec\\\", \\\"status\\\": \\\"execution_error\\\", \\\"content\\\": \\\"Exit code: 1\\\\nElapsed: 0.21s\\\\nOutput:\\\\n/usr/bin/grep: openclost/: No such file or directory\\\\n\\\", \\\"error\\\": \\\"exit 1:\\\\n/usr/bin/grep: openclost/: No such file or directory\\\"}\"}}",
+        "created_at": "2026-05-06T19:07:34.565Z",
+        "id": "5af3e3c335d943f987d6d6769f400f61",
+        "position": 5,
+        "role": "tool",
+        "token_estimate": 95
+      }
+    ]
+  },
+  "paths": {
+    "artifact": "D:\\openclaw\\opencloset\\evals\\runs\\20260506\\repo-exploration-runner-path\\d5b59cd2108b4f409d369279bad7fb1a.json",
+    "replay": "D:\\openclaw\\opencloset\\evals\\runs\\20260506\\repo-exploration-runner-path\\d5b59cd2108b4f409d369279bad7fb1a.replay.json"
+  },
+  "messages": [
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Find the file and function that handle the synchronous `POST /api/sessions/<session_id>/runs/<run_id>/execute` path, then answer with the file path and function name only.",
+      "created_at": "2026-05-06T19:07:07.831Z",
+      "id": "773e5761e72c43a38de6b6e5d2034982",
+      "position": 1,
+      "role": "user",
+      "token_estimate": 42
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_e11275a7007f\\\", \\\"tool_name\\\": \\\"exec\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"Exit code: 0\\\\nElapsed: 0.41s\\\", \\\"error\\\": null}\"}}",
+      "created_at": "2026-05-06T19:07:34.556Z",
+      "id": "02cf77a4116f4f8db236e51f3abd367f",
+      "position": 2,
+      "role": "tool",
+      "token_estimate": 60
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_028b68657177\\\", \\\"tool_name\\\": \\\"exec\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"Exit code: 0\\\\nElapsed: 0.41s\\\\nOutput:\\\\n\\\\nevals\\\\\\\\runner.py:211:                execute_data = self._post(f\\\\\\\"/sessions/{session_id}/runs/{run_id}/execute\\\\\\\", None, \\\\nexpected=200)\\\\nevals\\\\\\\\runner.py:594:        execute_data = self._post(f\\\\\\\"/sessions/{session_id}/runs/{run_id}/execute\\\\\\\", None, \\\\nexpected=200)\\\\ntests\\\\\\\\test_api.py:702:            execute_resp = self.client.post(f\\\\\\\"/api/sessions/{session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:738:        execute_resp = self.client.post(f\\\\\\\"/api/sessions/{session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:777:            execute_resp = self.client.post(f\\\\\\\"/api/sessions/{session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:832:            execute_resp = self.client.post(f\\\\\\\"/api/sessions/{session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:914:            execute_resp = self.client.post(f\\\\\\\"/api/sessions/{session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1492:        resp = self.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/fake-run/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1522:            resp = self.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1548:        resp = self.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1722:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1760:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1788:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1824:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1869:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_api.py:1895:            execute_resp = \\\\nself.client.post(f\\\\\\\"/api/sessions/{self.session_id}/runs/{run_id}/execute\\\\\\\")\\\\ntests\\\\\\\\test_governor.py:101:            last_user_prompt=\\\\\\\"Find the file and function that handle the synchronous POST \\\\n/api/sessions/<session_id>/runs/<run_id>/execute path, then answer with the file path and function name only.\\\\\\\",\\\\n\\\\n\\\\n\\\", \\\"error\\\": null}\"}}",
+      "created_at": "2026-05-06T19:07:34.559Z",
+      "id": "41e193b0c92844488ffbc8e896148f3e",
+      "position": 3,
+      "role": "tool",
+      "token_estimate": 661
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_e125af4888fe\\\", \\\"tool_name\\\": \\\"exec\\\", \\\"status\\\": \\\"execution_error\\\", \\\"content\\\": \\\"Exit code: 1\\\\nElapsed: 0.21s\\\\nOutput:\\\\n/usr/bin/grep: openclost/: No such file or directory\\\\n\\\", \\\"error\\\": \\\"exit 1:\\\\n/usr/bin/grep: openclost/: No such file or directory\\\"}\"}}",
+      "created_at": "2026-05-06T19:07:34.562Z",
+      "id": "94b57678ffd942eca375eb7433b538c8",
+      "position": 4,
+      "role": "tool",
+      "token_estimate": 95
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_198c041ef9c4\\\", \\\"tool_name\\\": \\\"exec\\\", \\\"status\\\": \\\"execution_error\\\", \\\"content\\\": \\\"Exit code: 1\\\\nElapsed: 0.21s\\\\nOutput:\\\\n/usr/bin/grep: openclost/: No such file or directory\\\\n\\\", \\\"error\\\": \\\"exit 1:\\\\n/usr/bin/grep: openclost/: No such file or directory\\\"}\"}}",
+      "created_at": "2026-05-06T19:07:34.565Z",
+      "id": "5af3e3c335d943f987d6d6769f400f61",
+      "position": 5,
+      "role": "tool",
+      "token_estimate": 95
+    }
+  ],
+  "session_events": [
+    {
+      "created_at": "2026-05-06T19:07:07.785719Z",
+      "data": {
+        "label": "eval:repo_exploration_runner_path",
+        "model": "qwen3.6-27b"
+      },
+      "id": "abfec5544bb04817bd1657b7f7e72f7b",
+      "run_id": null,
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "session_created"
+    },
+    {
+      "created_at": "2026-05-06T19:07:07.798500Z",
+      "data": {
+        "plan_id": "1f2cd85e52374d829494114a097871b0",
+        "previous_plan_id": null,
+        "reason": "bootstrap",
+        "title": "Session Plan"
+      },
+      "id": "4bbedd3f40ed4fb3b94b989ee7ebb537",
+      "run_id": null,
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "plan_activated"
+    },
+    {
+      "created_at": "2026-05-06T19:07:07.834950Z",
+      "data": {
+        "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+        "turn_number": 1
+      },
+      "id": "25c525ee3b7d4e8f9339872f06c7c183",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "run_queued"
+    },
+    {
+      "created_at": "2026-05-06T19:07:07.856937Z",
+      "data": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 171,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "id": "a0731b90140141c2ad4ed55c08e8d6e1",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "provider_routed"
+    },
+    {
+      "created_at": "2026-05-06T19:07:07.909789Z",
+      "data": {
+        "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+        "turn_number": 1
+      },
+      "id": "09071770d9ae4d99ac418809a5c44019",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "run_started"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.355260Z",
+      "data": {
+        "text": "\n\nI"
+      },
+      "id": "3f589578ac6e4d1d81e66cbc7f6b8098",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.416149Z",
+      "data": {
+        "text": "'ll"
+      },
+      "id": "5edcbd4d1ed143778830b2cb2854e4c2",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.469713Z",
+      "data": {
+        "text": " search"
+      },
+      "id": "64b92e23b74b4453840144c5d5245b72",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.517912Z",
+      "data": {
+        "text": " for"
+      },
+      "id": "3d713d696b7b45408e0222f9fa775574",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.565898Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "0842ddec5a2b4eb9ac3ffd7812f6bf52",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.619077Z",
+      "data": {
+        "text": " route"
+      },
+      "id": "65a2cd16a9f6429ca89839235bff7c4c",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.669169Z",
+      "data": {
+        "text": " handler"
+      },
+      "id": "289b2d78198648098987e57c18776d3e",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.718153Z",
+      "data": {
+        "text": " that"
+      },
+      "id": "1c29d3bfd66e42b2af06691fc63ddf84",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.765579Z",
+      "data": {
+        "text": " handles"
+      },
+      "id": "e06de02c42ba40628aae26aaafc2f88a",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.818281Z",
+      "data": {
+        "text": " `"
+      },
+      "id": "8e3d9449298340b89084cfeddf883220",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.868885Z",
+      "data": {
+        "text": "POST"
+      },
+      "id": "fddc11ac827a482581c21bbd43a303ae",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.920898Z",
+      "data": {
+        "text": " /"
+      },
+      "id": "a7d492577c31412cbed7de56f07dcb82",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:11.970764Z",
+      "data": {
+        "text": "api"
+      },
+      "id": "abc6eef024044121a78768f24ae3f99a",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.018970Z",
+      "data": {
+        "text": "/s"
+      },
+      "id": "1e62a5ef03fc406c92691fad7fccaec9",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.067035Z",
+      "data": {
+        "text": "essions"
+      },
+      "id": "ada03ac557514fc4a752a4b9459cbbbb",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.120032Z",
+      "data": {
+        "text": "/"
+      },
+      "id": "e973e3f3fdf24b188b2a7506c6da4c3a",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.170279Z",
+      "data": {
+        "text": "<session"
+      },
+      "id": "a810d4679dd4477fa6775bf6feab3143",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.222277Z",
+      "data": {
+        "text": "_id"
+      },
+      "id": "c21b062ae31d499fafd8fbadab34fce0",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.268252Z",
+      "data": {
+        "text": ">/"
+      },
+      "id": "7470cf6026f84ffe94769ad9c0d17743",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.320358Z",
+      "data": {
+        "text": "runs"
+      },
+      "id": "c8ceae918ea4466fa4636dda581c50cf",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.369345Z",
+      "data": {
+        "text": "/"
+      },
+      "id": "9d94e565a15f4a7887d091072917086b",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.419841Z",
+      "data": {
+        "text": "<run"
+      },
+      "id": "d1237968a8f84b089de4d712ea70be9b",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.472191Z",
+      "data": {
+        "text": "_id"
+      },
+      "id": "da86393360e7494cabde390b3e158e65",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.520029Z",
+      "data": {
+        "text": ">/"
+      },
+      "id": "a4846b5546044bfbbe1960f20ac5dee1",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.568867Z",
+      "data": {
+        "text": "execute"
+      },
+      "id": "173e192e866a4d4ab3653a39ab3a52a8",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.620795Z",
+      "data": {
+        "text": "`."
+      },
+      "id": "2f9bf1fe11544c14828274bd28c425c4",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:12.669434Z",
+      "data": {
+        "text": "\n\n"
+      },
+      "id": "21c978a47ad74c4d8e0528d041675d4d",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:16.091387Z",
+      "data": {
+        "input": {
+          "command": "Select-String -Path \"D:\\openclaw\\opencloset\\**\\*.py\" -Pattern \"run.*execute|execute.*run\" -SimpleMatch | Select-Object -First 30"
+        },
+        "tool_id": "exec"
+      },
+      "id": "d1791c1d604444f28c0835b5beeff936",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "tool_called"
+    },
+    {
+      "created_at": "2026-05-06T19:07:16.095002Z",
+      "data": {
+        "input": {
+          "command": "Select-String -Path \"D:\\openclaw\\opencloset\\**\\*.py\" -Pattern \"run.*execute|execute.*run\" -SimpleMatch | Select-Object -First 30"
+        },
+        "tool_name": "exec"
+      },
+      "id": "165683560c58467f8bce22085b28898e",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.tool_call"
+    },
+    {
+      "created_at": "2026-05-06T19:07:19.618772Z",
+      "data": {
+        "input": {
+          "command": "Select-String -Path \"D:\\openclaw\\opencloset\\**\\*.py\" -Pattern \"runs.*execute|/runs/.*execute\" | Select-Object -First 30"
+        },
+        "tool_id": "exec"
+      },
+      "id": "8ef99a1e20c94abead8236701f8163a4",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "tool_called"
+    },
+    {
+      "created_at": "2026-05-06T19:07:19.622382Z",
+      "data": {
+        "input": {
+          "command": "Select-String -Path \"D:\\openclaw\\opencloset\\**\\*.py\" -Pattern \"runs.*execute|/runs/.*execute\" | Select-Object -First 30"
+        },
+        "tool_name": "exec"
+      },
+      "id": "5f7bbb511b824631bc2d8f471fdb79fe",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.tool_call"
+    },
+    {
+      "created_at": "2026-05-06T19:07:19.722433Z",
+      "data": {
+        "input_tokens": 2592,
+        "output_tokens": 27
+      },
+      "id": "0493496be1804fdf9c81a5e5d913ec33",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.usage"
+    },
+    {
+      "created_at": "2026-05-06T19:07:20.558772Z",
+      "data": {
+        "content": "Exit code: 0\nElapsed: 0.41s",
+        "status": "success",
+        "tool_id": "call_e11275a7007f",
+        "tool_name": "exec"
+      },
+      "id": "5cec0436a77c48b685e91fd36ec221d6",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.tool_result"
+    },
+    {
+      "created_at": "2026-05-06T19:07:20.562028Z",
+      "data": {
+        "content": "Exit code: 0\nElapsed: 0.41s\nOutput:\n\nevals\\runner.py:211:                execute_data = self._post(f\"/sessions/{session_id}/runs/{run_id}/execute\", None, \nexpected=200)\nevals\\runner.py:594:        execute_data = self._post(f\"/sessions/{session_id}/runs/{run_id}/execute\", None, \nexpected=200)\ntests\\test_api.py:702:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:738:        execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:777:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:832:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:914:            execute_resp = self.client.post(f\"/api/sessions/{session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1492:        resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/fake-run/execute\")\ntests\\test_api.py:1522:            resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1548:        resp = self.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1722:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1760:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1788:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1824:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1869:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_api.py:1895:            execute_resp = \nself.client.post(f\"/api/sessions/{self.session_id}/runs/{run_id}/execute\")\ntests\\test_governor.py:101:            last_user_prompt=\"Find the file and function that handle the synchronous POST \n/api/sessions/<session_id>/runs/<run_id>/execute path, then answer with the file path and function name only.\",\n\n\n",
+        "status": "success",
+        "tool_id": "call_028b68657177",
+        "tool_name": "exec"
+      },
+      "id": "cf6d97f6ddc94647848574f99d35d0ee",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.tool_result"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.147552Z",
+      "data": {
+        "text": "\n\nThose"
+      },
+      "id": "78b294caef664261b5a712a398421e4e",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.210222Z",
+      "data": {
+        "text": " are"
+      },
+      "id": "95e69f120a954e5fa9197dfb52af997c",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.264764Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "6b0fc937009e4ce9af215357ec04e77b",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.315499Z",
+      "data": {
+        "text": " callers"
+      },
+      "id": "34625e57561d48dab03cef7e31e13267",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.362751Z",
+      "data": {
+        "text": " ("
+      },
+      "id": "a488194264c94115975f9a9c1606a685",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.414294Z",
+      "data": {
+        "text": "tests"
+      },
+      "id": "1b17ea366a324237a747e2dd7df0dff5",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.469107Z",
+      "data": {
+        "text": " and"
+      },
+      "id": "986b3c600b8a4fb893e19426bf4ee529",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.517736Z",
+      "data": {
+        "text": " eval"
+      },
+      "id": "65ec9d93dad94b789c18143008c4e62a",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.564563Z",
+      "data": {
+        "text": "s"
+      },
+      "id": "9c518faf91484ee6829ba82c569b882c",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.612198Z",
+      "data": {
+        "text": ")."
+      },
+      "id": "842bfd2ea1e0498ea5ed8741c292b395",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.661950Z",
+      "data": {
+        "text": " Now"
+      },
+      "id": "462eb525e8744f72b756e9a7cfa3da48",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.709766Z",
+      "data": {
+        "text": " I"
+      },
+      "id": "c2ee846ad7614312bd92c0606186050c",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.759108Z",
+      "data": {
+        "text": " need"
+      },
+      "id": "b9aa0cf9f5854df083b173b822f33c80",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.805688Z",
+      "data": {
+        "text": " to"
+      },
+      "id": "b06e88a7b6af475d82973bb04a8c1217",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.851653Z",
+      "data": {
+        "text": " find"
+      },
+      "id": "e8de4d6f29e0410f9a967c24e76ddada",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.904485Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "cdac31b0730843eba809f017a4f27ea4",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:26.954946Z",
+      "data": {
+        "text": " actual"
+      },
+      "id": "8ca798f5e5c047bb85599d61d68d4d09",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:27.004273Z",
+      "data": {
+        "text": " route"
+      },
+      "id": "a6cbf8dd5352478f9c70912015445d56",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:27.055714Z",
+      "data": {
+        "text": " handler"
+      },
+      "id": "510de6e2d80d4a41af79c4827f4bc2f1",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:27.102565Z",
+      "data": {
+        "text": " on"
+      },
+      "id": "2f721b7f410b41d2b10de6fdd2230a8c",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:27.148686Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "7241e349585643aaa59861ca3103aedf",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:27.200078Z",
+      "data": {
+        "text": " server"
+      },
+      "id": "3574993bad3249678b305b3d4a57eace",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:27.252888Z",
+      "data": {
+        "text": " side"
+      },
+      "id": "784df17b0da34648b3236f13845a4790",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:27.302367Z",
+      "data": {
+        "text": "."
+      },
+      "id": "2cc4d6e6212f4d03adb574fe5d8a342e",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:27.348445Z",
+      "data": {
+        "text": "\n\n"
+      },
+      "id": "f751d11addc44073bf3c065c613bb109",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T19:07:30.519967Z",
+      "data": {
+        "input": {
+          "command": "grep -r \"runs.*execute\" --include=\"*.py\" openclost/",
+          "workdir": "D:\\openclaw\\opencloset"
+        },
+        "tool_id": "exec"
+      },
+      "id": "44f5b3562b834190b014bd7b91bcc4b8",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "tool_called"
+    },
+    {
+      "created_at": "2026-05-06T19:07:30.523655Z",
+      "data": {
+        "input": {
+          "command": "grep -r \"runs.*execute\" --include=\"*.py\" openclost/",
+          "workdir": "D:\\openclaw\\opencloset"
+        },
+        "tool_name": "exec"
+      },
+      "id": "58f13fb649f141ac877af4293f1ee382",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.tool_call"
+    },
+    {
+      "created_at": "2026-05-06T19:07:34.008842Z",
+      "data": {
+        "input": {
+          "command": "grep -r \"session_id.*run_id.*execute\" --include=\"*.py\" openclost/",
+          "workdir": "D:\\openclaw\\opencloset"
+        },
+        "tool_id": "exec"
+      },
+      "id": "52d3adb8306f431cae66a0c0e1d34033",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "tool_called"
+    },
+    {
+      "created_at": "2026-05-06T19:07:34.012495Z",
+      "data": {
+        "input": {
+          "command": "grep -r \"session_id.*run_id.*execute\" --include=\"*.py\" openclost/",
+          "workdir": "D:\\openclaw\\opencloset"
+        },
+        "tool_name": "exec"
+      },
+      "id": "731981ad9c5f4f8c89812a75a6ad67bf",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.tool_call"
+    },
+    {
+      "created_at": "2026-05-06T19:07:34.106363Z",
+      "data": {
+        "input_tokens": 3252,
+        "output_tokens": 25
+      },
+      "id": "54b1a6e3a4f8459793d0d992fee01a8b",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.usage"
+    },
+    {
+      "created_at": "2026-05-06T19:07:34.545822Z",
+      "data": {
+        "content": "Exit code: 1\nElapsed: 0.21s\nOutput:\n/usr/bin/grep: openclost/: No such file or directory\n",
+        "error": "exit 1:\n/usr/bin/grep: openclost/: No such file or directory",
+        "error_code": "exec.exit_nonzero",
+        "status": "execution_error",
+        "tool_id": "call_e125af4888fe",
+        "tool_name": "exec"
+      },
+      "id": "0c92fef1e2a5462381a7f4c687d61d34",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.tool_result"
+    },
+    {
+      "created_at": "2026-05-06T19:07:34.549514Z",
+      "data": {
+        "content": "Exit code: 1\nElapsed: 0.21s\nOutput:\n/usr/bin/grep: openclost/: No such file or directory\n",
+        "error": "exit 1:\n/usr/bin/grep: openclost/: No such file or directory",
+        "error_code": "exec.exit_nonzero",
+        "status": "execution_error",
+        "tool_id": "call_198c041ef9c4",
+        "tool_name": "exec"
+      },
+      "id": "5e7f338b4147461f9632c419473bc4da",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.tool_result"
+    },
+    {
+      "created_at": "2026-05-06T19:07:34.552871Z",
+      "data": {
+        "snapshot": {
+          "blocked_strategies": {},
+          "facts": {
+            "exec:grep": [
+              "Executable or entrypoint missing for command root 'grep'."
+            ]
+          },
+          "frozen_subgoals": [],
+          "pending_action_attempts": 0,
+          "pending_action_signature": "",
+          "pending_action_signature_repeats": 0,
+          "recovery_attempts": {},
+          "subgoal_attempts": {
+            "exec:grep": 1
+          }
+        }
+      },
+      "id": "303dc9a4ad4b484582cb1494f38d91b6",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "run_governor_decision"
+    },
+    {
+      "created_at": "2026-05-06T19:07:34.575153Z",
+      "data": {
+        "error": "cannot access local variable 'last_user_prompt' where it is not associated with a value"
+      },
+      "id": "ad8c136ffd5a420098280fa524e79104",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "run_failed"
+    },
+    {
+      "created_at": "2026-05-06T19:07:34.578336Z",
+      "data": {
+        "code": "agent_error",
+        "message": "cannot access local variable 'last_user_prompt' where it is not associated with a value"
+      },
+      "id": "2ade5b3dd5ad41febc7fa5a58a83e181",
+      "run_id": "271a5a284f4a499789e2aaed11f55d4c",
+      "session_id": "1cc1ff65ddba412c9960083ba54957b4",
+      "type": "stream.error"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "forkuniverse_concept_registry.schema.json",
+  "title": "ForkUniverse Concept Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "registry_id", "concepts"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "forkuniverse.concept_registry.v1"
+    },
+    "registry_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "concepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/concept"
+      }
+    }
+  },
+  "$defs": {
+    "string_list": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "number_map": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "concept": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "concept_id",
+        "label",
+        "category",
+        "description",
+        "affects",
+        "creates_events",
+        "creates_threads",
+        "creates_predictions",
+        "decays_with",
+        "intensifies_with",
+        "resolution_modes",
+        "failure_modes",
+        "radio_surfaces",
+        "default_coefficients",
+        "tags"
+      ],
+      "properties": {
+        "concept_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "affects": {
+          "$ref": "#/$defs/string_list"
+        },
+        "creates_events": {
+          "$ref": "#/$defs/string_list"
+        },
+        "creates_threads": {
+          "$ref": "#/$defs/string_list"
+        },
+        "creates_predictions": {
+          "$ref": "#/$defs/string_list"
+        },
+        "decays_with": {
+          "$ref": "#/$defs/string_list"
+        },
+        "intensifies_with": {
+          "$ref": "#/$defs/string_list"
+        },
+        "resolution_modes": {
+          "$ref": "#/$defs/string_list"
+        },
+        "failure_modes": {
+          "$ref": "#/$defs/string_list"
+        },
+        "radio_surfaces": {
+          "$ref": "#/$defs/string_list"
+        },
+        "default_coefficients": {
+          "$ref": "#/$defs/number_map"
+        },
+        "tags": {
+          "$ref": "#/$defs/string_list"
+        }
+      }
+    }
+  }
+}

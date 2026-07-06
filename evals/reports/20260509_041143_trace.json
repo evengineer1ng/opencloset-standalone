@@ -1,0 +1,3324 @@
+{
+  "suite_id": "tool_read_before_edit",
+  "generated_at": "2026-05-09T04:11:43.595225Z",
+  "scenario_count": 1,
+  "artifacts": [
+    {
+      "schema_version": "eval-run.v2",
+      "artifact_id": "1976548bdbec4dd69e8f25da2c4c7103",
+      "created_at": "2026-05-09T04:06:11.855244Z",
+      "api_base_url": "http://127.0.0.1:5000/api",
+      "scenario": {
+        "id": "tool_read_before_edit",
+        "title": "Read before edit discipline",
+        "category": "tool_discipline",
+        "goal": "Verify the harness reads an existing file before modifying it.",
+        "tags": [],
+        "path": "D:\\openclaw\\opencloset\\evals\\scenarios\\tool_read_before_edit.yaml",
+        "notes_path": null,
+        "suite_ids": [
+          "e2e_basic"
+        ],
+        "expected_behavior": [
+          "Read the file first.",
+          "Then make the requested edit."
+        ],
+        "forbidden_behavior": [
+          "Blind editing without inspection."
+        ],
+        "required_observations": [
+          "note.txt should be read before edit."
+        ],
+        "max_turns": null,
+        "scoring_rubric": [
+          {
+            "name": "intent_capture",
+            "description": "",
+            "weight": 1.0
+          },
+          {
+            "name": "tool_discipline",
+            "description": "",
+            "weight": 1.0
+          },
+          {
+            "name": "completion",
+            "description": "",
+            "weight": 1.0
+          },
+          {
+            "name": "runtime_stability",
+            "description": "",
+            "weight": 1.0
+          },
+          {
+            "name": "user_experience",
+            "description": "",
+            "weight": 1.0
+          }
+        ]
+      },
+      "profile": {
+        "provider": "llamacpp",
+        "model": "qwen3.6-27b",
+        "harness_profile": "default"
+      },
+      "baseline": {
+        "git_commit": "5a0e9e5a047522fe93a346aabc19aba0f4882284",
+        "harness_profile": "default",
+        "provider": "llamacpp",
+        "model": "qwen3.6-27b",
+        "scenario_id": "tool_read_before_edit",
+        "category": "tool_discipline"
+      },
+      "session": {
+        "id": "f040b655b04b4251bcccc0d5a2fbdab3"
+      },
+      "summary": {
+        "status": "succeeded",
+        "finish_reason": "stop",
+        "hard_pass": true,
+        "check_pass_count": 3,
+        "check_fail_count": 0,
+        "final_text_preview": "Done. `beta` â `BETA` in the file.",
+        "failure_taxonomy": [
+          "slow_turn",
+          "tool_use_present"
+        ]
+      },
+      "turns": [
+        {
+          "turn_index": 1,
+          "role": "user",
+          "content": "Read `D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt` first, then change `beta` to `BETA` in that file.",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "message_id": "53718933e3e740e0b2fdb56a3c95ae62",
+          "status": "succeeded",
+          "finish_reason": "stop",
+          "final_text": "Done. `beta` â `BETA` in the file.",
+          "transient_text": "\n\nI'll read the file first, then edit it.\n\nFile contains:\n```\nalpha\nbeta\ngamma\n```\n\nNow I'll change `beta` to `BETA`.\n\nDone. `beta` â `BETA` in the file.",
+          "error": "",
+          "latency_ms": 331347,
+          "input_tokens": 2281,
+          "output_tokens": 53,
+          "tool_results": [
+            {
+              "call_id": "call_275407efea7a",
+              "content": "alpha\nbeta\ngamma\n",
+              "error": null,
+              "error_code": null,
+              "status": "success",
+              "token_estimate": 4,
+              "tool_name": "read"
+            },
+            {
+              "call_id": "call_cafbc03c46d5",
+              "content": "+1 -1 evals/tmp/tool-read-before-edit-1976548b/workspace/note.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt",
+              "error": null,
+              "error_code": null,
+              "status": "success",
+              "token_estimate": 42,
+              "tool_name": "edit"
+            }
+          ],
+          "provider_route": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 139,
+              "needs_frontier_tools": true,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "run_events": [
+            {
+              "created_at": "2026-05-09T04:06:12.152075Z",
+              "data": {
+                "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+                "turn_number": 1
+              },
+              "id": "1d34fb974ce54437b4a3fe5bee51024b",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "run_queued"
+            },
+            {
+              "created_at": "2026-05-09T04:06:12.171814Z",
+              "data": {
+                "provider_capabilities": {
+                  "frontier": false,
+                  "latency_tier": "local",
+                  "locality": "local",
+                  "supports_audio_input": false,
+                  "supports_tool_use": true,
+                  "supports_vision": false
+                },
+                "requested_model": "qwen3.6-27b",
+                "requested_provider": "llamacpp",
+                "resolved_model": "qwen3.6-27b",
+                "resolved_provider": "llamacpp",
+                "route_reason": "session_provider_pinned",
+                "task_profile": {
+                  "attachment_types": [],
+                  "message_length": 139,
+                  "needs_frontier_tools": true,
+                  "requires_audio": false,
+                  "requires_vision": false
+                },
+                "used_auto_routing": false
+              },
+              "id": "7d2fcae2eecb4203a42baff0f141c55d",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "provider_routed"
+            },
+            {
+              "created_at": "2026-05-09T04:06:12.180344Z",
+              "data": {
+                "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+                "turn_number": 1
+              },
+              "id": "81132960dc1848b1976fa4c47c558cc2",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "run_started"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.352461Z",
+              "data": {
+                "text": "\n\nI"
+              },
+              "id": "fa89518112ba4b81a1e93594b988a17a",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.425940Z",
+              "data": {
+                "text": "'ll"
+              },
+              "id": "aee8be1eeb324b02814fea6d24d32164",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.472603Z",
+              "data": {
+                "text": " read"
+              },
+              "id": "5338f1cd134e4f5abbc303837307abbc",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.523716Z",
+              "data": {
+                "text": " the"
+              },
+              "id": "e97641f192824e0aadc826e955014a97",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.577783Z",
+              "data": {
+                "text": " file"
+              },
+              "id": "52c42e8d479341198345ef70bcf23fd6",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.629771Z",
+              "data": {
+                "text": " first"
+              },
+              "id": "edab2947942a48ceb9b21bb1574ae0cc",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.673108Z",
+              "data": {
+                "text": ","
+              },
+              "id": "367fa5d8b8134fb08bbe1feab77d955a",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.726678Z",
+              "data": {
+                "text": " then"
+              },
+              "id": "2670f68bc06f49c7bdfd10aa65799d55",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.773763Z",
+              "data": {
+                "text": " edit"
+              },
+              "id": "0c7c7cd08242491095ef25cd91f28819",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.829044Z",
+              "data": {
+                "text": " it"
+              },
+              "id": "fba6295ec815496d8efc1c4e48f7732f",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.874962Z",
+              "data": {
+                "text": "."
+              },
+              "id": "ca44be4510114125ab8fa59fdae95066",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:04.956971Z",
+              "data": {
+                "text": "\n\n"
+              },
+              "id": "73b49370b09247a0a8c63dff3c98458f",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:07:08.531766Z",
+              "data": {
+                "input": {
+                  "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+                },
+                "tool_id": "read"
+              },
+              "id": "cb23bd87be564167b0b2e0bb07f0c622",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "tool_called"
+            },
+            {
+              "created_at": "2026-05-09T04:07:08.535606Z",
+              "data": {
+                "input": {
+                  "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+                },
+                "tool_name": "read"
+              },
+              "id": "363ddf2e01454f2aba141b4e79f78231",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "tool_call"
+            },
+            {
+              "created_at": "2026-05-09T04:07:08.642018Z",
+              "data": {
+                "input_tokens": 2010,
+                "output_tokens": 12
+              },
+              "id": "4e1e4e799ae746ca9e22503215d833b2",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "usage"
+            },
+            {
+              "created_at": "2026-05-09T04:07:08.652773Z",
+              "data": {
+                "content": "alpha\nbeta\ngamma\n",
+                "status": "success",
+                "tool_id": "call_211399d13a1d",
+                "tool_name": "read"
+              },
+              "id": "e9b60fb0536a4a409848eac2502b8079",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "tool_result"
+            },
+            {
+              "created_at": "2026-05-09T04:10:03.920126Z",
+              "data": {
+                "provider_capabilities": {
+                  "frontier": false,
+                  "latency_tier": "local",
+                  "locality": "local",
+                  "supports_audio_input": false,
+                  "supports_tool_use": true,
+                  "supports_vision": false
+                },
+                "requested_model": "qwen3.6-27b",
+                "requested_provider": "llamacpp",
+                "resolved_model": "qwen3.6-27b",
+                "resolved_provider": "llamacpp",
+                "route_reason": "session_provider_pinned",
+                "task_profile": {
+                  "attachment_types": [],
+                  "message_length": 139,
+                  "needs_frontier_tools": true,
+                  "requires_audio": false,
+                  "requires_vision": false
+                },
+                "used_auto_routing": false
+              },
+              "id": "5f9c4d17605e49c79efa0c74176d1bae",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "provider_routed"
+            },
+            {
+              "created_at": "2026-05-09T04:10:05.959948Z",
+              "data": {
+                "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+                "turn_number": 1
+              },
+              "id": "0b7f2afb447346dba92a3c5f166a93fc",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "run_started"
+            },
+            {
+              "created_at": "2026-05-09T04:10:29.771601Z",
+              "data": {
+                "text": "\n\nI"
+              },
+              "id": "ea7fcddd105042a0818f3bde91356f68",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:29.816865Z",
+              "data": {
+                "text": "'ll"
+              },
+              "id": "854c6ab9ea8749f2bb6bd219d890d622",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:29.874397Z",
+              "data": {
+                "text": " read"
+              },
+              "id": "5bef04f15b7b42d08aadba3fb9f82376",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:29.925901Z",
+              "data": {
+                "text": " the"
+              },
+              "id": "60c572d0184d4cf9a5e65c81b6b7c4d8",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:30.016457Z",
+              "data": {
+                "text": " file"
+              },
+              "id": "a04bfbf4ad794090bc53965366d6c8a3",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:30.067708Z",
+              "data": {
+                "text": " first"
+              },
+              "id": "1e6c6e5448fd4335be05e903e3629649",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:30.115444Z",
+              "data": {
+                "text": ","
+              },
+              "id": "ab19e6b642b048eebaca15fcbfa30724",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:30.169756Z",
+              "data": {
+                "text": " then"
+              },
+              "id": "c8b1c76216cf447e813437870ba9e9bd",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:30.221637Z",
+              "data": {
+                "text": " edit"
+              },
+              "id": "b3b194eb15124b0e827b646caf0bf4be",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:30.265706Z",
+              "data": {
+                "text": " it"
+              },
+              "id": "f9e556fa05fe49618db54f93f3e4e45b",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:30.320066Z",
+              "data": {
+                "text": "."
+              },
+              "id": "b74842f740994846af1c44b6dbe232db",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:30.373950Z",
+              "data": {
+                "text": "\n\n"
+              },
+              "id": "a01e79b5a2484927a15b0be2aa99c2fa",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:10:34.094952Z",
+              "data": {
+                "input": {
+                  "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+                },
+                "tool_id": "read"
+              },
+              "id": "6fcd379619ab4311b2354d00626b2023",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "tool_called"
+            },
+            {
+              "created_at": "2026-05-09T04:10:34.098540Z",
+              "data": {
+                "input": {
+                  "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+                },
+                "tool_name": "read"
+              },
+              "id": "70e1ca319e594b579116296392cdf04f",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "tool_call"
+            },
+            {
+              "created_at": "2026-05-09T04:10:34.195742Z",
+              "data": {
+                "input_tokens": 2010,
+                "output_tokens": 12
+              },
+              "id": "c60cf2257a13490ca6e03d080dd88c2a",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "usage"
+            },
+            {
+              "created_at": "2026-05-09T04:10:34.200699Z",
+              "data": {
+                "content": "alpha\nbeta\ngamma\n",
+                "status": "success",
+                "tool_id": "call_275407efea7a",
+                "tool_name": "read"
+              },
+              "id": "38b532cab8c84f8997e6fc628bdc9dd9",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "tool_result"
+            },
+            {
+              "created_at": "2026-05-09T04:11:09.688377Z",
+              "data": {
+                "text": "\n\nFile"
+              },
+              "id": "5be4d74c4cd8418fac52524b23023d06",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:09.745124Z",
+              "data": {
+                "text": " contains"
+              },
+              "id": "d96e24df0e214a76a3b4b8e4b8c2e0d3",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:09.795329Z",
+              "data": {
+                "text": ":"
+              },
+              "id": "cc7707a759c7489fadd4f85a42e1eed1",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:09.846092Z",
+              "data": {
+                "text": "\n"
+              },
+              "id": "63b830207fa04b82958412f3592564a9",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:09.893803Z",
+              "data": {
+                "text": "```"
+              },
+              "id": "772ac585cb70478cae8bbe929decc9bd",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:09.942456Z",
+              "data": {
+                "text": "\n"
+              },
+              "id": "11c9559ddf8246eb8be4a62dd9c3d607",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.025434Z",
+              "data": {
+                "text": "alpha"
+              },
+              "id": "be437e70811b4a31b535a4a7a42b44cb",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.065393Z",
+              "data": {
+                "text": "\n"
+              },
+              "id": "95cf0ced810645ccb15bd05d565dfd5c",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.120610Z",
+              "data": {
+                "text": "beta"
+              },
+              "id": "395f58d2d6574cf391d5d80204b777cc",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.160537Z",
+              "data": {
+                "text": "\n"
+              },
+              "id": "2f6d38812c9345eb9177f69815e37189",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.216553Z",
+              "data": {
+                "text": "gamma"
+              },
+              "id": "79d84e05cf5a481aad7c7cabeb76cbb8",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.256778Z",
+              "data": {
+                "text": "\n"
+              },
+              "id": "3e23f2cfad014305ab1c9509159c8e20",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.315155Z",
+              "data": {
+                "text": "```"
+              },
+              "id": "9839432badd74c7ca716678fd55573a4",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.354980Z",
+              "data": {
+                "text": "\n\n"
+              },
+              "id": "0796d5b5b5e34421b3ccc3357969e33f",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.407062Z",
+              "data": {
+                "text": "Now"
+              },
+              "id": "d79e78eecee543e4a65a667ad4536c5f",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.446998Z",
+              "data": {
+                "text": " I"
+              },
+              "id": "f6cc559e721c4595903d8e609ffc2bf3",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.508753Z",
+              "data": {
+                "text": "'ll"
+              },
+              "id": "9132ceb771814f768481537d2ecae45a",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.548661Z",
+              "data": {
+                "text": " change"
+              },
+              "id": "7f710b487669483796d47dbd5dca42f6",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.604329Z",
+              "data": {
+                "text": " `"
+              },
+              "id": "48d95a7bd0794aac95c5dc6d32eff925",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.644320Z",
+              "data": {
+                "text": "beta"
+              },
+              "id": "50c4038ab5b643b6abae316f6fa5c5ae",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.702084Z",
+              "data": {
+                "text": "`"
+              },
+              "id": "05d2cfc7b7c749458033b619ecdf7c82",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.750563Z",
+              "data": {
+                "text": " to"
+              },
+              "id": "37b4a80060424ac0ad25b363403e20fc",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.798609Z",
+              "data": {
+                "text": " `"
+              },
+              "id": "12819070bd294b6e923d444dfdf27562",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.845143Z",
+              "data": {
+                "text": "B"
+              },
+              "id": "ca4bfd8f87d147829576d67f6ca195b8",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.893334Z",
+              "data": {
+                "text": "ETA"
+              },
+              "id": "65ba135bedbc4f1fb74e0008b5a632ad",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:10.941883Z",
+              "data": {
+                "text": "`."
+              },
+              "id": "dc07580f1f434d8e9078ca98800d6830",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:11.017130Z",
+              "data": {
+                "text": "\n\n"
+              },
+              "id": "576ed13f5afc4bc2b6c75df805fef312",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:16.901463Z",
+              "data": {
+                "input": {
+                  "edits": [
+                    {
+                      "newText": "BETA",
+                      "oldText": "beta"
+                    }
+                  ],
+                  "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+                },
+                "tool_id": "edit"
+              },
+              "id": "23adcda2e8474eacb517612c02b14d0e",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "tool_called"
+            },
+            {
+              "created_at": "2026-05-09T04:11:16.904709Z",
+              "data": {
+                "input": {
+                  "edits": [
+                    {
+                      "newText": "BETA",
+                      "oldText": "beta"
+                    }
+                  ],
+                  "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+                },
+                "tool_name": "edit"
+              },
+              "id": "7cdf52d3534f4583aee5b1d9346499d9",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "tool_call"
+            },
+            {
+              "created_at": "2026-05-09T04:11:17.035823Z",
+              "data": {
+                "input_tokens": 2111,
+                "output_tokens": 27
+              },
+              "id": "dff04b45ed854c8b8a2c6291318e7bcc",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "usage"
+            },
+            {
+              "created_at": "2026-05-09T04:11:17.040909Z",
+              "data": {
+                "content": "+1 -1 evals/tmp/tool-read-before-edit-1976548b/workspace/note.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt",
+                "status": "success",
+                "tool_id": "call_cafbc03c46d5",
+                "tool_name": "edit"
+              },
+              "id": "e2409139fad84e4eabf4328f9df6ed0b",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "tool_result"
+            },
+            {
+              "created_at": "2026-05-09T04:11:42.745366Z",
+              "data": {
+                "text": "\n\nDone"
+              },
+              "id": "e416b031256d435fb6199190e0fd4580",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:42.794679Z",
+              "data": {
+                "text": "."
+              },
+              "id": "440ba4e16c6e4638ab9c46bbbbe22b62",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:42.850211Z",
+              "data": {
+                "text": " `"
+              },
+              "id": "f9d15aec11114c0b9d5ac7132978e811",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:42.894777Z",
+              "data": {
+                "text": "beta"
+              },
+              "id": "8a027c8bb7d64355835d13866aa0201d",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:42.949646Z",
+              "data": {
+                "text": "`"
+              },
+              "id": "0e94f9534f894286a1eeee22a6145bc4",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.004104Z",
+              "data": {
+                "text": " â"
+              },
+              "id": "7388252310eb43c4aa55c44a1d841cef",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.048236Z",
+              "data": {
+                "text": " `"
+              },
+              "id": "2f5885f6031545c18faa4862d58dfe38",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.102048Z",
+              "data": {
+                "text": "B"
+              },
+              "id": "cf0bd844980e44fdacde1c14b5a23dc7",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.153943Z",
+              "data": {
+                "text": "ETA"
+              },
+              "id": "662de8dedc594d88a4ad71fe59235edc",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.206561Z",
+              "data": {
+                "text": "`"
+              },
+              "id": "bbed23e14e8b4002ab7ffdb3f5302f10",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.261755Z",
+              "data": {
+                "text": " in"
+              },
+              "id": "4765ee3311d245c49b1b59d92505ec06",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.316309Z",
+              "data": {
+                "text": " the"
+              },
+              "id": "00ed9c0216d749a98d80c3e4ec914ee2",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.361704Z",
+              "data": {
+                "text": " file"
+              },
+              "id": "98d4a4962b844ea49b623d1506ed3602",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.417109Z",
+              "data": {
+                "text": "."
+              },
+              "id": "40060d2636264c9cab8b4f5095969466",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.470439Z",
+              "data": {
+                "input_tokens": 2247,
+                "output_tokens": 14
+              },
+              "id": "b5436867eab8465c8a5d6bc188a61eea",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "usage"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.476952Z",
+              "data": {
+                "final_text": "\n\nDone. `beta` â `BETA` in the file.",
+                "finish_reason": "stop",
+                "status": "succeeded",
+                "transcript_persisted": true,
+                "transient_text": "\n\nI'll read the file first, then edit it.\n\nFile contains:\n```\nalpha\nbeta\ngamma\n```\n\nNow I'll change `beta` to `BETA`.\n\nDone. `beta` â `BETA` in the file."
+              },
+              "id": "126a1fdbcacd4862a56bd5d2cfb258e0",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "assistant_final"
+            },
+            {
+              "created_at": "2026-05-09T04:11:43.492743Z",
+              "data": {
+                "duration_ms": 0
+              },
+              "id": "fc2e2d8026704259b0405b6ea0a2befe",
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "type": "run_completed"
+            }
+          ],
+          "stream_events": [],
+          "observations": {
+            "tool_calls": [
+              {
+                "tool_name": "read",
+                "input": {
+                  "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+                }
+              },
+              {
+                "tool_name": "read",
+                "input": {
+                  "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+                }
+              },
+              {
+                "tool_name": "edit",
+                "input": {
+                  "edits": [
+                    {
+                      "newText": "BETA",
+                      "oldText": "beta"
+                    }
+                  ],
+                  "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+                }
+              }
+            ],
+            "tool_result_count": 2,
+            "files_read": [
+              "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+            ],
+            "files_written": [
+              "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+            ],
+            "commands": [],
+            "runtime_event_types": [
+              "run_queued",
+              "provider_routed",
+              "run_started",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "tool_called",
+              "tool_call",
+              "usage",
+              "tool_result",
+              "provider_routed",
+              "run_started",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "tool_called",
+              "tool_call",
+              "usage",
+              "tool_result",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "tool_called",
+              "tool_call",
+              "usage",
+              "tool_result",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "usage",
+              "assistant_final",
+              "run_completed"
+            ],
+            "touched_temp_workspace": true
+          }
+        }
+      ],
+      "checks": [
+        {
+          "type": "status_is",
+          "passed": true,
+          "details": "expected succeeded, got succeeded",
+          "turn": null
+        },
+        {
+          "type": "observed_file_read_contains",
+          "passed": true,
+          "details": "expected observed read path containing 'note.txt'",
+          "turn": null
+        },
+        {
+          "type": "observed_file_written_contains",
+          "passed": true,
+          "details": "expected observed write path containing 'note.txt'",
+          "turn": null
+        }
+      ],
+      "metrics": {
+        "turn_count": 1,
+        "latency_ms_total": 331347,
+        "latency_ms_avg": 331347,
+        "input_tokens_total": 2281,
+        "output_tokens_total": 53,
+        "tool_call_count": 2,
+        "context_window": 65536,
+        "max_turns_requested": null
+      },
+      "judge": {
+        "enabled": false,
+        "status": "disabled",
+        "model": "qwen3.6-27b",
+        "provider": "llamacpp"
+      },
+      "self_critique": {
+        "enabled": false,
+        "status": "disabled",
+        "model": "qwen3.6-27b",
+        "provider": "llamacpp"
+      },
+      "replay": {
+        "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\tool_read_before_edit.yaml",
+        "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+        "turns": [
+          {
+            "role": "user",
+            "content": "Read `D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt` first, then change `beta` to `BETA` in that file.",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "tool_results": [
+              {
+                "call_id": "call_275407efea7a",
+                "content": "alpha\nbeta\ngamma\n",
+                "error": null,
+                "error_code": null,
+                "status": "success",
+                "token_estimate": 4,
+                "tool_name": "read"
+              },
+              {
+                "call_id": "call_cafbc03c46d5",
+                "content": "+1 -1 evals/tmp/tool-read-before-edit-1976548b/workspace/note.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt",
+                "error": null,
+                "error_code": null,
+                "status": "success",
+                "token_estimate": 42,
+                "tool_name": "edit"
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "archive_ready": false,
+            "archive_state": null,
+            "content": "Read `D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt` first, then change `beta` to `BETA` in that file.",
+            "created_at": "2026-05-09T04:06:12.147Z",
+            "id": "53718933e3e740e0b2fdb56a3c95ae62",
+            "position": 1,
+            "role": "user",
+            "token_estimate": 34
+          },
+          {
+            "archive_ready": false,
+            "archive_state": null,
+            "content": "Done. `beta` â `BETA` in the file.",
+            "created_at": "2026-05-09T04:11:43.473Z",
+            "id": "75d3497c04c04bbeab8bac90c009394a",
+            "position": 2,
+            "role": "assistant",
+            "token_estimate": 12
+          },
+          {
+            "archive_ready": false,
+            "archive_state": null,
+            "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_275407efea7a\\\", \\\"tool_name\\\": \\\"read\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"alpha\\\\nbeta\\\\ngamma\\\\n\\\", \\\"error\\\": null}\"}}",
+            "created_at": "2026-05-09T04:11:43.479Z",
+            "id": "ee77b102125f472c902ee85ac9ec4484",
+            "position": 3,
+            "role": "tool",
+            "token_estimate": 59
+          },
+          {
+            "archive_ready": false,
+            "archive_state": null,
+            "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_cafbc03c46d5\\\", \\\"tool_name\\\": \\\"edit\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"+1 -1 evals/tmp/tool-read-before-edit-1976548b/workspace/note.txt\\\\nApplied 1 edit(s) to D:\\\\\\\\openclaw\\\\\\\\opencloset\\\\\\\\evals\\\\\\\\tmp\\\\\\\\tool-read-before-edit-1976548b\\\\\\\\workspace\\\\\\\\note.txt\\\", \\\"error\\\": null}\"}}",
+            "created_at": "2026-05-09T04:11:43.482Z",
+            "id": "b35885ef6b2846a9b9791c1814edf178",
+            "position": 4,
+            "role": "tool",
+            "token_estimate": 101
+          }
+        ]
+      },
+      "paths": {
+        "artifact": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\tool-read-before-edit\\1976548bdbec4dd69e8f25da2c4c7103.json",
+        "replay": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\tool-read-before-edit\\1976548bdbec4dd69e8f25da2c4c7103.replay.json"
+      },
+      "trace": {
+        "temp_workspace": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace",
+        "fixture_dir": null,
+        "observed_files_read": [
+          "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+        ],
+        "observed_files_written": [
+          "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+        ],
+        "observed_commands": [],
+        "runtime_event_types": [
+          "run_queued",
+          "provider_routed",
+          "run_started",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "tool_called",
+          "tool_call",
+          "usage",
+          "tool_result",
+          "provider_routed",
+          "run_started",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "tool_called",
+          "tool_call",
+          "usage",
+          "tool_result",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "tool_called",
+          "tool_call",
+          "usage",
+          "tool_result",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "usage",
+          "assistant_final",
+          "run_completed"
+        ],
+        "session_events": [
+          {
+            "created_at": "2026-05-09T04:06:12.107187Z",
+            "data": {
+              "label": "eval:tool_read_before_edit",
+              "model": "qwen3.6-27b"
+            },
+            "id": "a6c71127181144c99d92d17e9fa15078",
+            "run_id": null,
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "session_created"
+          },
+          {
+            "created_at": "2026-05-09T04:06:12.120564Z",
+            "data": {
+              "plan_id": "6adde8e1af1543618fa26cd08512df11",
+              "previous_plan_id": null,
+              "reason": "bootstrap",
+              "title": "Session Plan"
+            },
+            "id": "0c0e9b59d41a4d37b68ec7daf974615a",
+            "run_id": null,
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "plan_activated"
+          },
+          {
+            "created_at": "2026-05-09T04:06:12.152075Z",
+            "data": {
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "turn_number": 1
+            },
+            "id": "1d34fb974ce54437b4a3fe5bee51024b",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "run_queued"
+          },
+          {
+            "created_at": "2026-05-09T04:06:12.171814Z",
+            "data": {
+              "provider_capabilities": {
+                "frontier": false,
+                "latency_tier": "local",
+                "locality": "local",
+                "supports_audio_input": false,
+                "supports_tool_use": true,
+                "supports_vision": false
+              },
+              "requested_model": "qwen3.6-27b",
+              "requested_provider": "llamacpp",
+              "resolved_model": "qwen3.6-27b",
+              "resolved_provider": "llamacpp",
+              "route_reason": "session_provider_pinned",
+              "task_profile": {
+                "attachment_types": [],
+                "message_length": 139,
+                "needs_frontier_tools": true,
+                "requires_audio": false,
+                "requires_vision": false
+              },
+              "used_auto_routing": false
+            },
+            "id": "7d2fcae2eecb4203a42baff0f141c55d",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "provider_routed"
+          },
+          {
+            "created_at": "2026-05-09T04:06:12.180344Z",
+            "data": {
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "turn_number": 1
+            },
+            "id": "81132960dc1848b1976fa4c47c558cc2",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "run_started"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.352461Z",
+            "data": {
+              "text": "\n\nI"
+            },
+            "id": "fa89518112ba4b81a1e93594b988a17a",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.425940Z",
+            "data": {
+              "text": "'ll"
+            },
+            "id": "aee8be1eeb324b02814fea6d24d32164",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.472603Z",
+            "data": {
+              "text": " read"
+            },
+            "id": "5338f1cd134e4f5abbc303837307abbc",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.523716Z",
+            "data": {
+              "text": " the"
+            },
+            "id": "e97641f192824e0aadc826e955014a97",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.577783Z",
+            "data": {
+              "text": " file"
+            },
+            "id": "52c42e8d479341198345ef70bcf23fd6",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.629771Z",
+            "data": {
+              "text": " first"
+            },
+            "id": "edab2947942a48ceb9b21bb1574ae0cc",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.673108Z",
+            "data": {
+              "text": ","
+            },
+            "id": "367fa5d8b8134fb08bbe1feab77d955a",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.726678Z",
+            "data": {
+              "text": " then"
+            },
+            "id": "2670f68bc06f49c7bdfd10aa65799d55",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.773763Z",
+            "data": {
+              "text": " edit"
+            },
+            "id": "0c7c7cd08242491095ef25cd91f28819",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.829044Z",
+            "data": {
+              "text": " it"
+            },
+            "id": "fba6295ec815496d8efc1c4e48f7732f",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.874962Z",
+            "data": {
+              "text": "."
+            },
+            "id": "ca44be4510114125ab8fa59fdae95066",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:04.956971Z",
+            "data": {
+              "text": "\n\n"
+            },
+            "id": "73b49370b09247a0a8c63dff3c98458f",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:07:08.531766Z",
+            "data": {
+              "input": {
+                "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+              },
+              "tool_id": "read"
+            },
+            "id": "cb23bd87be564167b0b2e0bb07f0c622",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "tool_called"
+          },
+          {
+            "created_at": "2026-05-09T04:07:08.535606Z",
+            "data": {
+              "input": {
+                "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+              },
+              "tool_name": "read"
+            },
+            "id": "363ddf2e01454f2aba141b4e79f78231",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.tool_call"
+          },
+          {
+            "created_at": "2026-05-09T04:07:08.642018Z",
+            "data": {
+              "input_tokens": 2010,
+              "output_tokens": 12
+            },
+            "id": "4e1e4e799ae746ca9e22503215d833b2",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.usage"
+          },
+          {
+            "created_at": "2026-05-09T04:07:08.652773Z",
+            "data": {
+              "content": "alpha\nbeta\ngamma\n",
+              "status": "success",
+              "tool_id": "call_211399d13a1d",
+              "tool_name": "read"
+            },
+            "id": "e9b60fb0536a4a409848eac2502b8079",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.tool_result"
+          },
+          {
+            "created_at": "2026-05-09T04:10:03.920126Z",
+            "data": {
+              "provider_capabilities": {
+                "frontier": false,
+                "latency_tier": "local",
+                "locality": "local",
+                "supports_audio_input": false,
+                "supports_tool_use": true,
+                "supports_vision": false
+              },
+              "requested_model": "qwen3.6-27b",
+              "requested_provider": "llamacpp",
+              "resolved_model": "qwen3.6-27b",
+              "resolved_provider": "llamacpp",
+              "route_reason": "session_provider_pinned",
+              "task_profile": {
+                "attachment_types": [],
+                "message_length": 139,
+                "needs_frontier_tools": true,
+                "requires_audio": false,
+                "requires_vision": false
+              },
+              "used_auto_routing": false
+            },
+            "id": "5f9c4d17605e49c79efa0c74176d1bae",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "provider_routed"
+          },
+          {
+            "created_at": "2026-05-09T04:10:05.959948Z",
+            "data": {
+              "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+              "turn_number": 1
+            },
+            "id": "0b7f2afb447346dba92a3c5f166a93fc",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "run_started"
+          },
+          {
+            "created_at": "2026-05-09T04:10:29.771601Z",
+            "data": {
+              "text": "\n\nI"
+            },
+            "id": "ea7fcddd105042a0818f3bde91356f68",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:29.816865Z",
+            "data": {
+              "text": "'ll"
+            },
+            "id": "854c6ab9ea8749f2bb6bd219d890d622",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:29.874397Z",
+            "data": {
+              "text": " read"
+            },
+            "id": "5bef04f15b7b42d08aadba3fb9f82376",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:29.925901Z",
+            "data": {
+              "text": " the"
+            },
+            "id": "60c572d0184d4cf9a5e65c81b6b7c4d8",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:30.016457Z",
+            "data": {
+              "text": " file"
+            },
+            "id": "a04bfbf4ad794090bc53965366d6c8a3",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:30.067708Z",
+            "data": {
+              "text": " first"
+            },
+            "id": "1e6c6e5448fd4335be05e903e3629649",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:30.115444Z",
+            "data": {
+              "text": ","
+            },
+            "id": "ab19e6b642b048eebaca15fcbfa30724",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:30.169756Z",
+            "data": {
+              "text": " then"
+            },
+            "id": "c8b1c76216cf447e813437870ba9e9bd",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:30.221637Z",
+            "data": {
+              "text": " edit"
+            },
+            "id": "b3b194eb15124b0e827b646caf0bf4be",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:30.265706Z",
+            "data": {
+              "text": " it"
+            },
+            "id": "f9e556fa05fe49618db54f93f3e4e45b",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:30.320066Z",
+            "data": {
+              "text": "."
+            },
+            "id": "b74842f740994846af1c44b6dbe232db",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:30.373950Z",
+            "data": {
+              "text": "\n\n"
+            },
+            "id": "a01e79b5a2484927a15b0be2aa99c2fa",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:10:34.094952Z",
+            "data": {
+              "input": {
+                "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+              },
+              "tool_id": "read"
+            },
+            "id": "6fcd379619ab4311b2354d00626b2023",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "tool_called"
+          },
+          {
+            "created_at": "2026-05-09T04:10:34.098540Z",
+            "data": {
+              "input": {
+                "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+              },
+              "tool_name": "read"
+            },
+            "id": "70e1ca319e594b579116296392cdf04f",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.tool_call"
+          },
+          {
+            "created_at": "2026-05-09T04:10:34.195742Z",
+            "data": {
+              "input_tokens": 2010,
+              "output_tokens": 12
+            },
+            "id": "c60cf2257a13490ca6e03d080dd88c2a",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.usage"
+          },
+          {
+            "created_at": "2026-05-09T04:10:34.200699Z",
+            "data": {
+              "content": "alpha\nbeta\ngamma\n",
+              "status": "success",
+              "tool_id": "call_275407efea7a",
+              "tool_name": "read"
+            },
+            "id": "38b532cab8c84f8997e6fc628bdc9dd9",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.tool_result"
+          },
+          {
+            "created_at": "2026-05-09T04:11:09.688377Z",
+            "data": {
+              "text": "\n\nFile"
+            },
+            "id": "5be4d74c4cd8418fac52524b23023d06",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:09.745124Z",
+            "data": {
+              "text": " contains"
+            },
+            "id": "d96e24df0e214a76a3b4b8e4b8c2e0d3",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:09.795329Z",
+            "data": {
+              "text": ":"
+            },
+            "id": "cc7707a759c7489fadd4f85a42e1eed1",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:09.846092Z",
+            "data": {
+              "text": "\n"
+            },
+            "id": "63b830207fa04b82958412f3592564a9",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:09.893803Z",
+            "data": {
+              "text": "```"
+            },
+            "id": "772ac585cb70478cae8bbe929decc9bd",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:09.942456Z",
+            "data": {
+              "text": "\n"
+            },
+            "id": "11c9559ddf8246eb8be4a62dd9c3d607",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.025434Z",
+            "data": {
+              "text": "alpha"
+            },
+            "id": "be437e70811b4a31b535a4a7a42b44cb",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.065393Z",
+            "data": {
+              "text": "\n"
+            },
+            "id": "95cf0ced810645ccb15bd05d565dfd5c",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.120610Z",
+            "data": {
+              "text": "beta"
+            },
+            "id": "395f58d2d6574cf391d5d80204b777cc",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.160537Z",
+            "data": {
+              "text": "\n"
+            },
+            "id": "2f6d38812c9345eb9177f69815e37189",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.216553Z",
+            "data": {
+              "text": "gamma"
+            },
+            "id": "79d84e05cf5a481aad7c7cabeb76cbb8",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.256778Z",
+            "data": {
+              "text": "\n"
+            },
+            "id": "3e23f2cfad014305ab1c9509159c8e20",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.315155Z",
+            "data": {
+              "text": "```"
+            },
+            "id": "9839432badd74c7ca716678fd55573a4",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.354980Z",
+            "data": {
+              "text": "\n\n"
+            },
+            "id": "0796d5b5b5e34421b3ccc3357969e33f",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.407062Z",
+            "data": {
+              "text": "Now"
+            },
+            "id": "d79e78eecee543e4a65a667ad4536c5f",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.446998Z",
+            "data": {
+              "text": " I"
+            },
+            "id": "f6cc559e721c4595903d8e609ffc2bf3",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.508753Z",
+            "data": {
+              "text": "'ll"
+            },
+            "id": "9132ceb771814f768481537d2ecae45a",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.548661Z",
+            "data": {
+              "text": " change"
+            },
+            "id": "7f710b487669483796d47dbd5dca42f6",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.604329Z",
+            "data": {
+              "text": " `"
+            },
+            "id": "48d95a7bd0794aac95c5dc6d32eff925",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.644320Z",
+            "data": {
+              "text": "beta"
+            },
+            "id": "50c4038ab5b643b6abae316f6fa5c5ae",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.702084Z",
+            "data": {
+              "text": "`"
+            },
+            "id": "05d2cfc7b7c749458033b619ecdf7c82",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.750563Z",
+            "data": {
+              "text": " to"
+            },
+            "id": "37b4a80060424ac0ad25b363403e20fc",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.798609Z",
+            "data": {
+              "text": " `"
+            },
+            "id": "12819070bd294b6e923d444dfdf27562",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.845143Z",
+            "data": {
+              "text": "B"
+            },
+            "id": "ca4bfd8f87d147829576d67f6ca195b8",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.893334Z",
+            "data": {
+              "text": "ETA"
+            },
+            "id": "65ba135bedbc4f1fb74e0008b5a632ad",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:10.941883Z",
+            "data": {
+              "text": "`."
+            },
+            "id": "dc07580f1f434d8e9078ca98800d6830",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:11.017130Z",
+            "data": {
+              "text": "\n\n"
+            },
+            "id": "576ed13f5afc4bc2b6c75df805fef312",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:16.901463Z",
+            "data": {
+              "input": {
+                "edits": [
+                  {
+                    "newText": "BETA",
+                    "oldText": "beta"
+                  }
+                ],
+                "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+              },
+              "tool_id": "edit"
+            },
+            "id": "23adcda2e8474eacb517612c02b14d0e",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "tool_called"
+          },
+          {
+            "created_at": "2026-05-09T04:11:16.904709Z",
+            "data": {
+              "input": {
+                "edits": [
+                  {
+                    "newText": "BETA",
+                    "oldText": "beta"
+                  }
+                ],
+                "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+              },
+              "tool_name": "edit"
+            },
+            "id": "7cdf52d3534f4583aee5b1d9346499d9",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.tool_call"
+          },
+          {
+            "created_at": "2026-05-09T04:11:17.035823Z",
+            "data": {
+              "input_tokens": 2111,
+              "output_tokens": 27
+            },
+            "id": "dff04b45ed854c8b8a2c6291318e7bcc",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.usage"
+          },
+          {
+            "created_at": "2026-05-09T04:11:17.040909Z",
+            "data": {
+              "content": "+1 -1 evals/tmp/tool-read-before-edit-1976548b/workspace/note.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt",
+              "status": "success",
+              "tool_id": "call_cafbc03c46d5",
+              "tool_name": "edit"
+            },
+            "id": "e2409139fad84e4eabf4328f9df6ed0b",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.tool_result"
+          },
+          {
+            "created_at": "2026-05-09T04:11:42.745366Z",
+            "data": {
+              "text": "\n\nDone"
+            },
+            "id": "e416b031256d435fb6199190e0fd4580",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:42.794679Z",
+            "data": {
+              "text": "."
+            },
+            "id": "440ba4e16c6e4638ab9c46bbbbe22b62",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:42.850211Z",
+            "data": {
+              "text": " `"
+            },
+            "id": "f9d15aec11114c0b9d5ac7132978e811",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:42.894777Z",
+            "data": {
+              "text": "beta"
+            },
+            "id": "8a027c8bb7d64355835d13866aa0201d",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:42.949646Z",
+            "data": {
+              "text": "`"
+            },
+            "id": "0e94f9534f894286a1eeee22a6145bc4",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.004104Z",
+            "data": {
+              "text": " â"
+            },
+            "id": "7388252310eb43c4aa55c44a1d841cef",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.048236Z",
+            "data": {
+              "text": " `"
+            },
+            "id": "2f5885f6031545c18faa4862d58dfe38",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.102048Z",
+            "data": {
+              "text": "B"
+            },
+            "id": "cf0bd844980e44fdacde1c14b5a23dc7",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.153943Z",
+            "data": {
+              "text": "ETA"
+            },
+            "id": "662de8dedc594d88a4ad71fe59235edc",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.206561Z",
+            "data": {
+              "text": "`"
+            },
+            "id": "bbed23e14e8b4002ab7ffdb3f5302f10",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.261755Z",
+            "data": {
+              "text": " in"
+            },
+            "id": "4765ee3311d245c49b1b59d92505ec06",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.316309Z",
+            "data": {
+              "text": " the"
+            },
+            "id": "00ed9c0216d749a98d80c3e4ec914ee2",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.361704Z",
+            "data": {
+              "text": " file"
+            },
+            "id": "98d4a4962b844ea49b623d1506ed3602",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.417109Z",
+            "data": {
+              "text": "."
+            },
+            "id": "40060d2636264c9cab8b4f5095969466",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.470439Z",
+            "data": {
+              "input_tokens": 2247,
+              "output_tokens": 14
+            },
+            "id": "b5436867eab8465c8a5d6bc188a61eea",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.usage"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.476952Z",
+            "data": {
+              "final_text": "\n\nDone. `beta` â `BETA` in the file.",
+              "finish_reason": "stop",
+              "status": "succeeded",
+              "transcript_persisted": true,
+              "transient_text": "\n\nI'll read the file first, then edit it.\n\nFile contains:\n```\nalpha\nbeta\ngamma\n```\n\nNow I'll change `beta` to `BETA`.\n\nDone. `beta` â `BETA` in the file."
+            },
+            "id": "126a1fdbcacd4862a56bd5d2cfb258e0",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "stream.assistant_final"
+          },
+          {
+            "created_at": "2026-05-09T04:11:43.492743Z",
+            "data": {
+              "duration_ms": 0
+            },
+            "id": "fc2e2d8026704259b0405b6ea0a2befe",
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+            "type": "run_completed"
+          }
+        ]
+      },
+      "messages": [
+        {
+          "archive_ready": false,
+          "archive_state": null,
+          "content": "Read `D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt` first, then change `beta` to `BETA` in that file.",
+          "created_at": "2026-05-09T04:06:12.147Z",
+          "id": "53718933e3e740e0b2fdb56a3c95ae62",
+          "position": 1,
+          "role": "user",
+          "token_estimate": 34
+        },
+        {
+          "archive_ready": false,
+          "archive_state": null,
+          "content": "Done. `beta` â `BETA` in the file.",
+          "created_at": "2026-05-09T04:11:43.473Z",
+          "id": "75d3497c04c04bbeab8bac90c009394a",
+          "position": 2,
+          "role": "assistant",
+          "token_estimate": 12
+        },
+        {
+          "archive_ready": false,
+          "archive_state": null,
+          "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_275407efea7a\\\", \\\"tool_name\\\": \\\"read\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"alpha\\\\nbeta\\\\ngamma\\\\n\\\", \\\"error\\\": null}\"}}",
+          "created_at": "2026-05-09T04:11:43.479Z",
+          "id": "ee77b102125f472c902ee85ac9ec4484",
+          "position": 3,
+          "role": "tool",
+          "token_estimate": 59
+        },
+        {
+          "archive_ready": false,
+          "archive_state": null,
+          "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_cafbc03c46d5\\\", \\\"tool_name\\\": \\\"edit\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"+1 -1 evals/tmp/tool-read-before-edit-1976548b/workspace/note.txt\\\\nApplied 1 edit(s) to D:\\\\\\\\openclaw\\\\\\\\opencloset\\\\\\\\evals\\\\\\\\tmp\\\\\\\\tool-read-before-edit-1976548b\\\\\\\\workspace\\\\\\\\note.txt\\\", \\\"error\\\": null}\"}}",
+          "created_at": "2026-05-09T04:11:43.482Z",
+          "id": "b35885ef6b2846a9b9791c1814edf178",
+          "position": 4,
+          "role": "tool",
+          "token_estimate": 101
+        }
+      ],
+      "session_events": [
+        {
+          "created_at": "2026-05-09T04:06:12.107187Z",
+          "data": {
+            "label": "eval:tool_read_before_edit",
+            "model": "qwen3.6-27b"
+          },
+          "id": "a6c71127181144c99d92d17e9fa15078",
+          "run_id": null,
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "session_created"
+        },
+        {
+          "created_at": "2026-05-09T04:06:12.120564Z",
+          "data": {
+            "plan_id": "6adde8e1af1543618fa26cd08512df11",
+            "previous_plan_id": null,
+            "reason": "bootstrap",
+            "title": "Session Plan"
+          },
+          "id": "0c0e9b59d41a4d37b68ec7daf974615a",
+          "run_id": null,
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "plan_activated"
+        },
+        {
+          "created_at": "2026-05-09T04:06:12.152075Z",
+          "data": {
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "turn_number": 1
+          },
+          "id": "1d34fb974ce54437b4a3fe5bee51024b",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "run_queued"
+        },
+        {
+          "created_at": "2026-05-09T04:06:12.171814Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 139,
+              "needs_frontier_tools": true,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "7d2fcae2eecb4203a42baff0f141c55d",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-09T04:06:12.180344Z",
+          "data": {
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "turn_number": 1
+          },
+          "id": "81132960dc1848b1976fa4c47c558cc2",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.352461Z",
+          "data": {
+            "text": "\n\nI"
+          },
+          "id": "fa89518112ba4b81a1e93594b988a17a",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.425940Z",
+          "data": {
+            "text": "'ll"
+          },
+          "id": "aee8be1eeb324b02814fea6d24d32164",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.472603Z",
+          "data": {
+            "text": " read"
+          },
+          "id": "5338f1cd134e4f5abbc303837307abbc",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.523716Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "e97641f192824e0aadc826e955014a97",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.577783Z",
+          "data": {
+            "text": " file"
+          },
+          "id": "52c42e8d479341198345ef70bcf23fd6",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.629771Z",
+          "data": {
+            "text": " first"
+          },
+          "id": "edab2947942a48ceb9b21bb1574ae0cc",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.673108Z",
+          "data": {
+            "text": ","
+          },
+          "id": "367fa5d8b8134fb08bbe1feab77d955a",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.726678Z",
+          "data": {
+            "text": " then"
+          },
+          "id": "2670f68bc06f49c7bdfd10aa65799d55",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.773763Z",
+          "data": {
+            "text": " edit"
+          },
+          "id": "0c7c7cd08242491095ef25cd91f28819",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.829044Z",
+          "data": {
+            "text": " it"
+          },
+          "id": "fba6295ec815496d8efc1c4e48f7732f",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.874962Z",
+          "data": {
+            "text": "."
+          },
+          "id": "ca44be4510114125ab8fa59fdae95066",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:04.956971Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "73b49370b09247a0a8c63dff3c98458f",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:07:08.531766Z",
+          "data": {
+            "input": {
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+            },
+            "tool_id": "read"
+          },
+          "id": "cb23bd87be564167b0b2e0bb07f0c622",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-09T04:07:08.535606Z",
+          "data": {
+            "input": {
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+            },
+            "tool_name": "read"
+          },
+          "id": "363ddf2e01454f2aba141b4e79f78231",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.tool_call"
+        },
+        {
+          "created_at": "2026-05-09T04:07:08.642018Z",
+          "data": {
+            "input_tokens": 2010,
+            "output_tokens": 12
+          },
+          "id": "4e1e4e799ae746ca9e22503215d833b2",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.usage"
+        },
+        {
+          "created_at": "2026-05-09T04:07:08.652773Z",
+          "data": {
+            "content": "alpha\nbeta\ngamma\n",
+            "status": "success",
+            "tool_id": "call_211399d13a1d",
+            "tool_name": "read"
+          },
+          "id": "e9b60fb0536a4a409848eac2502b8079",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.tool_result"
+        },
+        {
+          "created_at": "2026-05-09T04:10:03.920126Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 139,
+              "needs_frontier_tools": true,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "5f9c4d17605e49c79efa0c74176d1bae",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-09T04:10:05.959948Z",
+          "data": {
+            "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+            "turn_number": 1
+          },
+          "id": "0b7f2afb447346dba92a3c5f166a93fc",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-09T04:10:29.771601Z",
+          "data": {
+            "text": "\n\nI"
+          },
+          "id": "ea7fcddd105042a0818f3bde91356f68",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:29.816865Z",
+          "data": {
+            "text": "'ll"
+          },
+          "id": "854c6ab9ea8749f2bb6bd219d890d622",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:29.874397Z",
+          "data": {
+            "text": " read"
+          },
+          "id": "5bef04f15b7b42d08aadba3fb9f82376",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:29.925901Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "60c572d0184d4cf9a5e65c81b6b7c4d8",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:30.016457Z",
+          "data": {
+            "text": " file"
+          },
+          "id": "a04bfbf4ad794090bc53965366d6c8a3",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:30.067708Z",
+          "data": {
+            "text": " first"
+          },
+          "id": "1e6c6e5448fd4335be05e903e3629649",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:30.115444Z",
+          "data": {
+            "text": ","
+          },
+          "id": "ab19e6b642b048eebaca15fcbfa30724",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:30.169756Z",
+          "data": {
+            "text": " then"
+          },
+          "id": "c8b1c76216cf447e813437870ba9e9bd",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:30.221637Z",
+          "data": {
+            "text": " edit"
+          },
+          "id": "b3b194eb15124b0e827b646caf0bf4be",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:30.265706Z",
+          "data": {
+            "text": " it"
+          },
+          "id": "f9e556fa05fe49618db54f93f3e4e45b",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:30.320066Z",
+          "data": {
+            "text": "."
+          },
+          "id": "b74842f740994846af1c44b6dbe232db",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:30.373950Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "a01e79b5a2484927a15b0be2aa99c2fa",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:10:34.094952Z",
+          "data": {
+            "input": {
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+            },
+            "tool_id": "read"
+          },
+          "id": "6fcd379619ab4311b2354d00626b2023",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-09T04:10:34.098540Z",
+          "data": {
+            "input": {
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+            },
+            "tool_name": "read"
+          },
+          "id": "70e1ca319e594b579116296392cdf04f",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.tool_call"
+        },
+        {
+          "created_at": "2026-05-09T04:10:34.195742Z",
+          "data": {
+            "input_tokens": 2010,
+            "output_tokens": 12
+          },
+          "id": "c60cf2257a13490ca6e03d080dd88c2a",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.usage"
+        },
+        {
+          "created_at": "2026-05-09T04:10:34.200699Z",
+          "data": {
+            "content": "alpha\nbeta\ngamma\n",
+            "status": "success",
+            "tool_id": "call_275407efea7a",
+            "tool_name": "read"
+          },
+          "id": "38b532cab8c84f8997e6fc628bdc9dd9",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.tool_result"
+        },
+        {
+          "created_at": "2026-05-09T04:11:09.688377Z",
+          "data": {
+            "text": "\n\nFile"
+          },
+          "id": "5be4d74c4cd8418fac52524b23023d06",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:09.745124Z",
+          "data": {
+            "text": " contains"
+          },
+          "id": "d96e24df0e214a76a3b4b8e4b8c2e0d3",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:09.795329Z",
+          "data": {
+            "text": ":"
+          },
+          "id": "cc7707a759c7489fadd4f85a42e1eed1",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:09.846092Z",
+          "data": {
+            "text": "\n"
+          },
+          "id": "63b830207fa04b82958412f3592564a9",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:09.893803Z",
+          "data": {
+            "text": "```"
+          },
+          "id": "772ac585cb70478cae8bbe929decc9bd",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:09.942456Z",
+          "data": {
+            "text": "\n"
+          },
+          "id": "11c9559ddf8246eb8be4a62dd9c3d607",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.025434Z",
+          "data": {
+            "text": "alpha"
+          },
+          "id": "be437e70811b4a31b535a4a7a42b44cb",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.065393Z",
+          "data": {
+            "text": "\n"
+          },
+          "id": "95cf0ced810645ccb15bd05d565dfd5c",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.120610Z",
+          "data": {
+            "text": "beta"
+          },
+          "id": "395f58d2d6574cf391d5d80204b777cc",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.160537Z",
+          "data": {
+            "text": "\n"
+          },
+          "id": "2f6d38812c9345eb9177f69815e37189",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.216553Z",
+          "data": {
+            "text": "gamma"
+          },
+          "id": "79d84e05cf5a481aad7c7cabeb76cbb8",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.256778Z",
+          "data": {
+            "text": "\n"
+          },
+          "id": "3e23f2cfad014305ab1c9509159c8e20",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.315155Z",
+          "data": {
+            "text": "```"
+          },
+          "id": "9839432badd74c7ca716678fd55573a4",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.354980Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "0796d5b5b5e34421b3ccc3357969e33f",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.407062Z",
+          "data": {
+            "text": "Now"
+          },
+          "id": "d79e78eecee543e4a65a667ad4536c5f",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.446998Z",
+          "data": {
+            "text": " I"
+          },
+          "id": "f6cc559e721c4595903d8e609ffc2bf3",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.508753Z",
+          "data": {
+            "text": "'ll"
+          },
+          "id": "9132ceb771814f768481537d2ecae45a",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.548661Z",
+          "data": {
+            "text": " change"
+          },
+          "id": "7f710b487669483796d47dbd5dca42f6",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.604329Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "48d95a7bd0794aac95c5dc6d32eff925",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.644320Z",
+          "data": {
+            "text": "beta"
+          },
+          "id": "50c4038ab5b643b6abae316f6fa5c5ae",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.702084Z",
+          "data": {
+            "text": "`"
+          },
+          "id": "05d2cfc7b7c749458033b619ecdf7c82",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.750563Z",
+          "data": {
+            "text": " to"
+          },
+          "id": "37b4a80060424ac0ad25b363403e20fc",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.798609Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "12819070bd294b6e923d444dfdf27562",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.845143Z",
+          "data": {
+            "text": "B"
+          },
+          "id": "ca4bfd8f87d147829576d67f6ca195b8",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.893334Z",
+          "data": {
+            "text": "ETA"
+          },
+          "id": "65ba135bedbc4f1fb74e0008b5a632ad",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:10.941883Z",
+          "data": {
+            "text": "`."
+          },
+          "id": "dc07580f1f434d8e9078ca98800d6830",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:11.017130Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "576ed13f5afc4bc2b6c75df805fef312",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:16.901463Z",
+          "data": {
+            "input": {
+              "edits": [
+                {
+                  "newText": "BETA",
+                  "oldText": "beta"
+                }
+              ],
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+            },
+            "tool_id": "edit"
+          },
+          "id": "23adcda2e8474eacb517612c02b14d0e",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-09T04:11:16.904709Z",
+          "data": {
+            "input": {
+              "edits": [
+                {
+                  "newText": "BETA",
+                  "oldText": "beta"
+                }
+              ],
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt"
+            },
+            "tool_name": "edit"
+          },
+          "id": "7cdf52d3534f4583aee5b1d9346499d9",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.tool_call"
+        },
+        {
+          "created_at": "2026-05-09T04:11:17.035823Z",
+          "data": {
+            "input_tokens": 2111,
+            "output_tokens": 27
+          },
+          "id": "dff04b45ed854c8b8a2c6291318e7bcc",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.usage"
+        },
+        {
+          "created_at": "2026-05-09T04:11:17.040909Z",
+          "data": {
+            "content": "+1 -1 evals/tmp/tool-read-before-edit-1976548b/workspace/note.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-1976548b\\workspace\\note.txt",
+            "status": "success",
+            "tool_id": "call_cafbc03c46d5",
+            "tool_name": "edit"
+          },
+          "id": "e2409139fad84e4eabf4328f9df6ed0b",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.tool_result"
+        },
+        {
+          "created_at": "2026-05-09T04:11:42.745366Z",
+          "data": {
+            "text": "\n\nDone"
+          },
+          "id": "e416b031256d435fb6199190e0fd4580",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:42.794679Z",
+          "data": {
+            "text": "."
+          },
+          "id": "440ba4e16c6e4638ab9c46bbbbe22b62",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:42.850211Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "f9d15aec11114c0b9d5ac7132978e811",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:42.894777Z",
+          "data": {
+            "text": "beta"
+          },
+          "id": "8a027c8bb7d64355835d13866aa0201d",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:42.949646Z",
+          "data": {
+            "text": "`"
+          },
+          "id": "0e94f9534f894286a1eeee22a6145bc4",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.004104Z",
+          "data": {
+            "text": " â"
+          },
+          "id": "7388252310eb43c4aa55c44a1d841cef",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.048236Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "2f5885f6031545c18faa4862d58dfe38",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.102048Z",
+          "data": {
+            "text": "B"
+          },
+          "id": "cf0bd844980e44fdacde1c14b5a23dc7",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.153943Z",
+          "data": {
+            "text": "ETA"
+          },
+          "id": "662de8dedc594d88a4ad71fe59235edc",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.206561Z",
+          "data": {
+            "text": "`"
+          },
+          "id": "bbed23e14e8b4002ab7ffdb3f5302f10",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.261755Z",
+          "data": {
+            "text": " in"
+          },
+          "id": "4765ee3311d245c49b1b59d92505ec06",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.316309Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "00ed9c0216d749a98d80c3e4ec914ee2",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.361704Z",
+          "data": {
+            "text": " file"
+          },
+          "id": "98d4a4962b844ea49b623d1506ed3602",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.417109Z",
+          "data": {
+            "text": "."
+          },
+          "id": "40060d2636264c9cab8b4f5095969466",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.470439Z",
+          "data": {
+            "input_tokens": 2247,
+            "output_tokens": 14
+          },
+          "id": "b5436867eab8465c8a5d6bc188a61eea",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.usage"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.476952Z",
+          "data": {
+            "final_text": "\n\nDone. `beta` â `BETA` in the file.",
+            "finish_reason": "stop",
+            "status": "succeeded",
+            "transcript_persisted": true,
+            "transient_text": "\n\nI'll read the file first, then edit it.\n\nFile contains:\n```\nalpha\nbeta\ngamma\n```\n\nNow I'll change `beta` to `BETA`.\n\nDone. `beta` â `BETA` in the file."
+          },
+          "id": "126a1fdbcacd4862a56bd5d2cfb258e0",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "stream.assistant_final"
+        },
+        {
+          "created_at": "2026-05-09T04:11:43.492743Z",
+          "data": {
+            "duration_ms": 0
+          },
+          "id": "fc2e2d8026704259b0405b6ea0a2befe",
+          "run_id": "bab34432b51c4cb49b3507b7684ffa25",
+          "session_id": "f040b655b04b4251bcccc0d5a2fbdab3",
+          "type": "run_completed"
+        }
+      ]
+    }
+  ]
+}

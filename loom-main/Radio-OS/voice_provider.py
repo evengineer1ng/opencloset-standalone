@@ -1,0 +1,553 @@
+#!/usr/bin/env python3
+"""
+Voice Provider Abstraction Layer
+
+Supports both local (Piper) and cloud-based (ElevenLabs, Google Cloud TTS, Azure) TTS providers.
+Normalizes voice synthesis across providers.
+"""
+from __future__ import annotations
+
+import os
+import subprocess
+import tempfile
+from abc import ABC, abstractmethod
+from typing import Any, Dict, Optional, Tuple
+import requests
+import numpy as np
+
+
+class VoiceProvider(ABC):
+    """Base class for all voice synthesis providers."""
+
+    @abstractmethod
+    def synthesize(self, voice_key: str, text: str, voice_map: Dict[str, str]) -> Tuple[np.ndarray, int]:
+        """
+        Synthesize speech for the given text.
+
+        Args:
+            voice_key: Character/voice identifier (e.g. "host", "skeptic")
+            text: Text to synthesize
+            voice_map: Dict mapping voice_key to voice config (path, ID, etc.)
+
+        Returns:
+            (audio_data: np.ndarray float32, sample_rate: int)
+            audio_data should be mono or stereo (can reshape if needed).
+        """
+        pass
+
+
+class PiperProvider(VoiceProvider):
+    """Local Piper TTS (offline, requires binary + ONNX models)."""
+
+    def __init__(self, piper_bin: str):
+        """
+        Args:
+            piper_bin: Path to piper executable
+        """
+        self.piper_bin = piper_bin
+
+    def synthesize(
+        self, voice_key: str, text: str, voice_map: Dict[str, str]
+    ) -> Tuple[np.ndarray, int]:
+        """
+        Use piper to generate WAV from text.
+        Requires soundfile (sf) and numpy for loading.
+        """
+        import soundfile as sf
+
+        if not self.piper_bin or not os.path.exists(self.piper_bin):
+            raise RuntimeError(f"Piper binary not found: {self.piper_bin}")
+
+        # Get voice model path (prefix fallback for indexed voices like murmur_0)
+        voice_path = voice_map.get(voice_key)
+        if not voice_path and "_" in voice_key:
+            voice_path = voice_map.get(voice_key.rsplit("_", 1)[0])
+        if not voice_path:
+            voice_path = voice_map.get("host")
+        if not voice_path or not os.path.exists(voice_path):
+            raise RuntimeError(f"Voice model not found for key={voice_key}: {voice_path}")
+
+        # Generate temporary WAV file
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+            wav_path = f.name
+
+        try:
+            r = subprocess.run(
+                [self.piper_bin, "-m", voice_path, "-f", wav_path],
+                input=text,
+                text=True,
+                encoding="utf-8",
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                timeout=60,
+            )
+
+            if r.returncode != 0 or not os.path.exists(wav_path) or os.path.getsize(wav_path) <= 44:
+                raise RuntimeError(f"Piper failed or produced invalid WAV: rc={r.returncode}")
+
+            # Load WAV
+            data, sr = sf.read(wav_path, dtype="float32")
+
+            return data, int(sr)
+
+        finally:
+            try:
+                os.remove(wav_path)
+            except Exception:
+                pass
+
+
+class ElevenLabsProvider(VoiceProvider):
+    """ElevenLabs API TTS provider."""
+
+    def __init__(self, api_key: str):
+        """
+        Args:
+            api_key: ElevenLabs API key
+        """
+        self.api_key = api_key
+        self.base_url = "https://api.elevenlabs.io/v1"
+
+    def synthesize(
+        self, voice_key: str, text: str, voice_map: Dict[str, str]
+    ) -> Tuple[np.ndarray, int]:
+        """
+        Call ElevenLabs API to generate speech.
+        voice_map should contain voice_key -> voice_id mapping.
+        """
+        import soundfile as sf
+
+        # Get voice ID from mapping (prefix fallback for indexed voices)
+        voice_id = voice_map.get(voice_key)
+        if not voice_id and "_" in voice_key:
+            voice_id = voice_map.get(voice_key.rsplit("_", 1)[0])
+        if not voice_id:
+            voice_id = voice_map.get("host")
+        if not voice_id:
+            raise ValueError(f"Voice ID not found for key={voice_key}")
+
+        headers = {
+            "xi-api-key": self.api_key,
+            "Content-Type": "application/json",
+        }
+
+        payload = {
+            "text": text,
+            "model_id": "eleven_monolingual_v1",
+            "voice_settings": {
+                "stability": 0.5,
+                "similarity_boost": 0.75,
+            },
+        }
+
+        url = f"{self.base_url}/text-to-speech/{voice_id}"
+
+        r = requests.post(url, json=payload, headers=headers, timeout=30)
+        r.raise_for_status()
+
+        audio_bytes = r.content
+
+        # Load audio from bytes
+        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
+            temp_audio = f.name
+            f.write(audio_bytes)
+
+        try:
+            data, sr = sf.read(temp_audio, dtype="float32")
+            return data, int(sr)
+        finally:
+            try:
+                os.remove(temp_audio)
+            except Exception:
+                pass
+
+
+class GoogleCloudTTSProvider(VoiceProvider):
+    """Google Cloud Text-to-Speech API provider."""
+
+    def __init__(self, api_key: str):
+        """
+        Args:
+            api_key: Google Cloud API key (TTS enabled)
+        """
+        self.api_key = api_key
+        self.base_url = "https://texttospeech.googleapis.com/v1/text:synthesize"
+
+    def synthesize(
+        self, voice_key: str, text: str, voice_map: Dict[str, str]
+    ) -> Tuple[np.ndarray, int]:
+        """
+        Call Google Cloud TTS API.
+        voice_map should contain voice_key -> "en-US-Neural2-X" style voice name.
+        """
+        import soundfile as sf
+        from pydub import AudioSegment
+        import io
+
+        # Get voice name (prefix fallback for indexed voices)
+        voice_name = voice_map.get(voice_key)
+        if not voice_name and "_" in voice_key:
+            voice_name = voice_map.get(voice_key.rsplit("_", 1)[0])
+        if not voice_name:
+            voice_name = voice_map.get("host")
+        if not voice_name:
+            voice_name = "en-US-Neural2-C"  # Default US female voice
+
+        payload = {
+            "input": {"text": text},
+            "voice": {
+                "languageCode": "en-US",
+                "name": voice_name,
+            },
+            "audioConfig": {
+                "audioEncoding": "MP3",
+            },
+        }
+
+        params = {"key": self.api_key}
+
+        r = requests.post(self.base_url, json=payload, params=params, timeout=30)
+        r.raise_for_status()
+
+        audio_content = r.json().get("audioContent", "")
+        if not audio_content:
+            raise RuntimeError("Google Cloud TTS returned empty audio")
+
+        # Decode base64 audio
+        import base64
+
+        audio_bytes = base64.b64decode(audio_content)
+
+        # Convert MP3 to WAV via pydub
+        audio = AudioSegment.from_mp3(io.BytesIO(audio_bytes))
+
+        # Convert to numpy array
+        samples = np.array(audio.get_array_of_samples(), dtype=np.float32)
+        samples = samples / (2**15)  # Normalize to [-1, 1]
+
+        # Handle stereo -> mono if needed
+        if audio.channels == 2:
+            samples = samples.reshape((-1, 2))
+            samples = samples.mean(axis=1)
+
+        return samples, audio.frame_rate
+
+
+class KokoroProvider(VoiceProvider):
+    """Kokoro TTS (local ONNX-based multilingual TTS)."""
+
+    def __init__(self, model_path: str, voices_path: str):
+        """
+        Args:
+            model_path: Path to kokoro ONNX model file
+            voices_path: Path to kokoro voices bin file
+        """
+        self.model_path = model_path
+        self.voices_path = voices_path
+        self._kokoro = None
+
+    def _get_kokoro(self):
+        """Lazy initialization of Kokoro instance."""
+        if self._kokoro is None:
+            try:
+                from kokoro_onnx import Kokoro
+                self._kokoro = Kokoro(self.model_path, self.voices_path)
+            except ImportError:
+                raise RuntimeError("kokoro-onnx not installed. Install with: pip install kokoro-onnx")
+            except Exception as e:
+                raise RuntimeError(f"Failed to initialize Kokoro: {e}")
+        return self._kokoro
+
+    def synthesize(
+        self, voice_key: str, text: str, voice_map: Dict[str, str]
+    ) -> Tuple[np.ndarray, int]:
+        """
+        Use Kokoro to generate audio from text.
+        voice_map should contain voice_key -> kokoro voice name (e.g. "af_sarah")
+
+        Voice resolution order:
+          1. Exact match:   voice_map[voice_key]
+          2. Prefix match:  voice_map["murmur"] for voice_key="murmur_2"
+          3. Host fallback:  voice_map["host"]
+          4. Hard default:   "af_sarah"
+        """
+        # Get kokoro voice name from mapping
+        kokoro_voice = voice_map.get(voice_key)
+        if not kokoro_voice:
+            # Try prefix match (e.g. "murmur_2" → "murmur", "court_agents" → "court")
+            prefix = voice_key.rsplit("_", 1)[0] if "_" in voice_key else ""
+            if prefix:
+                kokoro_voice = voice_map.get(prefix)
+        if not kokoro_voice:
+            kokoro_voice = voice_map.get("host")
+        if not kokoro_voice:
+            # Default to a good English female voice if none specified
+            kokoro_voice = "af_sarah"
+
+        try:
+            kokoro = self._get_kokoro()
+            
+            # Check if voice exists
+            available_voices = kokoro.get_voices()
+            if kokoro_voice not in available_voices:
+                raise RuntimeError(f"Kokoro voice '{kokoro_voice}' not found. Available: {', '.join(available_voices[:10])}...")
+
+            # Generate audio
+            audio, sr = kokoro.create(text, voice=kokoro_voice, speed=1.0)
+            
+            # Convert to numpy array if needed
+            if not isinstance(audio, np.ndarray):
+                audio = np.array(audio, dtype=np.float32)
+            
+            # Ensure float32 dtype
+            if audio.dtype != np.float32:
+                audio = audio.astype(np.float32)
+
+            return audio, int(sr)
+
+        except Exception as e:
+            raise RuntimeError(f"Kokoro synthesis failed: {e}")
+
+
+class KokoroPipelineProvider(VoiceProvider):
+    """
+    Kokoro TTS using the `kokoro` pip package (PyTorch backend).
+    Auto-downloads models from HuggingFace on first use — no manual file setup.
+    Install: pip install kokoro
+    """
+
+    # lang_code mapping: kokoro uses single-char codes
+    _LANG_CODE = "a"  # 'a' = American English
+
+    def __init__(self):
+        self._pipeline = None
+
+    def _get_pipeline(self):
+        if self._pipeline is None:
+            try:
+                from kokoro import KPipeline
+                self._pipeline = KPipeline(lang_code=self._LANG_CODE)
+            except ImportError:
+                raise RuntimeError(
+                    "kokoro not installed. Install with: pip install kokoro"
+                )
+            except Exception as e:
+                raise RuntimeError(f"Failed to initialize kokoro pipeline: {e}")
+        return self._pipeline
+
+    def synthesize(
+        self, voice_key: str, text: str, voice_map: Dict[str, str]
+    ) -> Tuple[np.ndarray, int]:
+        # Resolve voice name same way as KokoroProvider
+        kokoro_voice = voice_map.get(voice_key)
+        if not kokoro_voice:
+            prefix = voice_key.rsplit("_", 1)[0] if "_" in voice_key else ""
+            if prefix:
+                kokoro_voice = voice_map.get(prefix)
+        if not kokoro_voice:
+            kokoro_voice = voice_map.get("host")
+        if not kokoro_voice:
+            kokoro_voice = "af_sarah"
+
+        try:
+            pipeline = self._get_pipeline()
+            audio_chunks = []
+            for _, _, audio in pipeline(text, voice=kokoro_voice, speed=1.0):
+                if audio is not None:
+                    if not isinstance(audio, np.ndarray):
+                        audio = np.array(audio, dtype=np.float32)
+                    audio_chunks.append(audio.astype(np.float32))
+            if not audio_chunks:
+                raise RuntimeError("kokoro returned no audio")
+            combined = np.concatenate(audio_chunks)
+            return combined, 24000  # kokoro outputs at 24 kHz
+        except Exception as e:
+            raise RuntimeError(f"Kokoro synthesis failed: {e}")
+
+
+class AzureSpeechProvider(VoiceProvider):
+    """Azure Cognitive Services Speech synthesis provider."""
+
+    def __init__(self, api_key: str, region: str):
+        """
+        Args:
+            api_key: Azure Cognitive Services API key
+            region: Azure region (e.g. "eastus")
+        """
+        self.api_key = api_key
+        self.region = region
+        self.base_url = f"https://{region}.tts.speech.microsoft.com/cognitiveservices/v1"
+
+    def synthesize(
+        self, voice_key: str, text: str, voice_map: Dict[str, str]
+    ) -> Tuple[np.ndarray, int]:
+        """
+        Call Azure Speech synthesis API.
+        voice_map should contain voice_key -> "en-US-AriaNeural" style voice.
+        """
+        import soundfile as sf
+
+        voice_name = voice_map.get(voice_key)
+        if not voice_name and "_" in voice_key:
+            voice_name = voice_map.get(voice_key.rsplit("_", 1)[0])
+        if not voice_name:
+            voice_name = voice_map.get("host")
+        if not voice_name:
+            voice_name = "en-US-AriaNeural"
+
+        # SSML format for Azure
+        ssml = f"""<speak version='1.0' xml:lang='en-US'>
+            <voice name='{voice_name}'>
+                {text}
+            </voice>
+        </speak>"""
+
+        headers = {
+            "Ocp-Apim-Subscription-Key": self.api_key,
+            "Content-Type": "application/ssml+xml",
+            "X-Microsoft-OutputFormat": "audio-16khz-32kbitrate-mono-mp3",
+        }
+
+        r = requests.post(self.base_url, data=ssml.encode("utf-8"), headers=headers, timeout=30)
+        r.raise_for_status()
+
+        audio_bytes = r.content
+
+        # Convert MP3 to WAV
+        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
+            temp_audio = f.name
+            f.write(audio_bytes)
+
+        try:
+            data, sr = sf.read(temp_audio, dtype="float32")
+            return data, int(sr)
+        finally:
+            try:
+                os.remove(temp_audio)
+            except Exception:
+                pass
+
+
+def get_voice_provider(cfg: Dict[str, Any], audio_cfg: Optional[Dict[str, Any]] = None) -> VoiceProvider:
+    """
+    Factory function to instantiate the correct voice provider.
+
+    Config structure:
+    {
+        "audio": {
+            "voices_provider": "piper" | "elevenlabs" | "google" | "azure",
+            "piper_bin": "/path/to/piper",  # for piper
+            "api_key_env": "ENV_VAR_NAME",  # for API providers
+            "region": "eastus",  # for azure
+        }
+    }
+
+    Defaults to Piper if not specified (backward compatibility).
+    """
+    if audio_cfg is None:
+        audio_cfg = cfg.get("audio") or {}
+
+    if not isinstance(audio_cfg, dict):
+        raise ValueError("audio config must be a dict")
+
+    provider_type = (audio_cfg.get("voices_provider") or "piper").strip().lower()
+
+    # Local providers
+    if provider_type == "piper":
+        piper_bin = (audio_cfg.get("piper_bin") or "").strip()
+        if not piper_bin:
+            # Try to auto-detect
+            from runtime import _auto_detect_piper_bin
+            piper_bin = _auto_detect_piper_bin()
+        if not piper_bin:
+            raise RuntimeError("Piper binary not found and could not auto-detect")
+        return PiperProvider(piper_bin)
+
+    elif provider_type == "kokoro":
+        model_path = (audio_cfg.get("kokoro_model") or "").strip()
+        voices_path = (audio_cfg.get("kokoro_voices") or "").strip()
+        
+        # Auto-detect if not specified
+        if not model_path or not voices_path:
+            import os
+            voices_dir = os.environ.get("RADIO_OS_VOICES", "voices")
+            kokoro_dir = os.path.join(voices_dir, "kokoro")
+            
+            if not model_path:
+                # Try to find model file
+                model_candidates = [
+                    os.path.join(kokoro_dir, "kokoro-v1.0.fp16.onnx"),
+                    os.path.join(kokoro_dir, "kokoro-v1.0.onnx"),
+                    os.path.join(kokoro_dir, "kokoro.onnx"),
+                ]
+                for candidate in model_candidates:
+                    if os.path.exists(candidate):
+                        model_path = candidate
+                        break
+                        
+            if not voices_path:
+                # Try to find voices file
+                voices_candidates = [
+                    os.path.join(kokoro_dir, "voices-v1.0.bin"),
+                    os.path.join(kokoro_dir, "voices.bin"),
+                ]
+                for candidate in voices_candidates:
+                    if os.path.exists(candidate):
+                        voices_path = candidate
+                        break
+        
+        if not model_path or not os.path.exists(model_path) or \
+           not voices_path or not os.path.exists(voices_path):
+            # Fall back to the `kokoro` pip package which auto-downloads models
+            try:
+                import kokoro  # noqa: F401
+                return KokoroPipelineProvider()
+            except ImportError:
+                pass
+            raise RuntimeError(
+                "Kokoro model files not found in voices/kokoro/. "
+                "Either download kokoro-v1.0.onnx + voices-v1.0.bin to voices/kokoro/, "
+                "or install the kokoro pip package: pip install kokoro"
+            )
+
+        return KokoroProvider(model_path, voices_path)
+
+    # API-based providers
+    elif provider_type == "elevenlabs":
+        api_key_env = (audio_cfg.get("api_key_env") or "ELEVENLABS_API_KEY").strip()
+        api_key = os.environ.get(api_key_env, "").strip()
+        if not api_key:
+            raise ValueError(
+                f"ElevenLabs provider requires API key in env var: {api_key_env}"
+            )
+        return ElevenLabsProvider(api_key)
+
+    elif provider_type == "google":
+        api_key_env = (audio_cfg.get("api_key_env") or "GOOGLE_API_KEY").strip()
+        api_key = os.environ.get(api_key_env, "").strip()
+        if not api_key:
+            raise ValueError(f"Google Cloud provider requires API key in env var: {api_key_env}")
+        return GoogleCloudTTSProvider(api_key)
+
+    elif provider_type == "azure":
+        api_key_env = (audio_cfg.get("api_key_env") or "AZURE_SPEECH_KEY").strip()
+        api_key = os.environ.get(api_key_env, "").strip()
+        if not api_key:
+            raise ValueError(f"Azure provider requires API key in env var: {api_key_env}")
+        region = (audio_cfg.get("region") or "eastus").strip()
+        return AzureSpeechProvider(api_key, region)
+
+    else:
+        raise ValueError(f"Unknown voice provider: {provider_type}")
+
+
+def log_voice_provider_info(provider_type: str, voice_key: str) -> str:
+    """Generate a log-friendly string about the voice provider."""
+    provider_display = {
+        "piper": "Piper (local)",
+        "kokoro": "Kokoro (local)",
+        "elevenlabs": "ElevenLabs",
+        "google": "Google Cloud TTS",
+        "azure": "Azure Speech",
+    }
+    return f"{provider_display.get(provider_type, provider_type)} [{voice_key}]"

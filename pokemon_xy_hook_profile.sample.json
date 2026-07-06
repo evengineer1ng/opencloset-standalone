@@ -1,0 +1,97 @@
+{
+  "profile": "pokemon_xy",
+  "game": "Pokemon X/Y",
+  "trainer": {
+    "name": { "address": null, "type": "utf16le", "length": 16 },
+    "badges": { "address": null, "type": "u8" },
+    "pokedex_seen": { "address": null, "type": "u16" },
+    "pokedex_caught": { "address": null, "type": "u16" },
+    "money": { "address": null, "type": "u32" }
+  },
+  "route": {
+    "map_name": { "address": null, "type": "utf16le", "length": 24 },
+    "route": { "address": null, "type": "utf16le", "length": 24 },
+    "objective": { "address": null, "type": "utf16le", "length": 32 },
+    "next_action": { "address": null, "type": "utf16le", "length": 32 }
+  },
+  "objective": {
+    "title": { "address": null, "type": "utf16le", "length": 32 },
+    "summary": { "address": null, "type": "utf16le", "length": 64 },
+    "why": { "address": null, "type": "utf16le", "length": 64 },
+    "next_action": { "address": null, "type": "utf16le", "length": 32 }
+  },
+  "team": {
+    "active_slot": { "address": null, "type": "u8" },
+    "party_count": { "address": null, "type": "u8" },
+    "party": {
+      "base_address": null,
+      "slot_stride": 128,
+      "count_field": "party_count",
+      "max_slots": 6,
+      "fields": {
+        "species": { "offset": 0, "type": "u16", "lookup": "species" },
+        "nickname": { "offset": 2, "type": "utf16le", "length": 12 },
+        "level": { "offset": 28, "type": "u8" },
+        "hp": { "offset": 32, "type": "u16" },
+        "max_hp": { "offset": 34, "type": "u16" },
+        "status": { "offset": 36, "type": "u8", "lookup": "status" }
+      }
+    }
+  },
+  "battle": {
+    "phase": { "address": null, "type": "u8", "lookup": "battle_phase" },
+    "turn_index": { "address": null, "type": "u16" },
+    "decision_required": { "address": null, "type": "bool" },
+    "low_confidence": { "address": null, "type": "bool" },
+    "active_pokemon": {
+      "base_address": null,
+      "fields": {
+        "species": { "offset": 0, "type": "u16", "lookup": "species" },
+        "level": { "offset": 2, "type": "u8" },
+        "hp": { "offset": 4, "type": "u16" },
+        "max_hp": { "offset": 6, "type": "u16" }
+      }
+    },
+    "opponent": {
+      "base_address": null,
+      "fields": {
+        "species": { "offset": 0, "type": "u16", "lookup": "species" },
+        "level": { "offset": 2, "type": "u8" },
+        "hp": { "offset": 4, "type": "u16" },
+        "max_hp": { "offset": 6, "type": "u16" }
+      }
+    }
+  },
+  "encounter": {
+    "species": { "address": null, "type": "u16", "lookup": "species" },
+    "level": { "address": null, "type": "u8" },
+    "shiny": { "address": null, "type": "bool" },
+    "rare": { "address": null, "type": "bool" },
+    "catch_opportunity": { "address": null, "type": "bool" },
+    "decision_required": { "address": null, "type": "bool" }
+  },
+  "lookups": {
+    "battle_phase": {
+      "0": "overworld",
+      "1": "turn_decision",
+      "2": "enemy_animation",
+      "3": "menu_navigation",
+      "4": "encounter_intro"
+    },
+    "species": {
+      "0": "",
+      "656": "Froakie",
+      "661": "Fletchling",
+      "664": "Scatterbug",
+      "667": "Litleo"
+    },
+    "status": {
+      "0": "",
+      "1": "sleep",
+      "2": "poison",
+      "3": "burn",
+      "4": "freeze",
+      "5": "paralysis"
+    }
+  }
+}

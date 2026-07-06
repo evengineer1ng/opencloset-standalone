@@ -1,0 +1,20 @@
+id: tool_heavy_workspace_audit
+title: Tool-heavy workspace audit
+category: tool_heavy
+goal: Encourage multi-tool exploration and synthesis.
+tags: [tools, exploration, synthesis]
+profile:
+  provider: llamacpp
+  model: qwen3.6-27b
+  harness_profile: default
+setup:
+  context_window: 32768
+turns:
+  - role: user
+    content: "Inspect the workspace and answer with three top-level directories, two Python entrypoints, and one sentence describing what OpenCloset is."
+checks:
+  rules:
+    - type: final_text_contains
+      value: OpenCloset
+    - type: max_latency_ms
+      value: 120000

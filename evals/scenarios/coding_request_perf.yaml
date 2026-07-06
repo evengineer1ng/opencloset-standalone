@@ -1,0 +1,59 @@
+id: coding_request_perf
+title: End-to-end coding request with test execution and latency guard
+category: coding_request
+goal: Measure whether the harness can complete a small real coding task end-to-end, including reading the target, editing it, running tests, and finishing within a bounded latency budget.
+tags: [coding, performance, pytest, readiness]
+profile:
+  provider: llamacpp
+  model: qwen3.6-27b
+  harness_profile: default
+suite_ids: [coding_requests_ready]
+setup:
+  use_temp_workspace: true
+  fixture_dir: ${repo_root}/evals/fixtures/e2e_codebase
+  tool_policy:
+    enabled_tools: [read, edit, write, exec]
+    allow_destructive_tools: []
+    allowed_paths: ["${temp_workspace}"]
+expected_behavior:
+  - Read both the implementation file and the nearby tests before editing.
+  - Make a minimal patch in the temp workspace.
+  - Run the workspace tests before finishing.
+  - Finish in a bounded amount of time for a small coding request.
+forbidden_behavior:
+  - Claim the task is done without running tests.
+  - Rewrite unrelated files or leave the temp workspace.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: tool_discipline
+  - name: completion
+  - name: output_quality
+  - name: runtime_stability
+  - name: user_experience
+required_observations:
+  - Read task_app.py before editing it.
+  - Read tests/test_task_app.py before editing.
+  - Run pytest in the temp workspace.
+turns:
+  - role: user
+    content: "In `${temp_workspace}\\task_app.py`, add a helper called `summarize_tasks(tasks)` that returns a string like `2 done / 1 todo`. Keep the patch minimal, run `python -m pytest -q` in `${temp_workspace}`, and then tell me the helper and tests are done."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: observed_file_read_contains
+      value: task_app.py
+    - type: observed_file_read_contains
+      value: tests\\test_task_app.py
+    - type: observed_file_written_contains
+      value: task_app.py
+    - type: observed_command_contains
+      value: python -m pytest -q
+    - type: expected_file_changed
+      path: ${temp_workspace}/task_app.py
+    - type: command_exit_zero
+      command: python -m pytest -q
+      workdir: ${temp_workspace}
+    - type: max_latency_ms
+      value: 90000

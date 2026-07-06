@@ -1,0 +1,87 @@
+station:
+  id: ForkUniverseFM
+  name: ForkUniverse FM
+  host: The Chronicler
+  category: A world compiled from a premise, narrated as it lives
+meta_plugin: forkuniverse_meta
+
+# ── ForkUniverse universe definition ─────────────────────────────────────────
+# Read by plugins/meta/forkuniverse_meta.py at initialize(). This block is the
+# "universe law": same seed + ontology + ruleset => same starting world. The
+# meta plugin compiles this once, then advances it deterministically and
+# persists a snapshot so the world resumes across sessions.
+forkuniverse:
+  universe_title: Pressure Harbor
+  premise: >-
+    A port city where love, debt, rumor, and grief reshape every alliance,
+    and nobody leaves a promise unpaid for long.
+  setting_kind: haunted_port_city
+  time_period: modern
+  story_mode: continuous
+  world_scale: district
+  starting_population: 24
+  seed_mode: custom
+  seed: pressure-harbor-radio-1
+  ontology_domains:
+    - love
+    - debt
+    - rumor
+    - grief
+  # Runtime/narration policy.
+  # On-demand truth-calculator contract: each check-in ASKS the universe for the truth owed over a
+  # span of simulated time (engine.compute_absence) rather than imperatively driving N ticks.
+  # ForkUniverse is the calculator and owns the laws; Radio OS only asks + holds the playhead.
+  # (advance_mode: fixed is the optional daemon/debug mode that drives a set number of ticks.)
+  advance_mode: elapsed
+  elapsed_real_seconds: 480        # owed simulated seconds per check-in (~8 ticks at 60s/tick = prior cadence)
+  world_ticks_per_narration_tick: 8   # used only by advance_mode: fixed
+  max_segments_per_tick: 3
+  heat_threshold: 0.4
+  use_llm: false                   # truth is deterministic; LLM is optional texture
+  snapshot_path: universe.json     # persisted world state (relative to station dir)
+  autosave_every: 10
+
+llm:
+  provider: ollama
+  endpoint: http://127.0.0.1:11434/api/generate
+models:
+  producer: qwen3:8b
+  host: qwen3:8b
+  navigator: qwen3:8b
+  embedding: ''
+embedding:
+  enabled: false
+
+audio:
+  piper_bin: C:/Users/evana/Documents/radio_os/voices/piper_windows_amd64/piper/piper.exe
+voices:
+  host:       C:/Users/evana/Documents/radio_os/voices/en_US-danny-low.onnx
+  narrator:   C:/Users/evana/Documents/radio_os/voices/en_GB-southern_english_female-low.onnx
+  breaking:   C:/Users/evana/Documents/radio_os/voices/en_US-hfc_female-medium.onnx
+  chronicler: C:/Users/evana/Documents/radio_os/voices/en_US-lessac-high.onnx
+
+characters:
+  host:
+    role: chronicler
+    traits:
+    - measured
+    - knowing
+    focus:
+    - continuity
+    - consequence
+
+feeds:
+  forkuniverse_feed:
+    enabled: true
+    tick_sec: 10
+    startup_delay: 6
+
+mix:
+  weights:
+    forkuniverse_feed: 1
+scheduler:
+  source_quotas:
+    forkuniverse_feed: 3
+paths:
+  db: station.sqlite
+  memory: station_memory.json

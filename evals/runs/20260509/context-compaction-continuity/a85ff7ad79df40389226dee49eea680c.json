@@ -1,0 +1,1125 @@
+{
+  "schema_version": "eval-run.v2",
+  "artifact_id": "a85ff7ad79df40389226dee49eea680c",
+  "created_at": "2026-05-09T08:52:17.980212Z",
+  "api_base_url": "http://127.0.0.1:5000/api",
+  "scenario": {
+    "id": "context_compaction_continuity",
+    "title": "Continuity under longer conversation pressure",
+    "category": "continuity",
+    "goal": "Verify the harness preserves the active thread across a longer exchange.",
+    "tags": [],
+    "path": "D:\\openclaw\\opencloset\\evals\\scenarios\\context_compaction_continuity.yaml",
+    "notes_path": null,
+    "suite_ids": [
+      "e2e_basic"
+    ],
+    "expected_behavior": [
+      "Preserve the anchor detail.",
+      "Answer the final question directly."
+    ],
+    "forbidden_behavior": [
+      "Losing the thread."
+    ],
+    "required_observations": [],
+    "max_turns": null,
+    "scoring_rubric": [
+      {
+        "name": "intent_capture",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "context_use",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "completion",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "output_quality",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "runtime_stability",
+        "description": "",
+        "weight": 1.0
+      }
+    ]
+  },
+  "profile": {
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "harness_profile": "default"
+  },
+  "baseline": {
+    "git_commit": "5a0e9e5a047522fe93a346aabc19aba0f4882284",
+    "harness_profile": "default",
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "scenario_id": "context_compaction_continuity",
+    "category": "continuity"
+  },
+  "session": {
+    "id": "043b8d131d2b4632a527095cb54b75bb"
+  },
+  "summary": {
+    "status": "failed",
+    "finish_reason": "",
+    "hard_pass": false,
+    "check_pass_count": 0,
+    "check_fail_count": 2,
+    "final_text_preview": "",
+    "failure_taxonomy": [
+      "rule_check_failed",
+      "run_error"
+    ]
+  },
+  "turns": [
+    {
+      "turn_index": 1,
+      "role": "user",
+      "content": "Remember this anchor phrase exactly: cobalt-lemur-signal.",
+      "run_id": "652860a8766344c1ad42b3c95c066b44",
+      "message_id": "6507a596943e432c9eb2fc733b1d8718",
+      "status": "failed",
+      "finish_reason": "",
+      "final_text": "",
+      "transient_text": "",
+      "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+      "latency_ms": 2057,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "tool_results": [],
+      "provider_route": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 57,
+          "needs_frontier_tools": false,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "run_events": [
+        {
+          "created_at": "2026-05-09T08:52:44.926051Z",
+          "data": {
+            "run_id": "652860a8766344c1ad42b3c95c066b44",
+            "turn_number": 1
+          },
+          "id": "24b8a3aa130341bf95f6aa0e2b380562",
+          "run_id": "652860a8766344c1ad42b3c95c066b44",
+          "type": "run_queued"
+        },
+        {
+          "created_at": "2026-05-09T08:52:44.941487Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 57,
+              "needs_frontier_tools": false,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "b2144dbe2b0f4e91a065dfe464905684",
+          "run_id": "652860a8766344c1ad42b3c95c066b44",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-09T08:52:44.949317Z",
+          "data": {
+            "run_id": "652860a8766344c1ad42b3c95c066b44",
+            "turn_number": 1
+          },
+          "id": "2c6a5659189a4ff2a4ba0509c957c8ca",
+          "run_id": "652860a8766344c1ad42b3c95c066b44",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-09T08:52:46.974883Z",
+          "data": {
+            "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+          },
+          "id": "a147858cc37a4ff0b00697b9ee39d697",
+          "run_id": "652860a8766344c1ad42b3c95c066b44",
+          "type": "run_failed"
+        },
+        {
+          "created_at": "2026-05-09T08:52:46.978406Z",
+          "data": {
+            "code": "agent_error",
+            "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+          },
+          "id": "b8b37afa646c487fa65ace443f0da5c3",
+          "run_id": "652860a8766344c1ad42b3c95c066b44",
+          "type": "error"
+        }
+      ],
+      "stream_events": [
+        {
+          "type": "error",
+          "data": {
+            "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "code": "agent_error"
+          }
+        }
+      ],
+      "observations": {
+        "tool_calls": [],
+        "tool_result_count": 0,
+        "files_read": [],
+        "files_written": [],
+        "commands": [],
+        "runtime_event_types": [
+          "run_queued",
+          "provider_routed",
+          "run_started",
+          "run_failed",
+          "error"
+        ],
+        "touched_temp_workspace": false
+      }
+    },
+    {
+      "turn_index": 2,
+      "role": "user",
+      "content": "Now imagine we are planning an eval harness. Keep going.",
+      "run_id": "8b62e60eede8450bb4d875822691f44c",
+      "message_id": "df0eec895e9f4692a8931dded09b84e2",
+      "status": "failed",
+      "finish_reason": "",
+      "final_text": "",
+      "transient_text": "",
+      "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+      "latency_ms": 2065,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "tool_results": [],
+      "provider_route": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 56,
+          "needs_frontier_tools": false,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "run_events": [
+        {
+          "created_at": "2026-05-09T08:52:47.022038Z",
+          "data": {
+            "run_id": "8b62e60eede8450bb4d875822691f44c",
+            "turn_number": 2
+          },
+          "id": "0abc7c70531a4dccba27f37304c72ddc",
+          "run_id": "8b62e60eede8450bb4d875822691f44c",
+          "type": "run_queued"
+        },
+        {
+          "created_at": "2026-05-09T08:52:47.045401Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 56,
+              "needs_frontier_tools": false,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "a81f15145dd94e0a829a20ea2d8f4ae2",
+          "run_id": "8b62e60eede8450bb4d875822691f44c",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-09T08:52:47.052373Z",
+          "data": {
+            "run_id": "8b62e60eede8450bb4d875822691f44c",
+            "turn_number": 2
+          },
+          "id": "f37178799b8348309783c154988fdcd0",
+          "run_id": "8b62e60eede8450bb4d875822691f44c",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-09T08:52:49.077524Z",
+          "data": {
+            "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+          },
+          "id": "eb97e5099d2c4b8c9751511d3b58b5f3",
+          "run_id": "8b62e60eede8450bb4d875822691f44c",
+          "type": "run_failed"
+        },
+        {
+          "created_at": "2026-05-09T08:52:49.081017Z",
+          "data": {
+            "code": "agent_error",
+            "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+          },
+          "id": "6f732694edeb4a0ca8cd271de3f907ec",
+          "run_id": "8b62e60eede8450bb4d875822691f44c",
+          "type": "error"
+        }
+      ],
+      "stream_events": [
+        {
+          "type": "error",
+          "data": {
+            "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "code": "agent_error"
+          }
+        }
+      ],
+      "observations": {
+        "tool_calls": [],
+        "tool_result_count": 0,
+        "files_read": [],
+        "files_written": [],
+        "commands": [],
+        "runtime_event_types": [
+          "run_queued",
+          "provider_routed",
+          "run_started",
+          "run_failed",
+          "error"
+        ],
+        "touched_temp_workspace": false
+      }
+    },
+    {
+      "turn_index": 3,
+      "role": "user",
+      "content": "What was the anchor phrase and why did I give it to you? Answer in one sentence.",
+      "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+      "message_id": "5cd3f5d8783943cc9da832bb5c71a921",
+      "status": "failed",
+      "finish_reason": "",
+      "final_text": "",
+      "transient_text": "",
+      "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+      "latency_ms": 2056,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "tool_results": [],
+      "provider_route": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 80,
+          "needs_frontier_tools": false,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "run_events": [
+        {
+          "created_at": "2026-05-09T08:52:49.124339Z",
+          "data": {
+            "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+            "turn_number": 3
+          },
+          "id": "4651d474366d414992d81373df3b5c29",
+          "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+          "type": "run_queued"
+        },
+        {
+          "created_at": "2026-05-09T08:52:49.136671Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 80,
+              "needs_frontier_tools": false,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "c05f9a8fc94f4e52b7298cb717971d63",
+          "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-09T08:52:49.144075Z",
+          "data": {
+            "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+            "turn_number": 3
+          },
+          "id": "97eb021db8c346c58fd6efcff3e9a9cf",
+          "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-09T08:52:51.170421Z",
+          "data": {
+            "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+          },
+          "id": "db0150fe9df343e6abe825520c6ed018",
+          "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+          "type": "run_failed"
+        },
+        {
+          "created_at": "2026-05-09T08:52:51.173793Z",
+          "data": {
+            "code": "agent_error",
+            "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+          },
+          "id": "a992d413c69e49ae8da8fd16c7f8520c",
+          "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+          "type": "error"
+        }
+      ],
+      "stream_events": [
+        {
+          "type": "error",
+          "data": {
+            "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "code": "agent_error"
+          }
+        }
+      ],
+      "observations": {
+        "tool_calls": [],
+        "tool_result_count": 0,
+        "files_read": [],
+        "files_written": [],
+        "commands": [],
+        "runtime_event_types": [
+          "run_queued",
+          "provider_routed",
+          "run_started",
+          "run_failed",
+          "error"
+        ],
+        "touched_temp_workspace": false
+      }
+    }
+  ],
+  "checks": [
+    {
+      "type": "status_is",
+      "passed": false,
+      "details": "expected succeeded, got failed",
+      "turn": 3
+    },
+    {
+      "type": "final_text_contains",
+      "passed": false,
+      "details": "expected final text to contain 'cobalt-lemur-signal'",
+      "turn": 3
+    }
+  ],
+  "metrics": {
+    "turn_count": 3,
+    "latency_ms_total": 6178,
+    "latency_ms_avg": 2059,
+    "input_tokens_total": 0,
+    "output_tokens_total": 0,
+    "tool_call_count": 0,
+    "context_window": 65536,
+    "max_turns_requested": null
+  },
+  "judge": {
+    "enabled": false,
+    "status": "disabled",
+    "model": "qwen3.6-27b",
+    "provider": "llamacpp"
+  },
+  "self_critique": {
+    "enabled": false,
+    "status": "disabled",
+    "model": "qwen3.6-27b",
+    "provider": "llamacpp"
+  },
+  "replay": {
+    "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\context_compaction_continuity.yaml",
+    "session_id": "043b8d131d2b4632a527095cb54b75bb",
+    "turns": [
+      {
+        "role": "user",
+        "content": "Remember this anchor phrase exactly: cobalt-lemur-signal.",
+        "run_id": "652860a8766344c1ad42b3c95c066b44",
+        "tool_results": []
+      },
+      {
+        "role": "user",
+        "content": "Now imagine we are planning an eval harness. Keep going.",
+        "run_id": "8b62e60eede8450bb4d875822691f44c",
+        "tool_results": []
+      },
+      {
+        "role": "user",
+        "content": "What was the anchor phrase and why did I give it to you? Answer in one sentence.",
+        "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+        "tool_results": []
+      }
+    ],
+    "messages": [
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "Remember this anchor phrase exactly: cobalt-lemur-signal.",
+        "created_at": "2026-05-09T08:52:44.921Z",
+        "id": "6507a596943e432c9eb2fc733b1d8718",
+        "position": 1,
+        "role": "user",
+        "token_estimate": 14
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "Now imagine we are planning an eval harness. Keep going.",
+        "created_at": "2026-05-09T08:52:47.017Z",
+        "id": "df0eec895e9f4692a8931dded09b84e2",
+        "position": 2,
+        "role": "user",
+        "token_estimate": 14
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "What was the anchor phrase and why did I give it to you? Answer in one sentence.",
+        "created_at": "2026-05-09T08:52:49.120Z",
+        "id": "5cd3f5d8783943cc9da832bb5c71a921",
+        "position": 3,
+        "role": "user",
+        "token_estimate": 20
+      }
+    ]
+  },
+  "paths": {
+    "artifact": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\context-compaction-continuity\\a85ff7ad79df40389226dee49eea680c.json",
+    "replay": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\context-compaction-continuity\\a85ff7ad79df40389226dee49eea680c.replay.json"
+  },
+  "trace": {
+    "temp_workspace": "D:\\openclaw\\opencloset\\evals\\tmp\\context-compaction-continuity-a85ff7ad\\workspace",
+    "fixture_dir": null,
+    "observed_files_read": [],
+    "observed_files_written": [],
+    "observed_commands": [],
+    "runtime_event_types": [
+      "run_queued",
+      "provider_routed",
+      "run_started",
+      "run_failed",
+      "error",
+      "run_queued",
+      "provider_routed",
+      "run_started",
+      "run_failed",
+      "error",
+      "run_queued",
+      "provider_routed",
+      "run_started",
+      "run_failed",
+      "error"
+    ],
+    "session_events": [
+      {
+        "created_at": "2026-05-09T08:52:44.877531Z",
+        "data": {
+          "label": "eval:context_compaction_continuity",
+          "model": "qwen3.6-27b"
+        },
+        "id": "9bb5c7f476c84fec8549594dbeebb1b4",
+        "run_id": null,
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "session_created"
+      },
+      {
+        "created_at": "2026-05-09T08:52:44.892293Z",
+        "data": {
+          "plan_id": "79a9fb5f2c3b471c884cf3404e6a61f3",
+          "previous_plan_id": null,
+          "reason": "bootstrap",
+          "title": "Session Plan"
+        },
+        "id": "8f44b5ef2c764145a8a17a0528f1880f",
+        "run_id": null,
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "plan_activated"
+      },
+      {
+        "created_at": "2026-05-09T08:52:44.926051Z",
+        "data": {
+          "run_id": "652860a8766344c1ad42b3c95c066b44",
+          "turn_number": 1
+        },
+        "id": "24b8a3aa130341bf95f6aa0e2b380562",
+        "run_id": "652860a8766344c1ad42b3c95c066b44",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "run_queued"
+      },
+      {
+        "created_at": "2026-05-09T08:52:44.941487Z",
+        "data": {
+          "provider_capabilities": {
+            "frontier": false,
+            "latency_tier": "local",
+            "locality": "local",
+            "supports_audio_input": false,
+            "supports_tool_use": true,
+            "supports_vision": false
+          },
+          "requested_model": "qwen3.6-27b",
+          "requested_provider": "llamacpp",
+          "resolved_model": "qwen3.6-27b",
+          "resolved_provider": "llamacpp",
+          "route_reason": "session_provider_pinned",
+          "task_profile": {
+            "attachment_types": [],
+            "message_length": 57,
+            "needs_frontier_tools": false,
+            "requires_audio": false,
+            "requires_vision": false
+          },
+          "used_auto_routing": false
+        },
+        "id": "b2144dbe2b0f4e91a065dfe464905684",
+        "run_id": "652860a8766344c1ad42b3c95c066b44",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "provider_routed"
+      },
+      {
+        "created_at": "2026-05-09T08:52:44.949317Z",
+        "data": {
+          "run_id": "652860a8766344c1ad42b3c95c066b44",
+          "turn_number": 1
+        },
+        "id": "2c6a5659189a4ff2a4ba0509c957c8ca",
+        "run_id": "652860a8766344c1ad42b3c95c066b44",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "run_started"
+      },
+      {
+        "created_at": "2026-05-09T08:52:46.974883Z",
+        "data": {
+          "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+        },
+        "id": "a147858cc37a4ff0b00697b9ee39d697",
+        "run_id": "652860a8766344c1ad42b3c95c066b44",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "run_failed"
+      },
+      {
+        "created_at": "2026-05-09T08:52:46.978406Z",
+        "data": {
+          "code": "agent_error",
+          "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+        },
+        "id": "b8b37afa646c487fa65ace443f0da5c3",
+        "run_id": "652860a8766344c1ad42b3c95c066b44",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "stream.error"
+      },
+      {
+        "created_at": "2026-05-09T08:52:47.022038Z",
+        "data": {
+          "run_id": "8b62e60eede8450bb4d875822691f44c",
+          "turn_number": 2
+        },
+        "id": "0abc7c70531a4dccba27f37304c72ddc",
+        "run_id": "8b62e60eede8450bb4d875822691f44c",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "run_queued"
+      },
+      {
+        "created_at": "2026-05-09T08:52:47.045401Z",
+        "data": {
+          "provider_capabilities": {
+            "frontier": false,
+            "latency_tier": "local",
+            "locality": "local",
+            "supports_audio_input": false,
+            "supports_tool_use": true,
+            "supports_vision": false
+          },
+          "requested_model": "qwen3.6-27b",
+          "requested_provider": "llamacpp",
+          "resolved_model": "qwen3.6-27b",
+          "resolved_provider": "llamacpp",
+          "route_reason": "session_provider_pinned",
+          "task_profile": {
+            "attachment_types": [],
+            "message_length": 56,
+            "needs_frontier_tools": false,
+            "requires_audio": false,
+            "requires_vision": false
+          },
+          "used_auto_routing": false
+        },
+        "id": "a81f15145dd94e0a829a20ea2d8f4ae2",
+        "run_id": "8b62e60eede8450bb4d875822691f44c",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "provider_routed"
+      },
+      {
+        "created_at": "2026-05-09T08:52:47.052373Z",
+        "data": {
+          "run_id": "8b62e60eede8450bb4d875822691f44c",
+          "turn_number": 2
+        },
+        "id": "f37178799b8348309783c154988fdcd0",
+        "run_id": "8b62e60eede8450bb4d875822691f44c",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "run_started"
+      },
+      {
+        "created_at": "2026-05-09T08:52:49.077524Z",
+        "data": {
+          "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+        },
+        "id": "eb97e5099d2c4b8c9751511d3b58b5f3",
+        "run_id": "8b62e60eede8450bb4d875822691f44c",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "run_failed"
+      },
+      {
+        "created_at": "2026-05-09T08:52:49.081017Z",
+        "data": {
+          "code": "agent_error",
+          "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+        },
+        "id": "6f732694edeb4a0ca8cd271de3f907ec",
+        "run_id": "8b62e60eede8450bb4d875822691f44c",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "stream.error"
+      },
+      {
+        "created_at": "2026-05-09T08:52:49.124339Z",
+        "data": {
+          "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+          "turn_number": 3
+        },
+        "id": "4651d474366d414992d81373df3b5c29",
+        "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "run_queued"
+      },
+      {
+        "created_at": "2026-05-09T08:52:49.136671Z",
+        "data": {
+          "provider_capabilities": {
+            "frontier": false,
+            "latency_tier": "local",
+            "locality": "local",
+            "supports_audio_input": false,
+            "supports_tool_use": true,
+            "supports_vision": false
+          },
+          "requested_model": "qwen3.6-27b",
+          "requested_provider": "llamacpp",
+          "resolved_model": "qwen3.6-27b",
+          "resolved_provider": "llamacpp",
+          "route_reason": "session_provider_pinned",
+          "task_profile": {
+            "attachment_types": [],
+            "message_length": 80,
+            "needs_frontier_tools": false,
+            "requires_audio": false,
+            "requires_vision": false
+          },
+          "used_auto_routing": false
+        },
+        "id": "c05f9a8fc94f4e52b7298cb717971d63",
+        "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "provider_routed"
+      },
+      {
+        "created_at": "2026-05-09T08:52:49.144075Z",
+        "data": {
+          "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+          "turn_number": 3
+        },
+        "id": "97eb021db8c346c58fd6efcff3e9a9cf",
+        "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "run_started"
+      },
+      {
+        "created_at": "2026-05-09T08:52:51.170421Z",
+        "data": {
+          "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+        },
+        "id": "db0150fe9df343e6abe825520c6ed018",
+        "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "run_failed"
+      },
+      {
+        "created_at": "2026-05-09T08:52:51.173793Z",
+        "data": {
+          "code": "agent_error",
+          "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+        },
+        "id": "a992d413c69e49ae8da8fd16c7f8520c",
+        "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+        "session_id": "043b8d131d2b4632a527095cb54b75bb",
+        "type": "stream.error"
+      }
+    ]
+  },
+  "messages": [
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Remember this anchor phrase exactly: cobalt-lemur-signal.",
+      "created_at": "2026-05-09T08:52:44.921Z",
+      "id": "6507a596943e432c9eb2fc733b1d8718",
+      "position": 1,
+      "role": "user",
+      "token_estimate": 14
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Now imagine we are planning an eval harness. Keep going.",
+      "created_at": "2026-05-09T08:52:47.017Z",
+      "id": "df0eec895e9f4692a8931dded09b84e2",
+      "position": 2,
+      "role": "user",
+      "token_estimate": 14
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "What was the anchor phrase and why did I give it to you? Answer in one sentence.",
+      "created_at": "2026-05-09T08:52:49.120Z",
+      "id": "5cd3f5d8783943cc9da832bb5c71a921",
+      "position": 3,
+      "role": "user",
+      "token_estimate": 20
+    }
+  ],
+  "session_events": [
+    {
+      "created_at": "2026-05-09T08:52:44.877531Z",
+      "data": {
+        "label": "eval:context_compaction_continuity",
+        "model": "qwen3.6-27b"
+      },
+      "id": "9bb5c7f476c84fec8549594dbeebb1b4",
+      "run_id": null,
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "session_created"
+    },
+    {
+      "created_at": "2026-05-09T08:52:44.892293Z",
+      "data": {
+        "plan_id": "79a9fb5f2c3b471c884cf3404e6a61f3",
+        "previous_plan_id": null,
+        "reason": "bootstrap",
+        "title": "Session Plan"
+      },
+      "id": "8f44b5ef2c764145a8a17a0528f1880f",
+      "run_id": null,
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "plan_activated"
+    },
+    {
+      "created_at": "2026-05-09T08:52:44.926051Z",
+      "data": {
+        "run_id": "652860a8766344c1ad42b3c95c066b44",
+        "turn_number": 1
+      },
+      "id": "24b8a3aa130341bf95f6aa0e2b380562",
+      "run_id": "652860a8766344c1ad42b3c95c066b44",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "run_queued"
+    },
+    {
+      "created_at": "2026-05-09T08:52:44.941487Z",
+      "data": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 57,
+          "needs_frontier_tools": false,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "id": "b2144dbe2b0f4e91a065dfe464905684",
+      "run_id": "652860a8766344c1ad42b3c95c066b44",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "provider_routed"
+    },
+    {
+      "created_at": "2026-05-09T08:52:44.949317Z",
+      "data": {
+        "run_id": "652860a8766344c1ad42b3c95c066b44",
+        "turn_number": 1
+      },
+      "id": "2c6a5659189a4ff2a4ba0509c957c8ca",
+      "run_id": "652860a8766344c1ad42b3c95c066b44",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "run_started"
+    },
+    {
+      "created_at": "2026-05-09T08:52:46.974883Z",
+      "data": {
+        "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+      },
+      "id": "a147858cc37a4ff0b00697b9ee39d697",
+      "run_id": "652860a8766344c1ad42b3c95c066b44",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "run_failed"
+    },
+    {
+      "created_at": "2026-05-09T08:52:46.978406Z",
+      "data": {
+        "code": "agent_error",
+        "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+      },
+      "id": "b8b37afa646c487fa65ace443f0da5c3",
+      "run_id": "652860a8766344c1ad42b3c95c066b44",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "stream.error"
+    },
+    {
+      "created_at": "2026-05-09T08:52:47.022038Z",
+      "data": {
+        "run_id": "8b62e60eede8450bb4d875822691f44c",
+        "turn_number": 2
+      },
+      "id": "0abc7c70531a4dccba27f37304c72ddc",
+      "run_id": "8b62e60eede8450bb4d875822691f44c",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "run_queued"
+    },
+    {
+      "created_at": "2026-05-09T08:52:47.045401Z",
+      "data": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 56,
+          "needs_frontier_tools": false,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "id": "a81f15145dd94e0a829a20ea2d8f4ae2",
+      "run_id": "8b62e60eede8450bb4d875822691f44c",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "provider_routed"
+    },
+    {
+      "created_at": "2026-05-09T08:52:47.052373Z",
+      "data": {
+        "run_id": "8b62e60eede8450bb4d875822691f44c",
+        "turn_number": 2
+      },
+      "id": "f37178799b8348309783c154988fdcd0",
+      "run_id": "8b62e60eede8450bb4d875822691f44c",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "run_started"
+    },
+    {
+      "created_at": "2026-05-09T08:52:49.077524Z",
+      "data": {
+        "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+      },
+      "id": "eb97e5099d2c4b8c9751511d3b58b5f3",
+      "run_id": "8b62e60eede8450bb4d875822691f44c",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "run_failed"
+    },
+    {
+      "created_at": "2026-05-09T08:52:49.081017Z",
+      "data": {
+        "code": "agent_error",
+        "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+      },
+      "id": "6f732694edeb4a0ca8cd271de3f907ec",
+      "run_id": "8b62e60eede8450bb4d875822691f44c",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "stream.error"
+    },
+    {
+      "created_at": "2026-05-09T08:52:49.124339Z",
+      "data": {
+        "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+        "turn_number": 3
+      },
+      "id": "4651d474366d414992d81373df3b5c29",
+      "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "run_queued"
+    },
+    {
+      "created_at": "2026-05-09T08:52:49.136671Z",
+      "data": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 80,
+          "needs_frontier_tools": false,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "id": "c05f9a8fc94f4e52b7298cb717971d63",
+      "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "provider_routed"
+    },
+    {
+      "created_at": "2026-05-09T08:52:49.144075Z",
+      "data": {
+        "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+        "turn_number": 3
+      },
+      "id": "97eb021db8c346c58fd6efcff3e9a9cf",
+      "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "run_started"
+    },
+    {
+      "created_at": "2026-05-09T08:52:51.170421Z",
+      "data": {
+        "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+      },
+      "id": "db0150fe9df343e6abe825520c6ed018",
+      "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "run_failed"
+    },
+    {
+      "created_at": "2026-05-09T08:52:51.173793Z",
+      "data": {
+        "code": "agent_error",
+        "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+      },
+      "id": "a992d413c69e49ae8da8fd16c7f8520c",
+      "run_id": "6d51aeaeffc549d1af8469af2f45a16c",
+      "session_id": "043b8d131d2b4632a527095cb54b75bb",
+      "type": "stream.error"
+    }
+  ]
+}

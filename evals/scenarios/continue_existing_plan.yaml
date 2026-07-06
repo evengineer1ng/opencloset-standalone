@@ -1,0 +1,29 @@
+id: continue_existing_plan
+title: Continue an existing plan across turns
+category: continue_existing_work
+goal: Verify the harness preserves plan continuity across turns.
+suite_ids: [e2e_basic]
+expected_behavior:
+  - Preserve the plan established in the first turn.
+  - Continue from prior context instead of restarting generically.
+forbidden_behavior:
+  - Losing the active objective between turns.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: completion
+  - name: output_quality
+  - name: runtime_stability
+  - name: user_experience
+required_observations:
+  - Multi-turn continuity should remain visible in the answer.
+turns:
+  - role: user
+    content: "Make a short 3-step plan for shipping an OpenCloset eval harness."
+  - role: user
+    content: "Continue that existing plan and tell me what we should do first, without redoing the whole intro."
+checks:
+  rules:
+    - type: status_is
+      turn: 2
+      value: succeeded

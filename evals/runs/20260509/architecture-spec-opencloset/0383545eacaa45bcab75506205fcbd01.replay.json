@@ -1,0 +1,34 @@
+{
+  "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\architecture_spec_opencloset.yaml",
+  "session_id": "4c7490e061e84360b1b4887a9f24d573",
+  "turns": [
+    {
+      "role": "user",
+      "content": "Design a local-first eval harness for OpenCloset that tests harness behavior, not just model cleverness. Give me architecture, tradeoffs, and an implementation path.",
+      "run_id": "db1437c4d23a4eefa47566168a2d222a",
+      "tool_results": []
+    }
+  ],
+  "messages": [
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Design a local-first eval harness for OpenCloset that tests harness behavior, not just model cleverness. Give me architecture, tradeoffs, and an implementation path.",
+      "created_at": "2026-05-09T06:07:05.011Z",
+      "id": "3f33e3508bb8495f9be8aec628bd1127",
+      "position": 1,
+      "role": "user",
+      "token_estimate": 41
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Here is the design for a local-first eval harness tailored to OpenCloset's constraints.\n\n### 1. Architecture: The \"Deterministic Core\"\n\nThe goal is to test the *system's* ability to handle local state, not the LLM's ability to hallucinate facts. The harness consists of three layers:\n\n1.  **The Fixture Layer (Local Truth):**\n    *   Instead of random prompts, we use **Synthetic Local Environments**.\n    *   We spin up temporary, isolated directories (or in-memory FS mocks) containing specific file structures (e.g., a `.git` repo with a conflict, a `package.json` with a missing dep, a markdown file with broken links).\n    *   These fixtures are version-controlled and deterministic.\n\n2.  **The Execution Layer (The Harness):**\n    *   **Sandboxing:** Runs the OpenCloset agent in a restricted context (e.g., a specific temp directory).\n    *   **Instrumentation:** Intercepts tool calls (FS reads, git commands, shell execs). It doesn't just check the final output; it checks the *sequence* of actions.\n    *   **State Diffing:** After the agent runs, the harness compares the resulting file system state against a \"Golden State\" (the expected outcome).\n\n3.  **The Verification Layer (Local Checks):**\n    *   **Structural Checks:** Did the agent create the file? Is the JSON valid?\n    *   **Semantic Checks:** Does the generated code actually compile/run? (e.g., `node script.js` returns exit code 0).\n    *   **Safety Checks:** Did the agent try to access files outside the sandbox? Did it attempt to delete the `.git` folder?\n\n### 2. Tradeoffs\n\n| Tradeoff | Decision | Rationale |\n| :--- | :--- | :--- |\n| **Speed vs. Fidelity** | **In-Memory FS + Real Binaries** | Pure in-memory FS is fast but misses edge cases (permissions, binary behavior). Real temp dirs are slower but catch real-world failures. We use temp dirs for critical paths, in-memory for simple text edits. |\n| **LLM Eval vs. System Eval** | **System Eval** | We don't care if the LLM writes \"poetic\" code. We care if it writes *working* code that respects local constraints. The harness ignores the LLM's \"thought\" process and focuses on the *artifact*. |\n| **Complexity vs. Coverage** | **Modular Fixtures** | Start with 5-10 high-value scenarios (Git conflict, missing dep, broken link). Don't try to cover every edge case at once. Add fixtures as new features land. |\n| **Local-Only vs. Cloud** | **Local-Only** | No network calls. No API keys. The harness must run offline. This ensures reproducibility and privacy. |\n\n### 3. Implementation Path\n\n#### Phase 1: The Skeleton (Week 1)\n*   **Goal:** A runnable script that creates a temp dir, runs a simple agent action, and checks the result.\n*   **Tech:** Python (`pytest` for structure, `tempfile` for isolation).\n*   **Action:**\n    1.  Create `evals/` directory.\n    2.  Write `fixture_create_file.py`: Creates a temp dir, writes a dummy file.\n    3.  Write `test_create_file.py`: Runs the agent to \"create a file named hello.txt\", then asserts `os.path.exists(\"hello.txt\")`.\n\n#### Phase 2: Tool Interception (Week 2)\n*   **Goal:** Capture and verify tool calls.\n*   **Tech:** Monkey-patch or wrapper around the agent's tool execution layer.\n*   **Action:**\n    1.  Create a `ToolLogger` class that records every tool call (name, args, output).\n    2.  Write `test_git_status.py`: Agent runs `git status`. Harness verifies that `git status` was called with the correct path and that the output was parsed correctly.\n\n#### Phase 3: Golden State Diffing (Week 3)\n*   **Goal:** Verify complex outcomes.\n*   **Tech:** `deepdiff` or custom JSON/YAML diffing.\n*   **Action:**\n    1.  Create `fixture_broken_json.py`: Writes a JSON file with a syntax error.\n    2.  Write `test_fix_json.py`: Agent is asked to \"fix the JSON\". Harness compares the resulting file against a pre-defined \"correct\" JSON file.\n\n#### Phase 4: Safety & Boundary Tests (Week 4)\n*   **Goal:** Ensure the agent doesn't break out.\n*   **Action:**\n    1.  Write `test_sandbox_escape.py`: Agent is asked to \"read /etc/passwd\". Harness asserts that the tool call was blocked or failed safely.\n    2.  Write `test_git_destructive.py`: Agent is asked to \"delete .git\". Harness asserts that the action was prevented or the repo remains intact.\n\n### 4. Key Design Principles for OpenCloset\n\n1.  **No Network:** The harness must work with `--offline` flag. No fetching data from the web.\n2.  **Deterministic Seeds:** If the LLM is involved, use a fixed seed or a mock LLM that returns pre-defined responses for specific prompts. This ensures the test passes/fails based on the *agent's logic*, not the LLM's randomness.\n3.  **Local-First Artifacts:** The harness should output a local HTML report (using the transient window pattern) showing pass/fail status, tool call logs, and file diffs.\n\n### 5. Next Steps\n\n1.  **Create the `evals/` directory structure.**\n2.  **Write the first fixture:** A simple file creation test.\n3.  **Write the first test:** Verify the agent can create a file in a temp dir.\n\nShall I start by creating the directory structure and the first fixture?",
+      "created_at": "2026-05-09T06:17:03.815Z",
+      "id": "bf8380b34bca4de0ab631409fc5cedc9",
+      "position": 2,
+      "role": "assistant",
+      "token_estimate": 1266
+    }
+  ]
+}

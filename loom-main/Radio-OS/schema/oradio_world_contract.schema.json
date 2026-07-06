@@ -1,0 +1,667 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://radio-os.local/schema/oradio_world_contract.schema.json",
+  "title": "The Loom .oradio World Contract",
+  "description": "Declares the persistent world-state shape for an .oradio universe: entities, pressure, threads, predictions, memory, and lightweight state tables suitable for tiny artifacts or club-resolved snapshots.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "world_id",
+    "state_mode",
+    "clock",
+    "tables"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "oradio.world_contract.v1"
+    },
+    "world_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "state_mode": {
+      "type": "string",
+      "enum": [
+        "seed_only",
+        "light_snapshot",
+        "full_snapshot",
+        "club_snapshot"
+      ]
+    },
+    "seed_ref": {
+      "$ref": "#/$defs/seedRef"
+    },
+    "snapshot_ref": {
+      "$ref": "#/$defs/clubSnapshotRef"
+    },
+    "clock": {
+      "$ref": "#/$defs/clockBlock"
+    },
+    "macro_state": {
+      "$ref": "#/$defs/macroState"
+    },
+    "tables": {
+      "$ref": "#/$defs/tableBlock"
+    }
+  },
+  "$defs": {
+    "idString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "seedRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "seed_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "seed_value": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "generator": {
+          "type": "string",
+          "maxLength": 120
+        }
+      }
+    },
+    "clubSnapshotRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolve",
+        "reference"
+      ],
+      "properties": {
+        "resolve": {
+          "const": "club"
+        },
+        "reference": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "clockBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tick",
+        "last_checked_at"
+      ],
+      "properties": {
+        "tick": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "last_checked_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "world_time_label": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "elapsed_policy": {
+          "type": "string",
+          "enum": [
+            "on_demand",
+            "fixed",
+            "hybrid"
+          ]
+        }
+      }
+    },
+    "macroState": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pressure_axes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pressureAxis"
+          },
+          "default": []
+        },
+        "active_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": []
+        }
+      }
+    },
+    "pressureAxis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "axis_id",
+        "current_value"
+      ],
+      "properties": {
+        "axis_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "baseline": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "current_value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "drift_rate": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        }
+      }
+    },
+    "tableBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity"
+          },
+          "default": []
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relationship"
+          },
+          "default": []
+        },
+        "institutions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/institution"
+          },
+          "default": []
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/location"
+          },
+          "default": []
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/obligation"
+          },
+          "default": []
+        },
+        "story_threads": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/storyThread"
+          },
+          "default": []
+        },
+        "predictions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/prediction"
+          },
+          "default": []
+        },
+        "memory_records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/memoryRecord"
+          },
+          "default": []
+        },
+        "event_log": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/worldEvent"
+          },
+          "default": []
+        },
+        "coefficients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/coefficient"
+          },
+          "default": []
+        }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entity_id",
+        "kind",
+        "label"
+      ],
+      "properties": {
+        "entity_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "character",
+            "faction",
+            "organization",
+            "sensor_avatar",
+            "custom"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "state": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "ledger_seed": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationship_id",
+        "source_entity_id",
+        "target_entity_id"
+      ],
+      "properties": {
+        "relationship_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "source_entity_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "target_entity_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": []
+        }
+      }
+    },
+    "institution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "institution_id",
+        "label"
+      ],
+      "properties": {
+        "institution_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "type": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "state": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "location_id",
+        "label"
+      ],
+      "properties": {
+        "location_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "location_type": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "pressure_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": []
+        },
+        "state": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "obligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "obligation_id",
+        "holder_id",
+        "status"
+      ],
+      "properties": {
+        "obligation_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "obligation_type": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "holder_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "counterparty_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "due_tick": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stakes": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "resolved",
+            "failed",
+            "expired"
+          ]
+        },
+        "pressure_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": []
+        }
+      }
+    },
+    "storyThread": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "thread_id",
+        "title",
+        "status"
+      ],
+      "properties": {
+        "thread_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "domain": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "participant_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/idString"
+          },
+          "default": []
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "resolved",
+            "dormant",
+            "failed"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "urgency": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "heat": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "predicted_resolution_tick": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_event_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/idString"
+          },
+          "default": []
+        }
+      }
+    },
+    "prediction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prediction_id",
+        "claim_type",
+        "status"
+      ],
+      "properties": {
+        "prediction_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "claim_type": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "thread_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "target_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "horizon_ticks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "resolved",
+            "expired"
+          ]
+        },
+        "resolution_outcome": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 160
+        }
+      }
+    },
+    "memoryRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "memory_id",
+        "memory_tier",
+        "summary"
+      ],
+      "properties": {
+        "memory_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "memory_tier": {
+          "type": "string",
+          "enum": [
+            "immediate",
+            "recent_history",
+            "historical_record",
+            "mythology",
+            "system"
+          ]
+        },
+        "owner_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "source_event_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/idString"
+          },
+          "default": []
+        },
+        "decay_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "myth_weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "worldEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "event_type",
+        "tick"
+      ],
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "event_type": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "heat": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": []
+        }
+      }
+    },
+    "coefficient": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coefficient_id",
+        "name",
+        "value"
+      ],
+      "properties": {
+        "coefficient_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "scope": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "value": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        }
+      }
+    }
+  }
+}

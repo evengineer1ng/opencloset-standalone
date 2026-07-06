@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>loom · Night City Motorsports</title>
+<style>
+ :root{--bg:#0a0b0f;--pan:#13151c;--ln:#262a34;--tx:#eef1f4;--mut:#8b94a3;--acc:#ffd33d;--cy:#7ad7f0;--good:#43d17a;--bad:#ff5d6c}
+ *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--tx);
+   font:15px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+ .wrap{max-width:1000px;margin:0 auto;padding:16px}
+ .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+ h1{font:bold 20px Consolas,monospace;color:var(--acc);margin:0;letter-spacing:.04em}
+ .badge{font:bold 11px Consolas,monospace;padding:4px 9px;border-radius:20px;letter-spacing:.08em}
+ .badge.live{background:rgba(67,209,122,.15);color:var(--good);border:1px solid var(--good)}
+ .badge.replay{background:rgba(139,148,163,.12);color:var(--mut);border:1px solid var(--ln)}
+ .sub{color:var(--mut);font-size:12.5px;margin:3px 0 14px}
+ .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+ @media(max-width:720px){.grid{grid-template-columns:1fr}}
+ .deck{background:var(--pan);border:1px solid var(--ln);border-radius:12px;padding:14px}
+ .deck h2{font:bold 11px Consolas,monospace;color:var(--cy);letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+ .state{font:bold 26px Consolas,monospace;color:var(--acc);text-transform:uppercase;letter-spacing:.06em}
+ .state small{display:block;font:normal 12px/1.4 sans-serif;color:var(--mut);letter-spacing:0;margin-top:4px}
+ button{background:var(--pan);color:var(--tx);border:1px solid var(--ln);border-radius:9px;font:600 15px sans-serif;
+   padding:12px 16px;cursor:pointer;margin:6px 6px 0 0} button:hover{border-color:var(--cy)}
+ button.go{background:var(--good);color:#04140a;border-color:var(--good)} button.stop{background:var(--bad);color:#1a0306;border-color:var(--bad)}
+ button:disabled{opacity:.35;cursor:not-allowed}
+ table{width:100%;border-collapse:collapse;font-size:14px} td,th{text-align:left;padding:5px 6px;border-bottom:1px solid var(--ln)}
+ th{color:var(--mut);font:600 11px Consolas,monospace;letter-spacing:.06em;text-transform:uppercase}
+ td.p{color:var(--acc);font:bold 14px Consolas,monospace;width:34px} tr.you td{color:var(--cy)}
+ .feed .msg{border-left:2px solid var(--ln);padding:4px 0 4px 11px;margin:9px 0}
+ .feed .from{color:var(--acc);font:bold 12px Consolas,monospace} .feed .body{color:var(--tx);font-size:14px}
+ .empty{color:var(--mut);font-style:italic;padding:8px 0}
+ a{color:var(--cy)}
+ .foot{margin-top:16px}
+</style>
+</head>
+<body><div class=wrap>
+ <div class=top>
+   <h1>NIGHT CITY MOTORSPORTS</h1>
+   <span id=badge class="badge replay">● REPLAY</span>
+ </div>
+ <div class=sub id=tagline>a window into a deterministic city — the paddock, the grid, the standings. loom is the engine under it.</div>
+
+ <div class=grid>
+   <div class=deck>
+     <h2>Race Control</h2>
+     <div class=state id=stateName>—<small id=stateHint></small></div>
+     <div id=controls></div>
+   </div>
+   <div class=deck>
+     <h2>The Grid</h2>
+     <table><thead><tr><th>P</th><th>Driver</th><th>Gap</th></tr></thead><tbody id=grid></tbody></table>
+   </div>
+   <div class=deck>
+     <h2>Championship</h2>
+     <table><thead><tr><th>P</th><th>Driver</th><th>Pts</th></tr></thead><tbody id=standings></tbody></table>
+   </div>
+   <div class=deck feed>
+     <h2>The Paddock</h2>
+     <div class=feed id=feed></div>
+   </div>
+
+   <div class=deck style="grid-column:1/-1">
+     <h2>Lap Review · Engineer's Debrief</h2>
+     <div class=row style="margin:0 0 8px"><label style="color:var(--mut);font-size:12px">session
+       <select id=lapPick style="background:var(--pan);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:7px 10px;font-size:14px"></select></label>
+       <span class=sub id=lapSummary style="margin:0"></span></div>
+     <canvas id=spd style="width:100%;height:120px;background:#07080b;border:1px solid var(--ln);border-radius:9px;display:block"></canvas>
+     <table style="margin-top:10px"><thead><tr><th>Lap</th><th>Time</th><th>S1</th><th>S2</th><th>S3</th><th>Offs</th></tr></thead><tbody id=laptable></tbody></table>
+     <div class=feed id=debrief style="margin-top:10px"></div>
+   </div>
+ </div>
+
+ <div class="sub foot">
+   <b>LIVE</b> controls a running Cyberpunk via the loom relay (<code>python integrations/ncm/ncm_bridge.py --mod &lt;path&gt;</code>). This page on its own is the <b>read-only portal</b>.
+   &middot; <a href="./">loom</a> &middot; <a href="./booth.html">the booth</a> &middot; <a href="https://github.com/evengineer1ng/loom">source</a>
+ </div>
+<script>
+// ===== the state machine, mirrored from racing.lua (IDLE->CONFIG->PRERACE->...->RESULTS) =====
+// each state advertises its next legal action(s); a click POSTs that intent to the relay.
+const STATES={
+ idle:     {hint:"No race staged. Open a config to begin.",            btns:[["open","Open Race Config"]]},
+ config:   {hint:"Pick track/field in-game, then warp to the start.",  btns:[["stage","Stage / Warp to Start"],["abort","Cancel"]]},
+ prerace:  {hint:"On the line. Drop the green when the grid's formed.", btns:[["start","▶ Green Flag","go"],["abort","Abort","stop"]]},
+ quali:    {hint:"Qualifying. Set a time, then start the race.",        btns:[["start","▶ Start Race","go"],["abort","Abort","stop"]]},
+ countdown:{hint:"Lights out…",                                         btns:[["abort","Abort","stop"]]},
+ racing:   {hint:"Green flag — racing live.",                           btns:[["abort","Abort","stop"]]},
+ results:  {hint:"Chequered flag. Results are in.",                     btns:[["open","New Race"]]},
+ unknown:  {hint:"Waiting on the game…",                                btns:[]}
+};
+
+// ===== REPLAY: a baked deterministic season, so the Pages page is a living portal =====
+const SEASON={
+ state:"results",
+ field:[
+  {pos:1,name:"Vale",gap:"—"},{pos:2,name:"Hex",gap:"+1.8s"},
+  {pos:3,name:"You",gap:"+2.4s",you:true},{pos:4,name:"Rin",gap:"+6.1s"},
+  {pos:5,name:"Mica",gap:"+9.7s"},{pos:6,name:"Timo",gap:"+14.0s"}],
+ standings:[
+  {pos:1,name:"Vale",points:78},{pos:2,name:"You",points:71},
+  {pos:3,name:"Hex",points:69},{pos:4,name:"Rin",points:54},{pos:5,name:"Timo",points:40}],
+ feed:[
+  {from:"Glow",body:"Third from the back of the grid — Night City's talking about you now."},
+  {from:"Rico",body:"Vale's crew switched to soft compound next round. Didn't come from me."},
+  {from:"Stu",body:"You're leaning too hard on the brakes into Three. Ease off or we lose the car."},
+  {from:"Inquiry",body:"Two podiums, zero wins. What's failing on the last lap?"}]
+};
+
+// REPLAY lap review — what lap_review.py computes for the demo session (the Pages page shows it too).
+const BAKED_REVIEW={
+ summary:{route:"Watson Northside Loop",best:"1:42.40"},
+ laps:[{lap:1,fmt:"1:46.20",s1:34.1,s2:40.0,s3:32.1,offs:1,best:false},
+       {lap:2,fmt:"1:43.80",s1:33.6,s2:38.7,s3:31.5,offs:0,best:false},
+       {lap:3,fmt:"1:42.40",s1:33.4,s2:38.2,s3:30.8,offs:0,best:true}],
+ trace:[202,216,137,108,158,209,220,126,101,144,198,212,180].map(v=>({speed:v})),
+ debrief:[
+  "Watson Northside Loop — 3 laps. Your best was lap 3, 1:42.40.",
+  "Your best lap stitched all three sectors near your sector bests — that's a clean one.",
+  "You brought it down 3.8s from lap 1 to lap 3 — building into it.",
+  "Tidy it up: 1 off-route. Clean that and the time comes for free.",
+  "Top speed 220 km/h. 2 heavy braking zones; slowest point 101 km/h — that's the corner that pays."]
+};
+
+// ===== a tiny loom narrator: turn a live snapshot into paddock lines (deterministic) =====
+function feedFromState(s){
+ const out=[]; const f=s.field||[];
+ if(s.state==="results" && f.length){
+   const w=f[0], you=f.find(x=>x.you);
+   if(w) out.push({from:"Race Control",body:`${w.name} takes the chequered flag.`});
+   if(you) out.push({from:"Glow",body:`You finished P${you.pos}. ${you.pos===1?"The whole grid knows your name now.":you.pos<=3?"Podium — the city's watching.":"Points on the board. Onward."}`});
+ } else if(s.state==="racing" && f.length){
+   out.push({from:"Race Control",body:`Green flag. ${f[0]?.name||"The leader"} leads ${(f.length-1)} cars through the city.`});
+ } else if(s.state==="prerace"){
+   out.push({from:"Stu",body:"Grid's forming up. Stage on the line and we go on your call."});
+ }
+ return out;
+}
+
+// ===== rendering =====
+function rows(tb, arr, cells){ tb.innerHTML=""; if(!arr||!arr.length){tb.innerHTML=`<tr><td colspan=3 class=empty>—</td></tr>`;return;}
+ for(const r of arr){ const tr=document.createElement('tr'); if(r.you)tr.className="you"; tr.innerHTML=cells(r); tb.appendChild(tr);} }
+function renderField(f){ rows(document.getElementById('grid'), f, r=>`<td class=p>${r.pos}</td><td>${r.name}${r.you?" (you)":""}</td><td>${r.gap||""}</td>`); }
+function renderStandings(s){ rows(document.getElementById('standings'), s, r=>`<td class=p>${r.pos}</td><td>${r.name}${r.you?" (you)":""}</td><td>${r.points??""}</td>`); }
+function renderFeed(items){ const el=document.getElementById('feed'); el.innerHTML="";
+ if(!items||!items.length){el.innerHTML=`<div class=empty>quiet in the paddock.</div>`;return;}
+ for(const m of items){ const d=document.createElement('div'); d.className="msg";
+   d.innerHTML=`<div class=from>${m.from}</div><div class=body>${m.body}</div>`; el.appendChild(d);} }
+function renderControl(state){ const def=STATES[state]||STATES.unknown;
+ document.getElementById('stateName').childNodes[0].nodeValue=state.toUpperCase();
+ document.getElementById('stateHint').textContent=def.hint;
+ const c=document.getElementById('controls'); c.innerHTML="";
+ for(const [intent,label,cls] of def.btns){ const b=document.createElement('button');
+   b.textContent=label; if(cls)b.className=cls; b.disabled=!LIVE;
+   b.onclick=()=>postCmd(intent); c.appendChild(b); }
+ if(!LIVE){ const n=document.createElement('div'); n.className="sub"; n.style.margin="8px 0 0";
+   n.textContent="read-only — start the relay to take control."; c.appendChild(n); }
+}
+function render(s){ renderControl(s.state||"unknown"); renderField(s.field); renderStandings(s.standings);
+ renderFeed(LIVE ? feedFromState(s) : SEASON.feed); }
+
+// ===== Lap Review: chart + table + the engineer's debrief =====
+function drawSpd(trace){ const c=document.getElementById('spd'),g=c.getContext('2d');
+ c.width=c.clientWidth*devicePixelRatio; c.height=c.clientHeight*devicePixelRatio;
+ g.clearRect(0,0,c.width,c.height); if(!trace||!trace.length)return;
+ const sp=trace.map(s=>s.speed||0),mx=Math.max(...sp,1),mn=Math.min(...sp,0),w=c.width,h=c.height,pad=10*devicePixelRatio;
+ g.strokeStyle="#7ad7f0"; g.lineWidth=2*devicePixelRatio; g.beginPath();
+ sp.forEach((v,i)=>{const x=pad+(w-2*pad)*i/Math.max(1,sp.length-1),y=h-pad-(h-2*pad)*(v-mn)/Math.max(1,mx-mn); i?g.lineTo(x,y):g.moveTo(x,y);});
+ g.stroke(); g.fillStyle="#8b94a3"; g.font=(11*devicePixelRatio)+"px Consolas";
+ g.fillText(Math.round(mx)+" km/h",pad,14*devicePixelRatio); }
+function renderReview(r){ if(!r)return;
+ document.getElementById('lapSummary').textContent = r.summary?(r.summary.route+"  ·  best "+(r.summary.best||"—")):"";
+ drawSpd(r.trace);
+ rows(document.getElementById('laptable'), r.laps, l=>`<td class=p>${l.lap}</td><td>${l.fmt}${l.best?" *":""}</td><td>${l.s1??""}</td><td>${l.s2??""}</td><td>${l.s3??""}</td><td>${l.offs||0}</td>`);
+ const d=document.getElementById('debrief'); d.innerHTML="";
+ for(const line of (r.debrief||[])){ const el=document.createElement('div'); el.className="msg";
+   el.innerHTML=`<div class=from>Engineer</div><div class=body>${line}</div>`; d.appendChild(el);} }
+async function loadSessions(){ try{ const list=await (await fetch('/sessions')).json();
+   const sel=document.getElementById('lapPick'); sel.innerHTML="";
+   for(const s of list){ const o=document.createElement('option'); o.value=s.id; o.textContent=s.route; sel.appendChild(o); }
+   sel.onchange=()=>loadReview(sel.value); if(list.length) loadReview(list[0].id);
+ }catch(_){} }
+async function loadReview(id){ try{ renderReview(await (await fetch('/session?id='+encodeURIComponent(id))).json()); }catch(_){} }
+
+// ===== mode detection + transport =====
+let LIVE=false;
+async function postCmd(intent){
+ try{ const r=await fetch('/cmd',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({intent})});
+   if(!r.ok){ const e=await r.json().catch(()=>({})); flash(e.error||('command failed ('+r.status+')')); } }
+ catch(_){ flash('relay not reachable'); }
+}
+function flash(msg){ const t=document.getElementById('tagline'); const old=t.textContent; t.textContent="⚠ "+msg;
+ setTimeout(()=>{t.textContent=old;},2200); }
+async function poll(){
+ try{ const s=await (await fetch('/state')).json();
+   if(s.connected && s.fresh){ render(s); document.getElementById('badge').className="badge live"; document.getElementById('badge').textContent="● LIVE — connected"; }
+   else { document.getElementById('badge').className="badge live"; document.getElementById('badge').textContent="● LIVE — game not ticking"; renderControl((s&&s.state)||"unknown"); }
+ }catch(_){ /* relay went away */ }
+}
+async function boot(){
+ try{ const p=await fetch('/ping'); LIVE = p.ok && (await p.json()).mode==="live"; }catch(_){ LIVE=false; }
+ if(LIVE){ document.getElementById('badge').className="badge live"; document.getElementById('badge').textContent="● LIVE";
+   document.getElementById('tagline').textContent="connected to Night City — control the race, watch the paddock react.";
+   poll(); setInterval(poll, 1200); loadSessions();
+ } else {
+   render(SEASON);   // the shareable read-only portal
+   const sel=document.getElementById('lapPick'); sel.innerHTML='<option value=example>Watson Northside Loop (demo)</option>';
+   renderReview(BAKED_REVIEW);
+ }
+}
+boot();
+</script>
+</div></body></html>

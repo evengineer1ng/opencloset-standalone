@@ -1,0 +1,194 @@
+{
+  "schema_version": "forkuniverse.compiled_world_package.v1",
+  "package_identity": {
+    "universe_id": "fu_000001",
+    "universe_title": "Frontier Mirror",
+    "ruleset_family": "westworld_frontier",
+    "ruleset_version": "v1",
+    "canonical_seed": "19383ybfgobblegork",
+    "seed_hash": "sha256:REPLACE_ME"
+  },
+  "universe_brief": {
+    "premise": "A Wild West theme park populated by AI hosts and wealthy visitors starts destabilizing when memory glitches accumulate.",
+    "story_mode": "continuous",
+    "world_scale": "district",
+    "starting_population": 48
+  },
+  "time_policy": {
+    "execution_model": "on_demand",
+    "preset": "adaptive_medium",
+    "world_seconds_per_real_second": 60.0,
+    "real_seconds_to_world_tick": 60,
+    "idle_tick_ratio": 0.25,
+    "deep_sleep_mode": "epoch",
+    "query_driven": true
+  },
+  "coefficient_profile": {
+    "pressure_social": 0.65,
+    "pressure_mystery": 0.7,
+    "pressure_entropy": 0.55,
+    "economy_harshness": 0.45,
+    "institutional_density": 0.8
+  },
+  "world_tables": {
+    "characters": [
+      {
+        "character_id": "char_0001",
+        "display_name": "Mae Mercer",
+        "archetype_id": "host_gunslinger",
+        "origin_location_id": "loc_0001",
+        "home_location_id": "loc_0003",
+        "organization_ids": ["org_0001"],
+        "trait_vector": {
+          "status_drive": 0.3,
+          "obedience": 0.7,
+          "curiosity": 0.45,
+          "resentment_potential": 0.6
+        },
+        "resource_state": {
+          "cash": 0,
+          "housing_security": 0.9,
+          "mobility": 0.4
+        },
+        "desire_vector": {
+          "freedom": 0.8,
+          "belonging": 0.55,
+          "status": 0.25
+        },
+        "fear_vector": {
+          "erasure": 0.9,
+          "humiliation": 0.6
+        },
+        "stress_profile": {
+          "baseline": 0.45,
+          "volatility": 0.5
+        },
+        "ledger_seed": {
+          "myth_tags": [],
+          "starting_promises": []
+        }
+      }
+    ],
+    "relationships": [
+      {
+        "relationship_id": "rel_0001",
+        "source_character_id": "char_0001",
+        "target_character_id": "char_0002",
+        "affection": 0.2,
+        "trust": 0.35,
+        "dependency": 0.5,
+        "resentment": 0.25,
+        "attraction": 0.0,
+        "loyalty": 0.4,
+        "fear": 0.3,
+        "history_depth": 0.55
+      }
+    ],
+    "organizations": [
+      {
+        "organization_id": "org_0001",
+        "label": "Del Oro Attractions",
+        "type": "corporation",
+        "district_id": "loc_0001",
+        "power_score": 0.88,
+        "wealth_score": 0.92,
+        "policy_profile": {
+          "secrecy": 0.85,
+          "discipline": 0.75,
+          "care": 0.15
+        },
+        "member_ids": ["char_0002"],
+        "tension_profile": {
+          "internal_rivalry": 0.4,
+          "external_scrutiny": 0.3
+        }
+      }
+    ],
+    "locations": [
+      {
+        "location_id": "loc_0001",
+        "label": "Sweetwater Row",
+        "location_type": "district",
+        "parent_location_id": "",
+        "pressure_tags": ["performance", "tourism", "surveillance"],
+        "population_capacity": 200,
+        "economic_heat": 0.8,
+        "danger_heat": 0.35,
+        "symbolic_weight": 0.9
+      }
+    ],
+    "obligations": [
+      {
+        "obligation_id": "obl_0001",
+        "obligation_type": "service_contract",
+        "holder_id": "char_0001",
+        "counterparty_id": "org_0001",
+        "start_tick": 0,
+        "due_tick": 120,
+        "stakes": 0.8,
+        "failure_cost": 0.9,
+        "success_reward": 0.15,
+        "status": "active"
+      }
+    ],
+    "macro_state": [
+      {
+        "axis_id": "institutional_control",
+        "baseline": 0.75,
+        "current_value": 0.75,
+        "normalization_bias": 0.0,
+        "drift_rate": -0.002
+      }
+    ],
+    "story_threads": [
+      {
+        "thread_id": "thr_0001",
+        "title": "Will the hosts' memory drift be detected before it spreads?",
+        "domain": "memory_instability",
+        "participant_ids": ["char_0001", "char_0002"],
+        "status": "active",
+        "confidence": 0.68,
+        "urgency": 0.44,
+        "heat": 0.72,
+        "predicted_resolution_tick": 140,
+        "source_event_ids": []
+      }
+    ],
+    "predictions": [
+      {
+        "prediction_id": "pred_0001",
+        "predictor_type": "organization",
+        "predictor_id": "org_0001",
+        "target_type": "thread",
+        "target_id": "thr_0001",
+        "thread_id": "thr_0001",
+        "claim_type": "containment_success",
+        "confidence": 0.74,
+        "horizon_ticks": 140,
+        "status": "open",
+        "resolution_outcome": null
+      }
+    ],
+    "memory_records": [
+      {
+        "memory_id": "mem_0001",
+        "memory_tier": "recent_history",
+        "owner_type": "world",
+        "owner_id": "world",
+        "summary": "A previous maintenance incident was quietly buried.",
+        "source_event_ids": [],
+        "decay_rate": 0.02,
+        "myth_weight": 0.1
+      }
+    ],
+    "coefficients": [
+      {
+        "coefficient_id": "coef_0001",
+        "scope": "global",
+        "name": "thread_heat_decay",
+        "value": 0.015,
+        "description": "Per-tick natural heat decay for unresolved threads."
+      }
+    ]
+  }
+}

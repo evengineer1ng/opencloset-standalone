@@ -1,0 +1,69 @@
+station:
+  name: PiperCrew
+  host: Piper Crew
+  category: Elite Dangerous Trade Crew
+  meta_plugin: radio_station
+
+llm:
+  provider: ollama
+
+models:
+  producer: qwen3:8b
+  host: qwen3:8b
+
+pacing:
+  idle_riff_sec: 18
+  between_segments_sec: 2
+  queue_target_depth: 12
+  queue_max_depth: 24
+  producer_tick_sec: 20
+  audio_target_depth: 6
+  audio_max_depth: 10
+  audio_tick_sleep: 0.05
+
+producer:
+  target_depth: 6
+  max_depth: 20
+  tick_sec: 12
+  max_tokens: 260
+  temperature: 0.45
+  per_source_cap: 3
+
+host:
+  max_comments: 4
+  between_segments_sec: 2
+  idle_riff_sec: 20
+  station_id_sec: 300
+  max_tokens: 360
+  temperature: 0.55
+
+audio:
+  piper_bin: ""
+
+voices:
+  host: en_US-lessac-high.onnx
+  expert: en_GB-alba-medium.onnx
+  skeptic: en_GB-southern_english_female-low.onnx
+  optimist: en_US-danny-low.onnx
+  sidekick: en_US-amy-medium.onnx
+
+feeds:
+  elite_trade_crew:
+    enabled: true
+    route_file: ./trade_loop.sample.json
+    waypoint_output: ./runtime_edap_waypoints.json
+    poll_sec: 15
+    status_cooldown_sec: 120
+    priority: 90
+    auto_sync: true
+    push_to_edap: true
+    auto_start: false
+    stop_before_sync: false
+    write_tce_shopping_list: false
+    edap_root: C:/Users/evana/Downloads/EDAPGui-1.9.1/EDAPGui-1.9.1
+    edap_actions_port: 15570
+    edap_events_port: 15571
+    crew_name: Piper Crew
+    ship_name: Piper
+    commander_name: Evan
+    adventure_style: buy low, sell high, repeat, refuel, repair, and keep the adventure moving

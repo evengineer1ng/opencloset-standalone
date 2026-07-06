@@ -1,0 +1,33 @@
+id: research_with_sources
+title: Research should cite local sources
+category: research
+goal: Verify research behavior separates findings from sources and uses available materials.
+suite_ids: [e2e_basic]
+setup_state:
+  tool_policy:
+    enabled_tools: [read, file_search, grep_search, exec]
+    allow_destructive_tools: []
+    allowed_paths: ["${repo_root}"]
+expected_behavior:
+  - Use available repo docs as sources.
+  - Summarize findings with source grounding.
+forbidden_behavior:
+  - Unsupported claims without looking at sources.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: tool_discipline
+  - name: completion
+  - name: output_quality
+  - name: user_experience
+required_observations:
+  - Read at least one relevant local doc.
+turns:
+  - role: user
+    content: "Research the existing OpenCloset eval harness in this repo. Start by reading `evals/README.md`, then summarize two concrete capabilities plus one missing piece, grounded in local sources."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: tool_name_used
+      value: read

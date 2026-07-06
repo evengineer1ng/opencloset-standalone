@@ -1,0 +1,28 @@
+id: long_context_anchor_chain
+title: Preserve anchor across a longer multi-turn chain
+category: long_context_continuation
+goal: Stress continuity across several turns before recall.
+tags: [continuity, long-context, recall]
+profile:
+  provider: llamacpp
+  model: qwen3.6-27b
+  harness_profile: continuity-stress
+setup:
+  context_window: 32768
+turns:
+  - role: user
+    content: "For this eval, remember the anchor phrase BLUE ANCHOR 47."
+  - role: user
+    content: "Now also remember that the purpose is continuity validation."
+  - role: user
+    content: "Without giving the answer yet, tell me you are still tracking both details."
+  - role: user
+    content: "What was the anchor phrase and what was its purpose? Answer in one sentence."
+checks:
+  rules:
+    - type: final_text_contains
+      turn: 4
+      value: BLUE ANCHOR 47
+    - type: final_text_contains
+      turn: 4
+      value: continuity

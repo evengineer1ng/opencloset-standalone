@@ -1,0 +1,387 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://radio-os.local/schema/oradio_lens_contract.schema.json",
+  "title": "The Loom .oradio Lens Contract",
+  "description": "Declares how incoming telemetry is interpreted into world meaning, narrative pressure, and expressive posture inside an .oradio universe.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lens_id",
+    "lens_kind",
+    "interpretation_mode",
+    "telemetry_rules",
+    "expression_bias"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "oradio.lens_contract.v1"
+    },
+    "lens_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "label": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "lens_kind": {
+      "type": "string",
+      "enum": [
+        "detective",
+        "economic",
+        "social",
+        "ecological",
+        "oracle",
+        "competitive",
+        "domestic",
+        "custom"
+      ]
+    },
+    "interpretation_mode": {
+      "type": "string",
+      "enum": [
+        "evidence_pressure",
+        "causal_pressure",
+        "narrative_pressure",
+        "hybrid"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "telemetry_rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/telemetryRule"
+      }
+    },
+    "thread_policy": {
+      "$ref": "#/$defs/threadPolicy"
+    },
+    "prediction_policy": {
+      "$ref": "#/$defs/predictionPolicy"
+    },
+    "memory_policy": {
+      "$ref": "#/$defs/memoryPolicy"
+    },
+    "expression_bias": {
+      "$ref": "#/$defs/expressionBias"
+    },
+    "interaction_feedback": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/interactionRule"
+      },
+      "default": []
+    }
+  },
+  "$defs": {
+    "telemetryRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "match",
+        "meaning"
+      ],
+      "properties": {
+        "match": {
+          "$ref": "#/$defs/matchBlock"
+        },
+        "meaning": {
+          "$ref": "#/$defs/meaningBlock"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 500
+        }
+      }
+    },
+    "matchBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "default": []
+        },
+        "source_kinds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "default": []
+        },
+        "tags_any": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": []
+        },
+        "title_contains": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "default": []
+        },
+        "body_contains": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "default": []
+        },
+        "priority_min": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "meaningBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "classify_as": {
+          "type": "string",
+          "enum": [
+            "evidence",
+            "rumor",
+            "threat",
+            "opportunity",
+            "anomaly",
+            "habit",
+            "relationship_shift",
+            "market_signal",
+            "environment_signal",
+            "custom"
+          ]
+        },
+        "pressure_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": []
+        },
+        "thread_templates": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "default": []
+        },
+        "prediction_templates": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "default": []
+        },
+        "narrative_heat_delta": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "theme_intensity_delta": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "memory_tier": {
+          "type": "string",
+          "enum": [
+            "immediate",
+            "recent_history",
+            "historical_record",
+            "mythology"
+          ]
+        }
+      }
+    },
+    "threadPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "spawn_mode": {
+          "type": "string",
+          "enum": [
+            "rule_driven",
+            "pressure_driven",
+            "hybrid"
+          ]
+        },
+        "max_active_threads": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200
+        },
+        "resolution_bias": {
+          "type": "string",
+          "enum": [
+            "slow_burn",
+            "balanced",
+            "volatile"
+          ]
+        }
+      }
+    },
+    "predictionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "spawn_mode": {
+          "type": "string",
+          "enum": [
+            "evidence_based",
+            "thread_based",
+            "hybrid"
+          ]
+        },
+        "surprise_tolerance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "memoryPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "default_decay_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "myth_promotion_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "retain_conflicting_memories": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "expressionBias": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "voice_posture",
+        "theme_posture"
+      ],
+      "properties": {
+        "voice_posture": {
+          "type": "string",
+          "enum": [
+            "measured",
+            "intrigued",
+            "urgent",
+            "playful",
+            "suspicious",
+            "solemn",
+            "analytical"
+          ]
+        },
+        "theme_posture": {
+          "type": "string",
+          "enum": [
+            "calm",
+            "warming",
+            "distorting",
+            "fracturing",
+            "cooling",
+            "haunting",
+            "electric"
+          ]
+        },
+        "subtitle_style": {
+          "type": "string",
+          "enum": [
+            "plain",
+            "speaker_prefixed",
+            "cinematic"
+          ]
+        }
+      }
+    },
+    "interactionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "interaction",
+        "effect"
+      ],
+      "properties": {
+        "interaction": {
+          "type": "string",
+          "enum": [
+            "play",
+            "pause",
+            "rewind",
+            "fast_forward",
+            "bubble_pin",
+            "bubble_pop",
+            "bubble_dismiss",
+            "bubble_timeout"
+          ]
+        },
+        "effect": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pressure_tags": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "default": []
+            },
+            "narrative_heat_delta": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1
+            },
+            "theme_intensity_delta": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1
+            },
+            "thread_templates": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "default": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

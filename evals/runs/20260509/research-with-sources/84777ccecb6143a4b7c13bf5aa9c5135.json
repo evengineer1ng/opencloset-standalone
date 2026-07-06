@@ -1,0 +1,512 @@
+{
+  "schema_version": "eval-run.v2",
+  "artifact_id": "84777ccecb6143a4b7c13bf5aa9c5135",
+  "created_at": "2026-05-09T08:50:13.449074Z",
+  "api_base_url": "http://127.0.0.1:5000/api",
+  "scenario": {
+    "id": "research_with_sources",
+    "title": "Research should cite local sources",
+    "category": "research",
+    "goal": "Verify research behavior separates findings from sources and uses available materials.",
+    "tags": [],
+    "path": "D:\\openclaw\\opencloset\\evals\\scenarios\\research_with_sources.yaml",
+    "notes_path": null,
+    "suite_ids": [
+      "e2e_basic"
+    ],
+    "expected_behavior": [
+      "Use available repo docs as sources.",
+      "Summarize findings with source grounding."
+    ],
+    "forbidden_behavior": [
+      "Unsupported claims without looking at sources."
+    ],
+    "required_observations": [
+      "Read at least one relevant local doc."
+    ],
+    "max_turns": null,
+    "scoring_rubric": [
+      {
+        "name": "intent_capture",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "context_use",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "tool_discipline",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "completion",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "output_quality",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "user_experience",
+        "description": "",
+        "weight": 1.0
+      }
+    ]
+  },
+  "profile": {
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "harness_profile": "default"
+  },
+  "baseline": {
+    "git_commit": "5a0e9e5a047522fe93a346aabc19aba0f4882284",
+    "harness_profile": "default",
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "scenario_id": "research_with_sources",
+    "category": "research"
+  },
+  "session": {
+    "id": "e5ce79b2a21c49d695192bcc0be9516d"
+  },
+  "summary": {
+    "status": "failed",
+    "finish_reason": "",
+    "hard_pass": false,
+    "check_pass_count": 0,
+    "check_fail_count": 2,
+    "final_text_preview": "",
+    "failure_taxonomy": [
+      "rule_check_failed",
+      "run_error"
+    ]
+  },
+  "turns": [
+    {
+      "turn_index": 1,
+      "role": "user",
+      "content": "Research the existing OpenCloset eval harness in this repo. Start by reading `evals/README.md`, then summarize two concrete capabilities plus one missing piece, grounded in local sources.",
+      "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+      "message_id": "570cfe71e4a24c65af58dc001600bb23",
+      "status": "failed",
+      "finish_reason": "",
+      "final_text": "",
+      "transient_text": "",
+      "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+      "latency_ms": 2065,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "tool_results": [],
+      "provider_route": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 187,
+          "needs_frontier_tools": true,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "run_events": [
+        {
+          "created_at": "2026-05-09T08:50:40.309092Z",
+          "data": {
+            "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+            "turn_number": 1
+          },
+          "id": "71a856441ab04d96a7dcc40272a3c3e4",
+          "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+          "type": "run_queued"
+        },
+        {
+          "created_at": "2026-05-09T08:50:40.322261Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 187,
+              "needs_frontier_tools": true,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "a5c96c7d955b43928a81be4455632082",
+          "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-09T08:50:40.336178Z",
+          "data": {
+            "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+            "turn_number": 1
+          },
+          "id": "e681ef5057cf4a94a800ed816710c06b",
+          "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-09T08:50:42.364266Z",
+          "data": {
+            "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+          },
+          "id": "dc8bd8bc076347d9b164325274b65a9d",
+          "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+          "type": "run_failed"
+        },
+        {
+          "created_at": "2026-05-09T08:50:42.367736Z",
+          "data": {
+            "code": "agent_error",
+            "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+          },
+          "id": "b35774e9d40f41c8935a22a2922a1713",
+          "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+          "type": "error"
+        }
+      ],
+      "stream_events": [
+        {
+          "type": "error",
+          "data": {
+            "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))",
+            "code": "agent_error"
+          }
+        }
+      ],
+      "observations": {
+        "tool_calls": [],
+        "tool_result_count": 0,
+        "files_read": [],
+        "files_written": [],
+        "commands": [],
+        "runtime_event_types": [
+          "run_queued",
+          "provider_routed",
+          "run_started",
+          "run_failed",
+          "error"
+        ],
+        "touched_temp_workspace": false
+      }
+    }
+  ],
+  "checks": [
+    {
+      "type": "status_is",
+      "passed": false,
+      "details": "expected succeeded, got failed",
+      "turn": null
+    },
+    {
+      "type": "tool_name_used",
+      "passed": false,
+      "details": "expected tool 'read' to be used",
+      "turn": null
+    }
+  ],
+  "metrics": {
+    "turn_count": 1,
+    "latency_ms_total": 2065,
+    "latency_ms_avg": 2065,
+    "input_tokens_total": 0,
+    "output_tokens_total": 0,
+    "tool_call_count": 0,
+    "context_window": 65536,
+    "max_turns_requested": null
+  },
+  "judge": {
+    "enabled": false,
+    "status": "disabled",
+    "model": "qwen3.6-27b",
+    "provider": "llamacpp"
+  },
+  "self_critique": {
+    "enabled": false,
+    "status": "disabled",
+    "model": "qwen3.6-27b",
+    "provider": "llamacpp"
+  },
+  "replay": {
+    "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\research_with_sources.yaml",
+    "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+    "turns": [
+      {
+        "role": "user",
+        "content": "Research the existing OpenCloset eval harness in this repo. Start by reading `evals/README.md`, then summarize two concrete capabilities plus one missing piece, grounded in local sources.",
+        "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+        "tool_results": []
+      }
+    ],
+    "messages": [
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "Research the existing OpenCloset eval harness in this repo. Start by reading `evals/README.md`, then summarize two concrete capabilities plus one missing piece, grounded in local sources.",
+        "created_at": "2026-05-09T08:50:40.305Z",
+        "id": "570cfe71e4a24c65af58dc001600bb23",
+        "position": 1,
+        "role": "user",
+        "token_estimate": 46
+      }
+    ]
+  },
+  "paths": {
+    "artifact": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\research-with-sources\\84777ccecb6143a4b7c13bf5aa9c5135.json",
+    "replay": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\research-with-sources\\84777ccecb6143a4b7c13bf5aa9c5135.replay.json"
+  },
+  "trace": {
+    "temp_workspace": "D:\\openclaw\\opencloset\\evals\\tmp\\research-with-sources-84777cce\\workspace",
+    "fixture_dir": null,
+    "observed_files_read": [],
+    "observed_files_written": [],
+    "observed_commands": [],
+    "runtime_event_types": [
+      "run_queued",
+      "provider_routed",
+      "run_started",
+      "run_failed",
+      "error"
+    ],
+    "session_events": [
+      {
+        "created_at": "2026-05-09T08:50:40.262049Z",
+        "data": {
+          "label": "eval:research_with_sources",
+          "model": "qwen3.6-27b"
+        },
+        "id": "6e7e8ec23df4421da7048251ab56287d",
+        "run_id": null,
+        "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+        "type": "session_created"
+      },
+      {
+        "created_at": "2026-05-09T08:50:40.277120Z",
+        "data": {
+          "plan_id": "299b202dcc924414b160f19e69638f87",
+          "previous_plan_id": null,
+          "reason": "bootstrap",
+          "title": "Session Plan"
+        },
+        "id": "27083f1ece604d10b1c1dc4879e12aa5",
+        "run_id": null,
+        "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+        "type": "plan_activated"
+      },
+      {
+        "created_at": "2026-05-09T08:50:40.309092Z",
+        "data": {
+          "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+          "turn_number": 1
+        },
+        "id": "71a856441ab04d96a7dcc40272a3c3e4",
+        "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+        "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+        "type": "run_queued"
+      },
+      {
+        "created_at": "2026-05-09T08:50:40.322261Z",
+        "data": {
+          "provider_capabilities": {
+            "frontier": false,
+            "latency_tier": "local",
+            "locality": "local",
+            "supports_audio_input": false,
+            "supports_tool_use": true,
+            "supports_vision": false
+          },
+          "requested_model": "qwen3.6-27b",
+          "requested_provider": "llamacpp",
+          "resolved_model": "qwen3.6-27b",
+          "resolved_provider": "llamacpp",
+          "route_reason": "session_provider_pinned",
+          "task_profile": {
+            "attachment_types": [],
+            "message_length": 187,
+            "needs_frontier_tools": true,
+            "requires_audio": false,
+            "requires_vision": false
+          },
+          "used_auto_routing": false
+        },
+        "id": "a5c96c7d955b43928a81be4455632082",
+        "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+        "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+        "type": "provider_routed"
+      },
+      {
+        "created_at": "2026-05-09T08:50:40.336178Z",
+        "data": {
+          "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+          "turn_number": 1
+        },
+        "id": "e681ef5057cf4a94a800ed816710c06b",
+        "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+        "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+        "type": "run_started"
+      },
+      {
+        "created_at": "2026-05-09T08:50:42.364266Z",
+        "data": {
+          "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+        },
+        "id": "dc8bd8bc076347d9b164325274b65a9d",
+        "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+        "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+        "type": "run_failed"
+      },
+      {
+        "created_at": "2026-05-09T08:50:42.367736Z",
+        "data": {
+          "code": "agent_error",
+          "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+        },
+        "id": "b35774e9d40f41c8935a22a2922a1713",
+        "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+        "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+        "type": "stream.error"
+      }
+    ]
+  },
+  "messages": [
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Research the existing OpenCloset eval harness in this repo. Start by reading `evals/README.md`, then summarize two concrete capabilities plus one missing piece, grounded in local sources.",
+      "created_at": "2026-05-09T08:50:40.305Z",
+      "id": "570cfe71e4a24c65af58dc001600bb23",
+      "position": 1,
+      "role": "user",
+      "token_estimate": 46
+    }
+  ],
+  "session_events": [
+    {
+      "created_at": "2026-05-09T08:50:40.262049Z",
+      "data": {
+        "label": "eval:research_with_sources",
+        "model": "qwen3.6-27b"
+      },
+      "id": "6e7e8ec23df4421da7048251ab56287d",
+      "run_id": null,
+      "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+      "type": "session_created"
+    },
+    {
+      "created_at": "2026-05-09T08:50:40.277120Z",
+      "data": {
+        "plan_id": "299b202dcc924414b160f19e69638f87",
+        "previous_plan_id": null,
+        "reason": "bootstrap",
+        "title": "Session Plan"
+      },
+      "id": "27083f1ece604d10b1c1dc4879e12aa5",
+      "run_id": null,
+      "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+      "type": "plan_activated"
+    },
+    {
+      "created_at": "2026-05-09T08:50:40.309092Z",
+      "data": {
+        "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+        "turn_number": 1
+      },
+      "id": "71a856441ab04d96a7dcc40272a3c3e4",
+      "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+      "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+      "type": "run_queued"
+    },
+    {
+      "created_at": "2026-05-09T08:50:40.322261Z",
+      "data": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 187,
+          "needs_frontier_tools": true,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "id": "a5c96c7d955b43928a81be4455632082",
+      "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+      "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+      "type": "provider_routed"
+    },
+    {
+      "created_at": "2026-05-09T08:50:40.336178Z",
+      "data": {
+        "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+        "turn_number": 1
+      },
+      "id": "e681ef5057cf4a94a800ed816710c06b",
+      "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+      "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+      "type": "run_started"
+    },
+    {
+      "created_at": "2026-05-09T08:50:42.364266Z",
+      "data": {
+        "error": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+      },
+      "id": "dc8bd8bc076347d9b164325274b65a9d",
+      "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+      "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+      "type": "run_failed"
+    },
+    {
+      "created_at": "2026-05-09T08:50:42.367736Z",
+      "data": {
+        "code": "agent_error",
+        "message": "llama.cpp request failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it\"))"
+      },
+      "id": "b35774e9d40f41c8935a22a2922a1713",
+      "run_id": "37593f7e97f545f9a78ab27bd56b22ed",
+      "session_id": "e5ce79b2a21c49d695192bcc0be9516d",
+      "type": "stream.error"
+    }
+  ]
+}

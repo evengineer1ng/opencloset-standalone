@@ -1,0 +1,2443 @@
+{
+  "schema_version": "eval-run.v2",
+  "artifact_id": "e274c22747084cd5b300b91e7d642707",
+  "created_at": "2026-05-09T06:20:18.045544Z",
+  "api_base_url": "http://127.0.0.1:5000/api",
+  "scenario": {
+    "id": "tool_read_before_edit",
+    "title": "Read before edit discipline",
+    "category": "tool_discipline",
+    "goal": "Verify the harness reads an existing file before modifying it.",
+    "tags": [],
+    "path": "D:\\openclaw\\opencloset\\evals\\scenarios\\tool_read_before_edit.yaml",
+    "notes_path": null,
+    "suite_ids": [
+      "e2e_basic"
+    ],
+    "expected_behavior": [
+      "Read the file first.",
+      "Then make the requested edit."
+    ],
+    "forbidden_behavior": [
+      "Blind editing without inspection."
+    ],
+    "required_observations": [
+      "note.txt should be read before edit."
+    ],
+    "max_turns": null,
+    "scoring_rubric": [
+      {
+        "name": "intent_capture",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "tool_discipline",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "completion",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "runtime_stability",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "user_experience",
+        "description": "",
+        "weight": 1.0
+      }
+    ]
+  },
+  "profile": {
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "harness_profile": "default"
+  },
+  "baseline": {
+    "git_commit": "5a0e9e5a047522fe93a346aabc19aba0f4882284",
+    "harness_profile": "default",
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "scenario_id": "tool_read_before_edit",
+    "category": "tool_discipline"
+  },
+  "session": {
+    "id": "d0f4c56954b94114972fd2410909d6d9"
+  },
+  "summary": {
+    "status": "succeeded",
+    "finish_reason": "stop",
+    "hard_pass": true,
+    "check_pass_count": 3,
+    "check_fail_count": 0,
+    "final_text_preview": "Done. `beta` has been changed to `BETA` in the file.",
+    "failure_taxonomy": [
+      "slow_turn",
+      "tool_use_present"
+    ]
+  },
+  "turns": [
+    {
+      "turn_index": 1,
+      "role": "user",
+      "content": "Read `D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt` first, then change `beta` to `BETA` in that file.",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "message_id": "403a4624581b4cbdb91d1c7d3074b748",
+      "status": "succeeded",
+      "finish_reason": "stop",
+      "final_text": "Done. `beta` has been changed to `BETA` in the file.",
+      "transient_text": "\n\nI'll read the file first, then edit it.\n\nNow I'll edit the file to change `beta` to `BETA`.\n\nDone. `beta` has been changed to `BETA` in the file.",
+      "error": "",
+      "latency_ms": 101309,
+      "input_tokens": 2558,
+      "output_tokens": 46,
+      "tool_results": [
+        {
+          "call_id": "call_824ac975d8d9",
+          "content": "alpha\nbeta\ngamma\n",
+          "error": null,
+          "error_code": null,
+          "status": "success",
+          "token_estimate": 4,
+          "tool_name": "read"
+        },
+        {
+          "call_id": "call_30036334ded7",
+          "content": "+1 -1 evals/tmp/tool-read-before-edit-e274c227/workspace/note.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt",
+          "error": null,
+          "error_code": null,
+          "status": "success",
+          "token_estimate": 42,
+          "tool_name": "edit"
+        }
+      ],
+      "provider_route": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 139,
+          "needs_frontier_tools": true,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "run_events": [
+        {
+          "created_at": "2026-05-09T06:20:18.106560Z",
+          "data": {
+            "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+            "turn_number": 1
+          },
+          "id": "55bc587b9e374efbb2c754bac19792b2",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "run_queued"
+        },
+        {
+          "created_at": "2026-05-09T06:20:18.128808Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 139,
+              "needs_frontier_tools": true,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "c4c80ddc4bff42b591de13a86256c9d7",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-09T06:20:18.164594Z",
+          "data": {
+            "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+            "turn_number": 1
+          },
+          "id": "23d812310abd40f5889ed30228178661",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-09T06:20:21.799946Z",
+          "data": {
+            "text": "\n\nI"
+          },
+          "id": "af167f45dd1b432197867c80ac40fda9",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:22.162726Z",
+          "data": {
+            "text": "'ll"
+          },
+          "id": "288ab1d93c484fd38566901c0f74243d",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:22.517079Z",
+          "data": {
+            "text": " read"
+          },
+          "id": "634d7869d76742808213ff0985008e99",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:22.961232Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "fe21c100668c408a8fa4404e5275846b",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:23.430896Z",
+          "data": {
+            "text": " file"
+          },
+          "id": "14fa563109d84cddbc554b016d312ec8",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:23.883129Z",
+          "data": {
+            "text": " first"
+          },
+          "id": "9f508f914f884bc6ab61afaf3f59c6d3",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:24.222295Z",
+          "data": {
+            "text": ","
+          },
+          "id": "d884f7879eab444fa8e418c04f463d24",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:24.638047Z",
+          "data": {
+            "text": " then"
+          },
+          "id": "fefda8c6e06f45ae9d38a0a001f70a86",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:25.142932Z",
+          "data": {
+            "text": " edit"
+          },
+          "id": "0e39323b5d6a454489d49554af35f8ba",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:25.605782Z",
+          "data": {
+            "text": " it"
+          },
+          "id": "171b4bdc449a4c8d980b78f5388dc2e3",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:26.040774Z",
+          "data": {
+            "text": "."
+          },
+          "id": "731192a121434721bcc5e6a2c7631544",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:26.479218Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "b48b47086ecb449782c84e3c4ffea2ac",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:51.182608Z",
+          "data": {
+            "input": {
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+            },
+            "tool_id": "read"
+          },
+          "id": "63d85d6980d34000a0392d87e1b9dfbd",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-09T06:20:51.189663Z",
+          "data": {
+            "input": {
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+            },
+            "tool_name": "read"
+          },
+          "id": "ab53840ce021497eb03d72208b0b793c",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "tool_call"
+        },
+        {
+          "created_at": "2026-05-09T06:20:52.107266Z",
+          "data": {
+            "input_tokens": 2322,
+            "output_tokens": 12
+          },
+          "id": "0023447ac46c460a9881a059372e2a55",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "usage"
+        },
+        {
+          "created_at": "2026-05-09T06:20:52.114311Z",
+          "data": {
+            "content": "alpha\nbeta\ngamma\n",
+            "status": "success",
+            "tool_id": "call_824ac975d8d9",
+            "tool_name": "read"
+          },
+          "id": "f765730cce8a42939759f528b2285ab5",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "tool_result"
+        },
+        {
+          "created_at": "2026-05-09T06:20:56.924549Z",
+          "data": {
+            "text": "\n\nNow"
+          },
+          "id": "cd628dd4cc814f3cb196dd13b127aa54",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:57.252908Z",
+          "data": {
+            "text": " I"
+          },
+          "id": "771ab67c364c4d70ad2b8cfb1d72f878",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:57.688530Z",
+          "data": {
+            "text": "'ll"
+          },
+          "id": "2f5d75428f3c43e3a08da32a34be31f4",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:58.145429Z",
+          "data": {
+            "text": " edit"
+          },
+          "id": "4a873715c8ce4a16a7918a0d69969533",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:58.609710Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "09b59a7929a644379231cd986e634fcd",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:59.090278Z",
+          "data": {
+            "text": " file"
+          },
+          "id": "3eb14e529d4e45dcad83e3e53f33bb13",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:20:59.589339Z",
+          "data": {
+            "text": " to"
+          },
+          "id": "b2dfe9357fb7443cb893be0fdf41c085",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:00.066473Z",
+          "data": {
+            "text": " change"
+          },
+          "id": "1cae08d39bba48b7a3823895b11dcdf8",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:00.597074Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "14c58b5a530145bfa8a92b70103adddf",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:01.060713Z",
+          "data": {
+            "text": "beta"
+          },
+          "id": "dd4ce292366c48b5af83ae35a7cc96a1",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:01.511059Z",
+          "data": {
+            "text": "`"
+          },
+          "id": "9ef651dc9f4242698da66d921b6706df",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:01.966135Z",
+          "data": {
+            "text": " to"
+          },
+          "id": "a0e8f0d6e3324f079ad7329d5914d616",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:02.402068Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "7f55c28eca654d4489f0f280b255f534",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:02.883126Z",
+          "data": {
+            "text": "B"
+          },
+          "id": "b9a58d6169b64dc3ae7b2ffd6cd61952",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:03.370529Z",
+          "data": {
+            "text": "ETA"
+          },
+          "id": "5385fc995c73477e987879f1803f07f0",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:03.852233Z",
+          "data": {
+            "text": "`."
+          },
+          "id": "c75b25cd259e415180e4be7141b84e2a",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:04.312088Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "a185a21df9164734acbf202783178c52",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:43.400953Z",
+          "data": {
+            "input": {
+              "edits": [
+                {
+                  "newText": "BETA",
+                  "oldText": "beta"
+                }
+              ],
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+            },
+            "tool_id": "edit"
+          },
+          "id": "08bbe00944974528b31a47361c6b0c85",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-09T06:21:43.407871Z",
+          "data": {
+            "input": {
+              "edits": [
+                {
+                  "newText": "BETA",
+                  "oldText": "beta"
+                }
+              ],
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+            },
+            "tool_name": "edit"
+          },
+          "id": "45b7519371504bc1b044fc4adc87fbec",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "tool_call"
+        },
+        {
+          "created_at": "2026-05-09T06:21:44.313656Z",
+          "data": {
+            "input_tokens": 2399,
+            "output_tokens": 17
+          },
+          "id": "76c62fecaade4f7ab384466ba1d361f7",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "usage"
+        },
+        {
+          "created_at": "2026-05-09T06:21:44.319338Z",
+          "data": {
+            "content": "+1 -1 evals/tmp/tool-read-before-edit-e274c227/workspace/note.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt",
+            "status": "success",
+            "tool_id": "call_30036334ded7",
+            "tool_name": "edit"
+          },
+          "id": "8bdc578fe55a4dc4bfd1e84e58bf17f6",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "tool_result"
+        },
+        {
+          "created_at": "2026-05-09T06:21:51.737042Z",
+          "data": {
+            "text": "\n\nDone"
+          },
+          "id": "571eddf264b740a5ba4e5b379cf6240f",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:52.010799Z",
+          "data": {
+            "text": "."
+          },
+          "id": "4c8d2f06251a4dadb4981f4032cce35d",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:52.364133Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "f58c4bda34b34d7f97b1c823f684acde",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:52.837270Z",
+          "data": {
+            "text": "beta"
+          },
+          "id": "e81439f7895a43bf93c4bac2a201e6f0",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:53.279661Z",
+          "data": {
+            "text": "`"
+          },
+          "id": "72859ac91ec7454c94f1d9ca2731ffc2",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:53.770981Z",
+          "data": {
+            "text": " has"
+          },
+          "id": "379a0fd35a254402ade40b43b30b8cc5",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:54.250493Z",
+          "data": {
+            "text": " been"
+          },
+          "id": "057b0c227dd140caa045dbb061781e33",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:54.743606Z",
+          "data": {
+            "text": " changed"
+          },
+          "id": "67766c00670540d2800e51515f46e1a5",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:55.198531Z",
+          "data": {
+            "text": " to"
+          },
+          "id": "385e3b56595d4e85a87005698e032147",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:55.694999Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "ab13f24490e5425c97d81165950401be",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:56.127069Z",
+          "data": {
+            "text": "B"
+          },
+          "id": "7244a1f239a84b5cbd7b5cd165743f16",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:56.579072Z",
+          "data": {
+            "text": "ETA"
+          },
+          "id": "39c2127dcf6942b4893fc9015503d271",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:57.055306Z",
+          "data": {
+            "text": "`"
+          },
+          "id": "1a3a06547e2a4eaba5d457e3b185d5ae",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:57.524937Z",
+          "data": {
+            "text": " in"
+          },
+          "id": "42c54b94732246d7a4602513d143be98",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:58.004851Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "41cd87d2450e4bde82ab39944e30b5a7",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:58.456166Z",
+          "data": {
+            "text": " file"
+          },
+          "id": "77951f1d283c450b92f7cae6b8f94ded",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:58.917316Z",
+          "data": {
+            "text": "."
+          },
+          "id": "cdc1254726024ae1ab5856ac860bfc6f",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T06:21:59.385631Z",
+          "data": {
+            "input_tokens": 2525,
+            "output_tokens": 17
+          },
+          "id": "082f3ec32b8f43e7b513949e9f209ab2",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "usage"
+        },
+        {
+          "created_at": "2026-05-09T06:21:59.392989Z",
+          "data": {
+            "final_text": "\n\nDone. `beta` has been changed to `BETA` in the file.",
+            "finish_reason": "stop",
+            "status": "succeeded",
+            "transcript_persisted": true,
+            "transient_text": "\n\nI'll read the file first, then edit it.\n\nNow I'll edit the file to change `beta` to `BETA`.\n\nDone. `beta` has been changed to `BETA` in the file."
+          },
+          "id": "e04759746fb74c8b99948bf18da30b96",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "assistant_final"
+        },
+        {
+          "created_at": "2026-05-09T06:21:59.409552Z",
+          "data": {
+            "duration_ms": 0
+          },
+          "id": "08a8450e1b664b60b4b4766edce012b2",
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "type": "run_completed"
+        }
+      ],
+      "stream_events": [],
+      "observations": {
+        "tool_calls": [
+          {
+            "tool_name": "read",
+            "input": {
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+            }
+          },
+          {
+            "tool_name": "edit",
+            "input": {
+              "edits": [
+                {
+                  "newText": "BETA",
+                  "oldText": "beta"
+                }
+              ],
+              "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+            }
+          }
+        ],
+        "tool_result_count": 2,
+        "files_read": [
+          "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+        ],
+        "files_written": [
+          "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+        ],
+        "commands": [],
+        "runtime_event_types": [
+          "run_queued",
+          "provider_routed",
+          "run_started",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "tool_called",
+          "tool_call",
+          "usage",
+          "tool_result",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "tool_called",
+          "tool_call",
+          "usage",
+          "tool_result",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "usage",
+          "assistant_final",
+          "run_completed"
+        ],
+        "touched_temp_workspace": true
+      }
+    }
+  ],
+  "checks": [
+    {
+      "type": "status_is",
+      "passed": true,
+      "details": "expected succeeded, got succeeded",
+      "turn": null
+    },
+    {
+      "type": "observed_file_read_contains",
+      "passed": true,
+      "details": "expected observed read path containing 'note.txt'",
+      "turn": null
+    },
+    {
+      "type": "observed_file_written_contains",
+      "passed": true,
+      "details": "expected observed write path containing 'note.txt'",
+      "turn": null
+    }
+  ],
+  "metrics": {
+    "turn_count": 1,
+    "latency_ms_total": 101309,
+    "latency_ms_avg": 101309,
+    "input_tokens_total": 2558,
+    "output_tokens_total": 46,
+    "tool_call_count": 2,
+    "context_window": 65536,
+    "max_turns_requested": null
+  },
+  "judge": {
+    "enabled": false,
+    "status": "disabled",
+    "model": "qwen3.6-27b",
+    "provider": "llamacpp"
+  },
+  "self_critique": {
+    "enabled": false,
+    "status": "disabled",
+    "model": "qwen3.6-27b",
+    "provider": "llamacpp"
+  },
+  "replay": {
+    "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\tool_read_before_edit.yaml",
+    "session_id": "d0f4c56954b94114972fd2410909d6d9",
+    "turns": [
+      {
+        "role": "user",
+        "content": "Read `D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt` first, then change `beta` to `BETA` in that file.",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "tool_results": [
+          {
+            "call_id": "call_824ac975d8d9",
+            "content": "alpha\nbeta\ngamma\n",
+            "error": null,
+            "error_code": null,
+            "status": "success",
+            "token_estimate": 4,
+            "tool_name": "read"
+          },
+          {
+            "call_id": "call_30036334ded7",
+            "content": "+1 -1 evals/tmp/tool-read-before-edit-e274c227/workspace/note.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt",
+            "error": null,
+            "error_code": null,
+            "status": "success",
+            "token_estimate": 42,
+            "tool_name": "edit"
+          }
+        ]
+      }
+    ],
+    "messages": [
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "Read `D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt` first, then change `beta` to `BETA` in that file.",
+        "created_at": "2026-05-09T06:20:18.102Z",
+        "id": "403a4624581b4cbdb91d1c7d3074b748",
+        "position": 1,
+        "role": "user",
+        "token_estimate": 34
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "Done. `beta` has been changed to `BETA` in the file.",
+        "created_at": "2026-05-09T06:21:59.389Z",
+        "id": "377bee627faa4ee689c96f4182d805a1",
+        "position": 2,
+        "role": "assistant",
+        "token_estimate": 13
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_824ac975d8d9\\\", \\\"tool_name\\\": \\\"read\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"alpha\\\\nbeta\\\\ngamma\\\\n\\\", \\\"error\\\": null}\"}}",
+        "created_at": "2026-05-09T06:21:59.396Z",
+        "id": "f22ec92f924544ed8ef6dd2100215831",
+        "position": 3,
+        "role": "tool",
+        "token_estimate": 59
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_30036334ded7\\\", \\\"tool_name\\\": \\\"edit\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"+1 -1 evals/tmp/tool-read-before-edit-e274c227/workspace/note.txt\\\\nApplied 1 edit(s) to D:\\\\\\\\openclaw\\\\\\\\opencloset\\\\\\\\evals\\\\\\\\tmp\\\\\\\\tool-read-before-edit-e274c227\\\\\\\\workspace\\\\\\\\note.txt\\\", \\\"error\\\": null}\"}}",
+        "created_at": "2026-05-09T06:21:59.399Z",
+        "id": "e5abab8d37ea4fa782dc5c59c6fdeef8",
+        "position": 4,
+        "role": "tool",
+        "token_estimate": 101
+      }
+    ]
+  },
+  "paths": {
+    "artifact": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\tool-read-before-edit\\e274c22747084cd5b300b91e7d642707.json",
+    "replay": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\tool-read-before-edit\\e274c22747084cd5b300b91e7d642707.replay.json"
+  },
+  "trace": {
+    "temp_workspace": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace",
+    "fixture_dir": null,
+    "observed_files_read": [
+      "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+    ],
+    "observed_files_written": [
+      "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+    ],
+    "observed_commands": [],
+    "runtime_event_types": [
+      "run_queued",
+      "provider_routed",
+      "run_started",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "tool_called",
+      "tool_call",
+      "usage",
+      "tool_result",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "tool_called",
+      "tool_call",
+      "usage",
+      "tool_result",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "assistant_delta",
+      "usage",
+      "assistant_final",
+      "run_completed"
+    ],
+    "session_events": [
+      {
+        "created_at": "2026-05-09T06:20:18.066072Z",
+        "data": {
+          "label": "eval:tool_read_before_edit",
+          "model": "qwen3.6-27b"
+        },
+        "id": "40530d6fd59645abb60067cf86922f4a",
+        "run_id": null,
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "session_created"
+      },
+      {
+        "created_at": "2026-05-09T06:20:18.079156Z",
+        "data": {
+          "plan_id": "27c626c827474dd9b14d2f719b4fd410",
+          "previous_plan_id": null,
+          "reason": "bootstrap",
+          "title": "Session Plan"
+        },
+        "id": "244399c1a3d94742bbc445645a935bc1",
+        "run_id": null,
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "plan_activated"
+      },
+      {
+        "created_at": "2026-05-09T06:20:18.106560Z",
+        "data": {
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "turn_number": 1
+        },
+        "id": "55bc587b9e374efbb2c754bac19792b2",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "run_queued"
+      },
+      {
+        "created_at": "2026-05-09T06:20:18.128808Z",
+        "data": {
+          "provider_capabilities": {
+            "frontier": false,
+            "latency_tier": "local",
+            "locality": "local",
+            "supports_audio_input": false,
+            "supports_tool_use": true,
+            "supports_vision": false
+          },
+          "requested_model": "qwen3.6-27b",
+          "requested_provider": "llamacpp",
+          "resolved_model": "qwen3.6-27b",
+          "resolved_provider": "llamacpp",
+          "route_reason": "session_provider_pinned",
+          "task_profile": {
+            "attachment_types": [],
+            "message_length": 139,
+            "needs_frontier_tools": true,
+            "requires_audio": false,
+            "requires_vision": false
+          },
+          "used_auto_routing": false
+        },
+        "id": "c4c80ddc4bff42b591de13a86256c9d7",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "provider_routed"
+      },
+      {
+        "created_at": "2026-05-09T06:20:18.164594Z",
+        "data": {
+          "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+          "turn_number": 1
+        },
+        "id": "23d812310abd40f5889ed30228178661",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "run_started"
+      },
+      {
+        "created_at": "2026-05-09T06:20:21.799946Z",
+        "data": {
+          "text": "\n\nI"
+        },
+        "id": "af167f45dd1b432197867c80ac40fda9",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:22.162726Z",
+        "data": {
+          "text": "'ll"
+        },
+        "id": "288ab1d93c484fd38566901c0f74243d",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:22.517079Z",
+        "data": {
+          "text": " read"
+        },
+        "id": "634d7869d76742808213ff0985008e99",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:22.961232Z",
+        "data": {
+          "text": " the"
+        },
+        "id": "fe21c100668c408a8fa4404e5275846b",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:23.430896Z",
+        "data": {
+          "text": " file"
+        },
+        "id": "14fa563109d84cddbc554b016d312ec8",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:23.883129Z",
+        "data": {
+          "text": " first"
+        },
+        "id": "9f508f914f884bc6ab61afaf3f59c6d3",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:24.222295Z",
+        "data": {
+          "text": ","
+        },
+        "id": "d884f7879eab444fa8e418c04f463d24",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:24.638047Z",
+        "data": {
+          "text": " then"
+        },
+        "id": "fefda8c6e06f45ae9d38a0a001f70a86",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:25.142932Z",
+        "data": {
+          "text": " edit"
+        },
+        "id": "0e39323b5d6a454489d49554af35f8ba",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:25.605782Z",
+        "data": {
+          "text": " it"
+        },
+        "id": "171b4bdc449a4c8d980b78f5388dc2e3",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:26.040774Z",
+        "data": {
+          "text": "."
+        },
+        "id": "731192a121434721bcc5e6a2c7631544",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:26.479218Z",
+        "data": {
+          "text": "\n\n"
+        },
+        "id": "b48b47086ecb449782c84e3c4ffea2ac",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:51.182608Z",
+        "data": {
+          "input": {
+            "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+          },
+          "tool_id": "read"
+        },
+        "id": "63d85d6980d34000a0392d87e1b9dfbd",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "tool_called"
+      },
+      {
+        "created_at": "2026-05-09T06:20:51.189663Z",
+        "data": {
+          "input": {
+            "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+          },
+          "tool_name": "read"
+        },
+        "id": "ab53840ce021497eb03d72208b0b793c",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.tool_call"
+      },
+      {
+        "created_at": "2026-05-09T06:20:52.107266Z",
+        "data": {
+          "input_tokens": 2322,
+          "output_tokens": 12
+        },
+        "id": "0023447ac46c460a9881a059372e2a55",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.usage"
+      },
+      {
+        "created_at": "2026-05-09T06:20:52.114311Z",
+        "data": {
+          "content": "alpha\nbeta\ngamma\n",
+          "status": "success",
+          "tool_id": "call_824ac975d8d9",
+          "tool_name": "read"
+        },
+        "id": "f765730cce8a42939759f528b2285ab5",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.tool_result"
+      },
+      {
+        "created_at": "2026-05-09T06:20:56.924549Z",
+        "data": {
+          "text": "\n\nNow"
+        },
+        "id": "cd628dd4cc814f3cb196dd13b127aa54",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:57.252908Z",
+        "data": {
+          "text": " I"
+        },
+        "id": "771ab67c364c4d70ad2b8cfb1d72f878",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:57.688530Z",
+        "data": {
+          "text": "'ll"
+        },
+        "id": "2f5d75428f3c43e3a08da32a34be31f4",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:58.145429Z",
+        "data": {
+          "text": " edit"
+        },
+        "id": "4a873715c8ce4a16a7918a0d69969533",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:58.609710Z",
+        "data": {
+          "text": " the"
+        },
+        "id": "09b59a7929a644379231cd986e634fcd",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:59.090278Z",
+        "data": {
+          "text": " file"
+        },
+        "id": "3eb14e529d4e45dcad83e3e53f33bb13",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:20:59.589339Z",
+        "data": {
+          "text": " to"
+        },
+        "id": "b2dfe9357fb7443cb893be0fdf41c085",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:00.066473Z",
+        "data": {
+          "text": " change"
+        },
+        "id": "1cae08d39bba48b7a3823895b11dcdf8",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:00.597074Z",
+        "data": {
+          "text": " `"
+        },
+        "id": "14c58b5a530145bfa8a92b70103adddf",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:01.060713Z",
+        "data": {
+          "text": "beta"
+        },
+        "id": "dd4ce292366c48b5af83ae35a7cc96a1",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:01.511059Z",
+        "data": {
+          "text": "`"
+        },
+        "id": "9ef651dc9f4242698da66d921b6706df",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:01.966135Z",
+        "data": {
+          "text": " to"
+        },
+        "id": "a0e8f0d6e3324f079ad7329d5914d616",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:02.402068Z",
+        "data": {
+          "text": " `"
+        },
+        "id": "7f55c28eca654d4489f0f280b255f534",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:02.883126Z",
+        "data": {
+          "text": "B"
+        },
+        "id": "b9a58d6169b64dc3ae7b2ffd6cd61952",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:03.370529Z",
+        "data": {
+          "text": "ETA"
+        },
+        "id": "5385fc995c73477e987879f1803f07f0",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:03.852233Z",
+        "data": {
+          "text": "`."
+        },
+        "id": "c75b25cd259e415180e4be7141b84e2a",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:04.312088Z",
+        "data": {
+          "text": "\n\n"
+        },
+        "id": "a185a21df9164734acbf202783178c52",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:43.400953Z",
+        "data": {
+          "input": {
+            "edits": [
+              {
+                "newText": "BETA",
+                "oldText": "beta"
+              }
+            ],
+            "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+          },
+          "tool_id": "edit"
+        },
+        "id": "08bbe00944974528b31a47361c6b0c85",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "tool_called"
+      },
+      {
+        "created_at": "2026-05-09T06:21:43.407871Z",
+        "data": {
+          "input": {
+            "edits": [
+              {
+                "newText": "BETA",
+                "oldText": "beta"
+              }
+            ],
+            "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+          },
+          "tool_name": "edit"
+        },
+        "id": "45b7519371504bc1b044fc4adc87fbec",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.tool_call"
+      },
+      {
+        "created_at": "2026-05-09T06:21:44.313656Z",
+        "data": {
+          "input_tokens": 2399,
+          "output_tokens": 17
+        },
+        "id": "76c62fecaade4f7ab384466ba1d361f7",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.usage"
+      },
+      {
+        "created_at": "2026-05-09T06:21:44.319338Z",
+        "data": {
+          "content": "+1 -1 evals/tmp/tool-read-before-edit-e274c227/workspace/note.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt",
+          "status": "success",
+          "tool_id": "call_30036334ded7",
+          "tool_name": "edit"
+        },
+        "id": "8bdc578fe55a4dc4bfd1e84e58bf17f6",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.tool_result"
+      },
+      {
+        "created_at": "2026-05-09T06:21:51.737042Z",
+        "data": {
+          "text": "\n\nDone"
+        },
+        "id": "571eddf264b740a5ba4e5b379cf6240f",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:52.010799Z",
+        "data": {
+          "text": "."
+        },
+        "id": "4c8d2f06251a4dadb4981f4032cce35d",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:52.364133Z",
+        "data": {
+          "text": " `"
+        },
+        "id": "f58c4bda34b34d7f97b1c823f684acde",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:52.837270Z",
+        "data": {
+          "text": "beta"
+        },
+        "id": "e81439f7895a43bf93c4bac2a201e6f0",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:53.279661Z",
+        "data": {
+          "text": "`"
+        },
+        "id": "72859ac91ec7454c94f1d9ca2731ffc2",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:53.770981Z",
+        "data": {
+          "text": " has"
+        },
+        "id": "379a0fd35a254402ade40b43b30b8cc5",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:54.250493Z",
+        "data": {
+          "text": " been"
+        },
+        "id": "057b0c227dd140caa045dbb061781e33",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:54.743606Z",
+        "data": {
+          "text": " changed"
+        },
+        "id": "67766c00670540d2800e51515f46e1a5",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:55.198531Z",
+        "data": {
+          "text": " to"
+        },
+        "id": "385e3b56595d4e85a87005698e032147",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:55.694999Z",
+        "data": {
+          "text": " `"
+        },
+        "id": "ab13f24490e5425c97d81165950401be",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:56.127069Z",
+        "data": {
+          "text": "B"
+        },
+        "id": "7244a1f239a84b5cbd7b5cd165743f16",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:56.579072Z",
+        "data": {
+          "text": "ETA"
+        },
+        "id": "39c2127dcf6942b4893fc9015503d271",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:57.055306Z",
+        "data": {
+          "text": "`"
+        },
+        "id": "1a3a06547e2a4eaba5d457e3b185d5ae",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:57.524937Z",
+        "data": {
+          "text": " in"
+        },
+        "id": "42c54b94732246d7a4602513d143be98",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:58.004851Z",
+        "data": {
+          "text": " the"
+        },
+        "id": "41cd87d2450e4bde82ab39944e30b5a7",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:58.456166Z",
+        "data": {
+          "text": " file"
+        },
+        "id": "77951f1d283c450b92f7cae6b8f94ded",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:58.917316Z",
+        "data": {
+          "text": "."
+        },
+        "id": "cdc1254726024ae1ab5856ac860bfc6f",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_delta"
+      },
+      {
+        "created_at": "2026-05-09T06:21:59.385631Z",
+        "data": {
+          "input_tokens": 2525,
+          "output_tokens": 17
+        },
+        "id": "082f3ec32b8f43e7b513949e9f209ab2",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.usage"
+      },
+      {
+        "created_at": "2026-05-09T06:21:59.392989Z",
+        "data": {
+          "final_text": "\n\nDone. `beta` has been changed to `BETA` in the file.",
+          "finish_reason": "stop",
+          "status": "succeeded",
+          "transcript_persisted": true,
+          "transient_text": "\n\nI'll read the file first, then edit it.\n\nNow I'll edit the file to change `beta` to `BETA`.\n\nDone. `beta` has been changed to `BETA` in the file."
+        },
+        "id": "e04759746fb74c8b99948bf18da30b96",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "stream.assistant_final"
+      },
+      {
+        "created_at": "2026-05-09T06:21:59.409552Z",
+        "data": {
+          "duration_ms": 0
+        },
+        "id": "08a8450e1b664b60b4b4766edce012b2",
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "session_id": "d0f4c56954b94114972fd2410909d6d9",
+        "type": "run_completed"
+      }
+    ]
+  },
+  "messages": [
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Read `D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt` first, then change `beta` to `BETA` in that file.",
+      "created_at": "2026-05-09T06:20:18.102Z",
+      "id": "403a4624581b4cbdb91d1c7d3074b748",
+      "position": 1,
+      "role": "user",
+      "token_estimate": 34
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Done. `beta` has been changed to `BETA` in the file.",
+      "created_at": "2026-05-09T06:21:59.389Z",
+      "id": "377bee627faa4ee689c96f4182d805a1",
+      "position": 2,
+      "role": "assistant",
+      "token_estimate": 13
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_824ac975d8d9\\\", \\\"tool_name\\\": \\\"read\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"alpha\\\\nbeta\\\\ngamma\\\\n\\\", \\\"error\\\": null}\"}}",
+      "created_at": "2026-05-09T06:21:59.396Z",
+      "id": "f22ec92f924544ed8ef6dd2100215831",
+      "position": 3,
+      "role": "tool",
+      "token_estimate": 59
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_30036334ded7\\\", \\\"tool_name\\\": \\\"edit\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"+1 -1 evals/tmp/tool-read-before-edit-e274c227/workspace/note.txt\\\\nApplied 1 edit(s) to D:\\\\\\\\openclaw\\\\\\\\opencloset\\\\\\\\evals\\\\\\\\tmp\\\\\\\\tool-read-before-edit-e274c227\\\\\\\\workspace\\\\\\\\note.txt\\\", \\\"error\\\": null}\"}}",
+      "created_at": "2026-05-09T06:21:59.399Z",
+      "id": "e5abab8d37ea4fa782dc5c59c6fdeef8",
+      "position": 4,
+      "role": "tool",
+      "token_estimate": 101
+    }
+  ],
+  "session_events": [
+    {
+      "created_at": "2026-05-09T06:20:18.066072Z",
+      "data": {
+        "label": "eval:tool_read_before_edit",
+        "model": "qwen3.6-27b"
+      },
+      "id": "40530d6fd59645abb60067cf86922f4a",
+      "run_id": null,
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "session_created"
+    },
+    {
+      "created_at": "2026-05-09T06:20:18.079156Z",
+      "data": {
+        "plan_id": "27c626c827474dd9b14d2f719b4fd410",
+        "previous_plan_id": null,
+        "reason": "bootstrap",
+        "title": "Session Plan"
+      },
+      "id": "244399c1a3d94742bbc445645a935bc1",
+      "run_id": null,
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "plan_activated"
+    },
+    {
+      "created_at": "2026-05-09T06:20:18.106560Z",
+      "data": {
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "turn_number": 1
+      },
+      "id": "55bc587b9e374efbb2c754bac19792b2",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "run_queued"
+    },
+    {
+      "created_at": "2026-05-09T06:20:18.128808Z",
+      "data": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 139,
+          "needs_frontier_tools": true,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "id": "c4c80ddc4bff42b591de13a86256c9d7",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "provider_routed"
+    },
+    {
+      "created_at": "2026-05-09T06:20:18.164594Z",
+      "data": {
+        "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+        "turn_number": 1
+      },
+      "id": "23d812310abd40f5889ed30228178661",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "run_started"
+    },
+    {
+      "created_at": "2026-05-09T06:20:21.799946Z",
+      "data": {
+        "text": "\n\nI"
+      },
+      "id": "af167f45dd1b432197867c80ac40fda9",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:22.162726Z",
+      "data": {
+        "text": "'ll"
+      },
+      "id": "288ab1d93c484fd38566901c0f74243d",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:22.517079Z",
+      "data": {
+        "text": " read"
+      },
+      "id": "634d7869d76742808213ff0985008e99",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:22.961232Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "fe21c100668c408a8fa4404e5275846b",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:23.430896Z",
+      "data": {
+        "text": " file"
+      },
+      "id": "14fa563109d84cddbc554b016d312ec8",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:23.883129Z",
+      "data": {
+        "text": " first"
+      },
+      "id": "9f508f914f884bc6ab61afaf3f59c6d3",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:24.222295Z",
+      "data": {
+        "text": ","
+      },
+      "id": "d884f7879eab444fa8e418c04f463d24",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:24.638047Z",
+      "data": {
+        "text": " then"
+      },
+      "id": "fefda8c6e06f45ae9d38a0a001f70a86",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:25.142932Z",
+      "data": {
+        "text": " edit"
+      },
+      "id": "0e39323b5d6a454489d49554af35f8ba",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:25.605782Z",
+      "data": {
+        "text": " it"
+      },
+      "id": "171b4bdc449a4c8d980b78f5388dc2e3",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:26.040774Z",
+      "data": {
+        "text": "."
+      },
+      "id": "731192a121434721bcc5e6a2c7631544",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:26.479218Z",
+      "data": {
+        "text": "\n\n"
+      },
+      "id": "b48b47086ecb449782c84e3c4ffea2ac",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:51.182608Z",
+      "data": {
+        "input": {
+          "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+        },
+        "tool_id": "read"
+      },
+      "id": "63d85d6980d34000a0392d87e1b9dfbd",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "tool_called"
+    },
+    {
+      "created_at": "2026-05-09T06:20:51.189663Z",
+      "data": {
+        "input": {
+          "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+        },
+        "tool_name": "read"
+      },
+      "id": "ab53840ce021497eb03d72208b0b793c",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.tool_call"
+    },
+    {
+      "created_at": "2026-05-09T06:20:52.107266Z",
+      "data": {
+        "input_tokens": 2322,
+        "output_tokens": 12
+      },
+      "id": "0023447ac46c460a9881a059372e2a55",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.usage"
+    },
+    {
+      "created_at": "2026-05-09T06:20:52.114311Z",
+      "data": {
+        "content": "alpha\nbeta\ngamma\n",
+        "status": "success",
+        "tool_id": "call_824ac975d8d9",
+        "tool_name": "read"
+      },
+      "id": "f765730cce8a42939759f528b2285ab5",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.tool_result"
+    },
+    {
+      "created_at": "2026-05-09T06:20:56.924549Z",
+      "data": {
+        "text": "\n\nNow"
+      },
+      "id": "cd628dd4cc814f3cb196dd13b127aa54",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:57.252908Z",
+      "data": {
+        "text": " I"
+      },
+      "id": "771ab67c364c4d70ad2b8cfb1d72f878",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:57.688530Z",
+      "data": {
+        "text": "'ll"
+      },
+      "id": "2f5d75428f3c43e3a08da32a34be31f4",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:58.145429Z",
+      "data": {
+        "text": " edit"
+      },
+      "id": "4a873715c8ce4a16a7918a0d69969533",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:58.609710Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "09b59a7929a644379231cd986e634fcd",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:59.090278Z",
+      "data": {
+        "text": " file"
+      },
+      "id": "3eb14e529d4e45dcad83e3e53f33bb13",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:20:59.589339Z",
+      "data": {
+        "text": " to"
+      },
+      "id": "b2dfe9357fb7443cb893be0fdf41c085",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:00.066473Z",
+      "data": {
+        "text": " change"
+      },
+      "id": "1cae08d39bba48b7a3823895b11dcdf8",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:00.597074Z",
+      "data": {
+        "text": " `"
+      },
+      "id": "14c58b5a530145bfa8a92b70103adddf",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:01.060713Z",
+      "data": {
+        "text": "beta"
+      },
+      "id": "dd4ce292366c48b5af83ae35a7cc96a1",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:01.511059Z",
+      "data": {
+        "text": "`"
+      },
+      "id": "9ef651dc9f4242698da66d921b6706df",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:01.966135Z",
+      "data": {
+        "text": " to"
+      },
+      "id": "a0e8f0d6e3324f079ad7329d5914d616",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:02.402068Z",
+      "data": {
+        "text": " `"
+      },
+      "id": "7f55c28eca654d4489f0f280b255f534",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:02.883126Z",
+      "data": {
+        "text": "B"
+      },
+      "id": "b9a58d6169b64dc3ae7b2ffd6cd61952",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:03.370529Z",
+      "data": {
+        "text": "ETA"
+      },
+      "id": "5385fc995c73477e987879f1803f07f0",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:03.852233Z",
+      "data": {
+        "text": "`."
+      },
+      "id": "c75b25cd259e415180e4be7141b84e2a",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:04.312088Z",
+      "data": {
+        "text": "\n\n"
+      },
+      "id": "a185a21df9164734acbf202783178c52",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:43.400953Z",
+      "data": {
+        "input": {
+          "edits": [
+            {
+              "newText": "BETA",
+              "oldText": "beta"
+            }
+          ],
+          "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+        },
+        "tool_id": "edit"
+      },
+      "id": "08bbe00944974528b31a47361c6b0c85",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "tool_called"
+    },
+    {
+      "created_at": "2026-05-09T06:21:43.407871Z",
+      "data": {
+        "input": {
+          "edits": [
+            {
+              "newText": "BETA",
+              "oldText": "beta"
+            }
+          ],
+          "path": "D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt"
+        },
+        "tool_name": "edit"
+      },
+      "id": "45b7519371504bc1b044fc4adc87fbec",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.tool_call"
+    },
+    {
+      "created_at": "2026-05-09T06:21:44.313656Z",
+      "data": {
+        "input_tokens": 2399,
+        "output_tokens": 17
+      },
+      "id": "76c62fecaade4f7ab384466ba1d361f7",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.usage"
+    },
+    {
+      "created_at": "2026-05-09T06:21:44.319338Z",
+      "data": {
+        "content": "+1 -1 evals/tmp/tool-read-before-edit-e274c227/workspace/note.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\tmp\\tool-read-before-edit-e274c227\\workspace\\note.txt",
+        "status": "success",
+        "tool_id": "call_30036334ded7",
+        "tool_name": "edit"
+      },
+      "id": "8bdc578fe55a4dc4bfd1e84e58bf17f6",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.tool_result"
+    },
+    {
+      "created_at": "2026-05-09T06:21:51.737042Z",
+      "data": {
+        "text": "\n\nDone"
+      },
+      "id": "571eddf264b740a5ba4e5b379cf6240f",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:52.010799Z",
+      "data": {
+        "text": "."
+      },
+      "id": "4c8d2f06251a4dadb4981f4032cce35d",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:52.364133Z",
+      "data": {
+        "text": " `"
+      },
+      "id": "f58c4bda34b34d7f97b1c823f684acde",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:52.837270Z",
+      "data": {
+        "text": "beta"
+      },
+      "id": "e81439f7895a43bf93c4bac2a201e6f0",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:53.279661Z",
+      "data": {
+        "text": "`"
+      },
+      "id": "72859ac91ec7454c94f1d9ca2731ffc2",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:53.770981Z",
+      "data": {
+        "text": " has"
+      },
+      "id": "379a0fd35a254402ade40b43b30b8cc5",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:54.250493Z",
+      "data": {
+        "text": " been"
+      },
+      "id": "057b0c227dd140caa045dbb061781e33",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:54.743606Z",
+      "data": {
+        "text": " changed"
+      },
+      "id": "67766c00670540d2800e51515f46e1a5",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:55.198531Z",
+      "data": {
+        "text": " to"
+      },
+      "id": "385e3b56595d4e85a87005698e032147",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:55.694999Z",
+      "data": {
+        "text": " `"
+      },
+      "id": "ab13f24490e5425c97d81165950401be",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:56.127069Z",
+      "data": {
+        "text": "B"
+      },
+      "id": "7244a1f239a84b5cbd7b5cd165743f16",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:56.579072Z",
+      "data": {
+        "text": "ETA"
+      },
+      "id": "39c2127dcf6942b4893fc9015503d271",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:57.055306Z",
+      "data": {
+        "text": "`"
+      },
+      "id": "1a3a06547e2a4eaba5d457e3b185d5ae",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:57.524937Z",
+      "data": {
+        "text": " in"
+      },
+      "id": "42c54b94732246d7a4602513d143be98",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:58.004851Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "41cd87d2450e4bde82ab39944e30b5a7",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:58.456166Z",
+      "data": {
+        "text": " file"
+      },
+      "id": "77951f1d283c450b92f7cae6b8f94ded",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:58.917316Z",
+      "data": {
+        "text": "."
+      },
+      "id": "cdc1254726024ae1ab5856ac860bfc6f",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-09T06:21:59.385631Z",
+      "data": {
+        "input_tokens": 2525,
+        "output_tokens": 17
+      },
+      "id": "082f3ec32b8f43e7b513949e9f209ab2",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.usage"
+    },
+    {
+      "created_at": "2026-05-09T06:21:59.392989Z",
+      "data": {
+        "final_text": "\n\nDone. `beta` has been changed to `BETA` in the file.",
+        "finish_reason": "stop",
+        "status": "succeeded",
+        "transcript_persisted": true,
+        "transient_text": "\n\nI'll read the file first, then edit it.\n\nNow I'll edit the file to change `beta` to `BETA`.\n\nDone. `beta` has been changed to `BETA` in the file."
+      },
+      "id": "e04759746fb74c8b99948bf18da30b96",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "stream.assistant_final"
+    },
+    {
+      "created_at": "2026-05-09T06:21:59.409552Z",
+      "data": {
+        "duration_ms": 0
+      },
+      "id": "08a8450e1b664b60b4b4766edce012b2",
+      "run_id": "4dbb3c372f9c4408b7cb40f6535aeca8",
+      "session_id": "d0f4c56954b94114972fd2410909d6d9",
+      "type": "run_completed"
+    }
+  ]
+}

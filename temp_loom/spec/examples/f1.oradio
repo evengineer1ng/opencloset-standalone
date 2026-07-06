@@ -1,0 +1,45 @@
+oradio: the-barcelona-grand-prix-replayed
+intent: The Barcelona Grand Prix, replayed lap by lap — a telemetry department reading
+  the race as it unfolds, deterministic and repeatable.
+telemetry:
+- source: tape_replay
+  name: trackside
+  path: data/f1_barcelona_2026.json
+surfaces:
+- ribbon
+- voice
+lens: identity
+club:
+- voices
+effectors:
+- kind: voice
+  name: commentator
+bindings:
+- from: trackside
+  to: commentator
+  transform: tape_to_speech
+  name: call
+  grammar: data/grammars/intern.json
+  verbs: data/english/irregular_verbs.json
+voice:
+  provider: sapi
+  assignments:
+    commentator: Microsoft David Desktop
+    host: Microsoft Zira Desktop
+visual:
+  base:
+    mode: builtin
+    theme: midnight
+    path: ''
+  tape:
+    seed: f1:barcelona:2026
+    accumulation: causal
+    families:
+    - color_drift
+    - particles
+    - ripples
+    - embers
+    - glitch
+    - grain
+  thumbnail:
+    mode: sidecar_png

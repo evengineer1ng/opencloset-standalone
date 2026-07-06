@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EVE Ops Dashboard</title>
+    <style>
+      :root {
+        --bg: #07131a;
+        --bg-deep: #041017;
+        --panel: rgba(9, 28, 38, 0.86);
+        --panel-strong: rgba(14, 38, 50, 0.96);
+        --line: rgba(120, 184, 203, 0.2);
+        --line-strong: rgba(120, 184, 203, 0.4);
+        --text: #e8f3f7;
+        --muted: #92abb7;
+        --teal: #78d4d0;
+        --amber: #ffb347;
+        --red: #ff6f61;
+        --green: #7fe08a;
+        --shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
+        --radius-xl: 28px;
+        --radius-lg: 22px;
+        --radius-md: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(120, 212, 208, 0.16), transparent 28%),
+          radial-gradient(circle at top right, rgba(255, 179, 71, 0.15), transparent 24%),
+          linear-gradient(160deg, var(--bg-deep), var(--bg) 48%, #08161e 100%);
+      }
+
+      .frame {
+        width: min(1500px, calc(100vw - 32px));
+        margin: 24px auto;
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 32px;
+        background: rgba(3, 12, 18, 0.65);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 18px;
+        align-items: stretch;
+      }
+
+      .hero,
+      .status-card,
+      .card,
+      .question,
+      .timeline,
+      .composer {
+        background: linear-gradient(180deg, var(--panel-strong), var(--panel));
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before,
+      .status-card::before,
+      .card::before,
+      .question::before,
+      .timeline::before,
+      .composer::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(120, 212, 208, 0.06), transparent 28%, rgba(255, 179, 71, 0.06));
+        pointer-events: none;
+      }
+
+      .hero {
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 240px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--teal);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-size: 12px;
+        margin-bottom: 14px;
+      }
+
+      .title {
+        font-size: clamp(30px, 4vw, 56px);
+        line-height: 0.96;
+        font-weight: 700;
+        max-width: 10ch;
+        margin: 0 0 16px;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        font-size: 15px;
+        max-width: 60ch;
+        margin: 0;
+      }
+
+      .hero-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        background: rgba(8, 20, 27, 0.72);
+        border: 1px solid var(--line);
+      }
+
+      .status-card {
+        padding: 24px;
+        display: grid;
+        gap: 18px;
+      }
+
+      .status-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .status-item,
+      .metric {
+        padding: 14px;
+        border-radius: var(--radius-md);
+        background: rgba(6, 18, 24, 0.72);
+        border: 1px solid rgba(120, 184, 203, 0.14);
+      }
+
+      .label {
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        margin-bottom: 8px;
+      }
+
+      .value {
+        font-size: 20px;
+        line-height: 1.1;
+        font-weight: 600;
+      }
+
+      .questions {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .question {
+        padding: 20px;
+        min-height: 150px;
+      }
+
+      .question h3,
+      .section-title,
+      .card h3,
+      .timeline h3,
+      .composer h3 {
+        margin: 0 0 14px;
+        font-size: 13px;
+        color: var(--teal);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+      }
+
+      .question p,
+      .card p,
+      .event-text,
+      .output-text,
+      .empty {
+        margin: 0;
+        color: var(--text);
+        line-height: 1.5;
+      }
+
+      .question p {
+        font-size: 18px;
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: 1.4fr 0.86fr;
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .card {
+        padding: 18px;
+        min-height: 210px;
+      }
+
+      .card h4,
+      .meta-row strong {
+        margin: 0;
+        font-size: 15px;
+      }
+
+      .meta-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(120, 184, 203, 0.1);
+      }
+
+      .meta-row:last-child {
+        border-bottom: 0;
+      }
+
+      .meta-row span {
+        color: var(--muted);
+        text-align: right;
+      }
+
+      .stack {
+        display: grid;
+        gap: 14px;
+      }
+
+      .timeline,
+      .composer {
+        padding: 18px;
+      }
+
+      .event-list,
+      .output-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .event,
+      .output {
+        padding: 14px;
+        border-radius: var(--radius-md);
+        background: rgba(5, 16, 23, 0.75);
+        border: 1px solid rgba(120, 184, 203, 0.12);
+      }
+
+      .event-top,
+      .output-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .preview-frame {
+        margin-top: 14px;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        border: 1px solid rgba(120, 184, 203, 0.16);
+        background: rgba(2, 10, 14, 0.92);
+      }
+
+      .preview-frame img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .chip {
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(8, 20, 27, 0.76);
+        border: 1px solid rgba(120, 184, 203, 0.14);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .toolbar button {
+        border: 0;
+        border-radius: 999px;
+        padding: 11px 16px;
+        font: inherit;
+        color: #08131a;
+        background: linear-gradient(135deg, var(--teal), #d0fff0);
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .toolbar .minor {
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      .composer form {
+        display: grid;
+        gap: 10px;
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field label {
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid var(--line-strong);
+        padding: 12px;
+        background: rgba(3, 13, 18, 0.9);
+        color: var(--text);
+        font: inherit;
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      .identity-callout {
+        padding: 18px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(160deg, rgba(10, 31, 41, 0.9), rgba(8, 24, 32, 0.82));
+        border: 1px solid rgba(120, 184, 203, 0.16);
+      }
+
+      .identity-name {
+        font-size: clamp(28px, 3vw, 42px);
+        line-height: 0.95;
+        margin: 0 0 10px;
+      }
+
+      .identity-subline {
+        color: var(--muted);
+        font-size: 14px;
+        margin: 0;
+      }
+
+      .composer textarea {
+        width: 100%;
+        min-height: 100px;
+        resize: vertical;
+        border-radius: 14px;
+        border: 1px solid var(--line-strong);
+        padding: 14px;
+        background: rgba(3, 13, 18, 0.9);
+        color: var(--text);
+        font: inherit;
+      }
+
+      .composer-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .composer-actions button {
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 18px;
+        background: linear-gradient(135deg, var(--amber), #ffd9a6);
+        color: #1a1408;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .signal-low { color: var(--green); }
+      .signal-mid { color: var(--amber); }
+      .signal-high { color: var(--red); }
+
+      @media (max-width: 1180px) {
+        .topbar,
+        .content,
+        .questions,
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .field-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="frame">
+      <section class="topbar">
+        <article class="hero">
+          <div class="hero-grid">
+            <div>
+            <div class="eyebrow" id="hero-eyebrow">EVE Ops Companion</div>
+            <h1 class="title" id="hero-title">Hauler Dispatch Deck</h1>
+            <p class="subtitle" id="hero-subtitle">
+              A standalone cockpit view for one hauling character. This page stays outside the main OpenCloset UI and keeps the frame on your pilot, your ship, and your exact staging point.
+            </p>
+            </div>
+            <div class="identity-callout">
+              <div class="label">Bound Pilot</div>
+              <h2 class="identity-name" id="pilot-name">Unbound pilot</h2>
+              <p class="identity-subline" id="pilot-subline">Set your pilot profile and current location to make this dashboard yours.</p>
+              <div class="chips" id="identity-chips"></div>
+            </div>
+          </div>
+          <div class="hero-meta">
+            <div class="pill">Channel <strong id="channel-name">{{ channel_name }}</strong></div>
+            <div class="pill">Ship <strong id="pilot-ship">No ship pinned</strong></div>
+            <div class="pill">Location <strong id="pilot-location">Location not pinned</strong></div>
+          </div>
+        </article>
+        <aside class="status-card">
+          <div class="toolbar">
+            <div>
+              <div class="section-title">Command Status</div>
+              <div class="minor" id="last-refresh">Waiting for first refresh</div>
+            </div>
+            <button id="refresh-button" type="button">Refresh</button>
+          </div>
+          <div class="status-grid">
+            <div class="status-item">
+              <div class="label">Objective</div>
+              <div class="value" id="objective-text">Loading...</div>
+            </div>
+            <div class="status-item">
+              <div class="label" id="status-label-current-system">Current System</div>
+              <div class="value" id="current-system">Unknown</div>
+            </div>
+            <div class="status-item">
+              <div class="label" id="status-label-ship-status">Ship Status</div>
+              <div class="value" id="ship-status">--</div>
+            </div>
+            <div class="status-item">
+              <div class="label" id="status-label-danger-score">Route Risk</div>
+              <div class="value" id="danger-score">--</div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="questions">
+        <article class="question"><h3>What am I doing?</h3><p id="what-answer">Loading...</p></article>
+        <article class="question"><h3>Why am I doing it?</h3><p id="why-answer">Loading...</p></article>
+        <article class="question"><h3>What should I watch?</h3><p id="watch-answer">Loading...</p></article>
+        <article class="question"><h3>What should I do next?</h3><p id="next-answer">Loading...</p></article>
+      </section>
+
+      <section class="content">
+        <section class="grid">
+          <article class="card">
+            <h3 id="card-title-identity">Pilot Identity</h3>
+            <div id="pilot-identity"></div>
+          </article>
+          <article class="card">
+            <h3 id="card-title-location">Current Location</h3>
+            <div id="current-location"></div>
+          </article>
+          <article class="card">
+            <h3 id="card-title-run">Current Run</h3>
+            <div id="current-run"></div>
+          </article>
+          <article class="card">
+            <h3 id="card-title-risk">Route Risk</h3>
+            <div id="route-risk"></div>
+          </article>
+          <article class="card">
+            <h3 id="card-title-contract">Contract Job</h3>
+            <div id="contract-job"></div>
+          </article>
+          <article class="card">
+            <h3 id="card-title-assets">Assets and Inventory</h3>
+            <div id="asset-inventory"></div>
+          </article>
+          <article class="card">
+            <h3 id="card-title-wallet">Wallet and Profit</h3>
+            <div id="wallet-profit"></div>
+          </article>
+          <article class="card">
+            <h3 id="card-title-companion">Session Companion</h3>
+            <div id="session-companion"></div>
+          </article>
+        </section>
+
+        <section class="stack">
+          <article class="composer">
+            <h3>Bind This Pilot</h3>
+            <form id="profile-form">
+              <div class="field-grid">
+                <div class="field"><label for="profile-name">Character</label><input id="profile-name" placeholder="Your character name"></div>
+                <div class="field"><label for="profile-corp">Corporation</label><input id="profile-corp" placeholder="Corp or alt shell"></div>
+                <div class="field"><label for="profile-role">Role</label><input id="profile-role" placeholder="solo hauler, DST pilot, dispatcher"></div>
+                <div class="field"><label for="profile-hub">Home Hub</label><input id="profile-hub" placeholder="Jita, Amarr, Hek"></div>
+                <div class="field"><label for="profile-hull">Preferred Hull</label><input id="profile-hull" placeholder="Deep Space Transport"></div>
+                <div class="field"><label for="profile-risk">Risk Posture</label><input id="profile-risk" placeholder="Boring profit first"></div>
+              </div>
+              <div class="composer-actions">
+                <div class="minor" id="profile-status">This makes the dashboard about your pilot instead of generic ops state.</div>
+                <button type="submit">Save Pilot</button>
+              </div>
+            </form>
+          </article>
+
+          <article class="composer">
+            <h3>Pin Current Location</h3>
+            <form id="location-form">
+              <div class="field-grid">
+                <div class="field"><label for="location-system">System</label><input id="location-system" placeholder="Perimeter"></div>
+                <div class="field"><label for="location-station">Station or Structure</label><input id="location-station" placeholder="Tranquility Trading Tower"></div>
+                <div class="field"><label for="location-ship-name">Ship Name</label><input id="location-ship-name" placeholder="Mule Two"></div>
+                <div class="field"><label for="location-ship-type">Ship Type</label><input id="location-ship-type" placeholder="Deep Space Transport"></div>
+                <div class="field"><label for="location-flight-state">Flight State</label><select id="location-flight-state"><option value="docked">Docked</option><option value="in_space">In Space</option><option value="warping">Warping</option><option value="gate_cloak">Gate Cloak</option></select></div>
+                <div class="field"><label for="location-destination">Destination</label><input id="location-destination" placeholder="Amarr"></div>
+                <div class="field"><label for="location-security">Security Band</label><select id="location-security"><option value="highsec">Highsec</option><option value="lowsec">Lowsec</option><option value="nullsec">Nullsec</option><option value="wormhole">Wormhole</option></select></div>
+                <div class="field full"><label for="location-situation">Situation</label><input id="location-situation" placeholder="Staging for undock, waiting on scout, hauling contract in cargo"></div>
+              </div>
+              <div class="composer-actions">
+                <div class="minor" id="location-status">This pins where your character is right now.</div>
+                <button type="submit">Update Location</button>
+              </div>
+            </form>
+          </article>
+
+          <article class="composer">
+            <h3>Ask the Dispatcher</h3>
+            <form id="message-form">
+              <textarea id="message-input" placeholder="Ask for the next move, route review, or cargo risk summary..."></textarea>
+              <div class="composer-actions">
+                <div class="minor" id="send-status">Sends a sync user turn into this channel.</div>
+                <button type="submit">Send</button>
+              </div>
+            </form>
+          </article>
+
+          <article class="timeline">
+            <h3>Recent Events</h3>
+            <div id="event-list" class="event-list"></div>
+          </article>
+
+          <article class="timeline">
+            <h3>Recent Outputs</h3>
+            <div id="output-list" class="output-list"></div>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const channelName = {{ channel_name|tojson }};
+      const channelDomain = {{ channel_domain|tojson }};
+      const dashboardApiPath = {{ dashboard_api_path|tojson }};
+      const eventsApiPath = {{ events_api_path|tojson }};
+      const outputsApiPath = {{ outputs_api_path|tojson }};
+      const streamPath = {{ stream_path|tojson }};
+
+      const byId = (id) => document.getElementById(id);
+
+      const fmtNumber = (value) => {
+        if (value === null || value === undefined || value === '') return '--';
+        return new Intl.NumberFormat().format(value);
+      };
+
+      const escapeHtml = (value) => String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+      const renderKeyValue = (pairs) => pairs
+        .filter(([, value]) => value !== undefined && value !== null && value !== '')
+        .map(([label, value]) => `<div class="meta-row"><strong>${escapeHtml(label)}</strong><span>${escapeHtml(value)}</span></div>`)
+        .join('') || '<p class="empty">No data yet.</p>';
+
+      const dangerClass = (score) => {
+        const numeric = Number(score || 0);
+        if (numeric >= 60) return 'signal-high';
+        if (numeric >= 30) return 'signal-mid';
+        return 'signal-low';
+      };
+
+      function applyDomainCopy(dashboard) {
+        const domain = (dashboard.domain || channelDomain || 'general').toLowerCase();
+        if (domain !== 'pokemon') {
+          return;
+        }
+
+        document.title = 'Pokemon Bridge Dashboard';
+        byId('hero-eyebrow').textContent = 'Pokemon Bridge';
+        byId('hero-title').textContent = 'Kalos Command Deck';
+        byId('hero-subtitle').textContent = 'A standalone runtime view for the live Pokemon X/Y channel. It tracks bridge health, live frame capture, battle state, route progress, and operator control posture outside the main OpenCloset chat.';
+        byId('status-label-current-system').textContent = 'Current Route';
+        byId('status-label-ship-status').textContent = 'Control Mode';
+        byId('status-label-danger-score').textContent = 'Risk Gate';
+        byId('card-title-identity').textContent = 'Trainer and Team';
+        byId('card-title-location').textContent = 'Route and Position';
+        byId('card-title-run').textContent = 'Bridge Status';
+        byId('card-title-risk').textContent = 'Encounter Watch';
+        byId('card-title-contract').textContent = 'Battle State';
+        byId('card-title-assets').textContent = 'Bag and Capture';
+        byId('card-title-wallet').textContent = 'Progress';
+        byId('card-title-companion').textContent = 'Runtime Control';
+      }
+
+      function renderDashboard(payload) {
+        const channel = payload.channel || {};
+        const dashboard = payload.dashboard || {};
+        const panels = dashboard.panels || {};
+        const questions = dashboard.four_questions || {};
+        const pilot = dashboard.pilot || {};
+        const pilotIdentity = panels.pilot_identity || {};
+        const currentLocation = panels.current_location || {};
+
+        byId('channel-name').textContent = channel.name || channelName;
+        byId('pilot-name').textContent = pilot.name || pilotIdentity.character_name || 'Unbound pilot';
+        byId('pilot-subline').textContent = [pilotIdentity.corporation_name, currentLocation.current_system, currentLocation.current_station].filter(Boolean).join(' • ') || 'Set your pilot profile and current location to make this dashboard yours.';
+        byId('pilot-ship').textContent = pilot.ship_label || currentLocation.ship_name || currentLocation.ship_type || 'No ship pinned';
+        byId('pilot-location').textContent = pilot.location_label || currentLocation.current_system || 'Location not pinned';
+        byId('objective-text').textContent = channel.active_objective || questions.what || '--';
+        byId('current-system').textContent = currentLocation.current_system || pilot.location_label || '--';
+        byId('ship-status').textContent = currentLocation.flight_state || pilot.corp_label || channel.status || '--';
+        byId('danger-score').innerHTML = `<span class="${dangerClass(panels.route_risk && panels.route_risk.danger_score)}">${escapeHtml(fmtNumber(panels.route_risk && panels.route_risk.danger_score))}</span>`;
+
+        applyDomainCopy(dashboard);
+
+        const identityChips = [];
+        if (pilotIdentity.home_hub) identityChips.push(`<span class="chip">Hub: ${escapeHtml(pilotIdentity.home_hub)}</span>`);
+        if (pilotIdentity.preferred_hull) identityChips.push(`<span class="chip">Hull: ${escapeHtml(pilotIdentity.preferred_hull)}</span>`);
+        if (pilotIdentity.risk_posture) identityChips.push(`<span class="chip">Risk: ${escapeHtml(pilotIdentity.risk_posture)}</span>`);
+        if (currentLocation.destination) identityChips.push(`<span class="chip">Destination: ${escapeHtml(currentLocation.destination)}</span>`);
+        byId('identity-chips').innerHTML = identityChips.join('');
+
+        byId('what-answer').textContent = questions.what || '--';
+        byId('why-answer').textContent = questions.why || '--';
+        byId('watch-answer').textContent = questions.watch || '--';
+        byId('next-answer').textContent = questions.next || '--';
+
+        byId('pilot-identity').innerHTML = renderKeyValue([
+          ['Character', pilotIdentity.character_name],
+          ['Corporation', pilotIdentity.corporation_name],
+          ['Alliance', pilotIdentity.alliance_name],
+          ['Role', pilotIdentity.hauling_role],
+          ['Home Hub', pilotIdentity.home_hub],
+          ['Preferred Hull', pilotIdentity.preferred_hull],
+          ['Risk Posture', pilotIdentity.risk_posture],
+        ]);
+
+        byId('current-location').innerHTML = renderKeyValue([
+          ['System', currentLocation.current_system],
+          ['Station', currentLocation.current_station],
+          ['Region', currentLocation.region_name],
+          ['Ship Name', currentLocation.ship_name],
+          ['Ship Type', currentLocation.ship_type],
+          ['Flight State', currentLocation.flight_state],
+          ['Destination', currentLocation.destination],
+          ['Security', currentLocation.security_band],
+          ['Situation', currentLocation.situation],
+        ]);
+
+        const currentRun = panels.current_run || {};
+        let currentRunHtml = renderKeyValue([
+          ['Objective', currentRun.objective],
+          ['Status', currentRun.status],
+          ['Next Action', currentRun.next_action],
+          ['Route', Array.isArray(currentRun.route) ? currentRun.route.join(' -> ') : ''],
+          ['Cargo Volume', currentRun.cargo ? `${fmtNumber(currentRun.cargo.volume_m3)} m3` : ''],
+          ['Estimated Value', currentRun.cargo ? `${fmtNumber(currentRun.cargo.estimated_value)} ISK` : ''],
+          ['Collateral', currentRun.cargo ? `${fmtNumber(currentRun.cargo.collateral)} ISK` : ''],
+        ]);
+        const frameCapture = panels.frame_capture || {};
+        if ((dashboard.domain || channelDomain || '').toLowerCase() === 'pokemon') {
+          currentRunHtml = renderKeyValue([
+            ['Capture Source', currentRun.capture_source],
+            ['Window Title', currentRun.window_title],
+            ['Bridge Connected', currentRun.bridge_connected],
+            ['Resolution', currentRun.resolution],
+            ['Last Snapshot', currentRun.last_snapshot_at],
+            ['Recent Emissions', Array.isArray(currentRun.recent_emissions) ? currentRun.recent_emissions.join(', ') : ''],
+          ]);
+          if (frameCapture.path) {
+            const frameUrl = `/api/runtime/agents/${encodeURIComponent(channel.name || {{ channel_name|tojson }})}/frame?ts=${encodeURIComponent(frameCapture.captured_at || frameCapture.path)}`;
+            currentRunHtml += `<div class="preview-frame"><img src="${frameUrl}" alt="Latest Pokemon bridge frame"></div>`;
+          }
+        }
+        byId('current-run').innerHTML = currentRunHtml;
+
+        const routeRisk = panels.route_risk || {};
+        byId('route-risk').innerHTML = renderKeyValue([
+          ['Danger Score', routeRisk.danger_score],
+          ['Jumps', routeRisk.jumps],
+          ['Warning', routeRisk.warning],
+          ['Watch', routeRisk.watch],
+          ['Alternate', routeRisk.alternate_route ? `${routeRisk.alternate_route.label} (+${routeRisk.alternate_route.extra_jumps} jumps)` : ''],
+        ]);
+
+        const contractJob = panels.contract_job || {};
+        byId('contract-job').innerHTML = renderKeyValue([
+          ['Pickup', contractJob.pickup],
+          ['Dropoff', contractJob.dropoff],
+          ['Reward', contractJob.reward ? `${fmtNumber(contractJob.reward)} ISK` : ''],
+          ['Collateral', contractJob.collateral ? `${fmtNumber(contractJob.collateral)} ISK` : ''],
+          ['Volume', contractJob.volume_m3 ? `${fmtNumber(contractJob.volume_m3)} m3` : ''],
+          ['Comment', contractJob.agent_comment],
+        ]);
+
+        const assets = panels.asset_inventory || {};
+        byId('asset-inventory').innerHTML = renderKeyValue([
+          ['Total Sellable Value', assets.total_sellable_value ? `${fmtNumber(assets.total_sellable_value)} ISK` : ''],
+          ['Stations', assets.stations],
+          ['Consolidation', Array.isArray(assets.consolidation_route) ? assets.consolidation_route.join(' -> ') : ''],
+          ['Dead Weight', Array.isArray(assets.dead_weight) ? assets.dead_weight.join(', ') : ''],
+        ]);
+
+        const wallet = panels.wallet_profit || {};
+        byId('wallet-profit').innerHTML = renderKeyValue([
+          ['Wallet', wallet.wallet_balance ? `${fmtNumber(wallet.wallet_balance)} ISK` : ''],
+          ['Session Profit', wallet.session_profit_estimate ? `${fmtNumber(wallet.session_profit_estimate)} ISK` : ''],
+          ['Target Profit', wallet.target_profit ? `${fmtNumber(wallet.target_profit)} ISK` : ''],
+        ]);
+
+        const companion = panels.session_companion || {};
+        const companionHtml = renderKeyValue([
+          ['Current Plan', companion.current_plan],
+          ['Why', companion.why_we_chose_it],
+          ['Watch', companion.what_were_watching],
+          ['Session Mood', companion.session_mood],
+        ]);
+        const chips = [];
+        for (const item of companion.abort_conditions || []) chips.push(`<span class="chip">Abort: ${escapeHtml(item)}</span>`);
+        for (const item of companion.next_actions || []) chips.push(`<span class="chip">Next: ${escapeHtml(item)}</span>`);
+        byId('session-companion').innerHTML = companionHtml + (chips.length ? `<div class="chips">${chips.join('')}</div>` : '');
+      }
+
+      function renderEvents(events) {
+        const target = byId('event-list');
+        if (!events.length) {
+          target.innerHTML = '<p class="empty">No events yet.</p>';
+          return;
+        }
+        target.innerHTML = events.map((event) => `
+          <article class="event">
+            <div class="event-top"><span>${escapeHtml(event.event_type || '--')}</span><span>${escapeHtml(event.source || '--')}</span></div>
+            <p class="event-text">${escapeHtml(event.text || '')}</p>
+          </article>
+        `).join('');
+      }
+
+      function renderOutputs(outputs) {
+        const target = byId('output-list');
+        if (!outputs.length) {
+          target.innerHTML = '<p class="empty">No outputs yet.</p>';
+          return;
+        }
+        target.innerHTML = outputs.map((output) => {
+          const payload = output.payload || {};
+          const body = payload.text || payload.summary || payload.message || JSON.stringify(payload, null, 2);
+          return `
+            <article class="output">
+              <div class="output-top"><span>${escapeHtml(output.output_type || '--')}</span><span>${escapeHtml(output.created_at || '--')}</span></div>
+              <p class="output-text">${escapeHtml(body)}</p>
+            </article>
+          `;
+        }).join('');
+      }
+
+      async function fetchJson(path, options) {
+        const response = await fetch(path, options);
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text || `HTTP ${response.status}`);
+        }
+        return response.json();
+      }
+
+      async function postChannelEvent(eventType, payload, text) {
+        return fetchJson(`/api/runtime/agents/${encodeURIComponent(channelName)}/events`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: eventType, payload, text }),
+        });
+      }
+
+      async function refreshAll() {
+        byId('last-refresh').textContent = 'Refreshing...';
+        const [dashboard, events, outputs] = await Promise.all([
+          fetchJson(dashboardApiPath),
+          fetchJson(eventsApiPath),
+          fetchJson(outputsApiPath),
+        ]);
+        renderDashboard(dashboard);
+        renderEvents(events.events || []);
+        renderOutputs(outputs.outputs || []);
+        byId('last-refresh').textContent = `Last refresh ${new Date().toLocaleTimeString()}`;
+      }
+
+      byId('refresh-button').addEventListener('click', () => {
+        refreshAll().catch((error) => {
+          byId('last-refresh').textContent = `Refresh failed: ${error.message}`;
+        });
+      });
+
+      byId('message-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const input = byId('message-input');
+        const content = input.value.trim();
+        if (!content) return;
+        byId('send-status').textContent = 'Sending...';
+        try {
+          await fetchJson(`/api/runtime/agents/${encodeURIComponent(channelName)}/send`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content, sync: true }),
+          });
+          input.value = '';
+          byId('send-status').textContent = 'Turn completed.';
+          await refreshAll();
+        } catch (error) {
+          byId('send-status').textContent = `Send failed: ${error.message}`;
+        }
+      });
+
+      byId('profile-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = {
+          character_name: byId('profile-name').value.trim(),
+          corporation_name: byId('profile-corp').value.trim(),
+          hauling_role: byId('profile-role').value.trim(),
+          home_hub: byId('profile-hub').value.trim(),
+          preferred_hull: byId('profile-hull').value.trim(),
+          risk_posture: byId('profile-risk').value.trim(),
+        };
+        byId('profile-status').textContent = 'Saving pilot...';
+        try {
+          await postChannelEvent('character.profile', payload, 'Pilot identity updated.');
+          byId('profile-status').textContent = 'Pilot identity saved.';
+          await refreshAll();
+        } catch (error) {
+          byId('profile-status').textContent = `Save failed: ${error.message}`;
+        }
+      });
+
+      byId('location-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = {
+          current_system: byId('location-system').value.trim(),
+          current_station: byId('location-station').value.trim(),
+          ship_name: byId('location-ship-name').value.trim(),
+          ship_type: byId('location-ship-type').value.trim(),
+          flight_state: byId('location-flight-state').value,
+          destination: byId('location-destination').value.trim(),
+          security_band: byId('location-security').value,
+          situation: byId('location-situation').value.trim(),
+        };
+        byId('location-status').textContent = 'Updating location...';
+        try {
+          await postChannelEvent('character.location', payload, 'Pilot location updated.');
+          byId('location-status').textContent = 'Location pinned.';
+          await refreshAll();
+        } catch (error) {
+          byId('location-status').textContent = `Update failed: ${error.message}`;
+        }
+      });
+
+      let stream;
+      try {
+        stream = new EventSource(streamPath);
+        stream.onmessage = () => {};
+        stream.addEventListener('agent_channel_event', () => refreshAll().catch(() => {}));
+        stream.addEventListener('dashboard.patch', () => refreshAll().catch(() => {}));
+        stream.addEventListener('message', () => refreshAll().catch(() => {}));
+      } catch (error) {
+        console.warn('stream unavailable', error);
+      }
+
+      refreshAll().catch((error) => {
+        byId('last-refresh').textContent = `Initial load failed: ${error.message}`;
+      });
+      setInterval(() => refreshAll().catch(() => {}), 15000);
+    </script>
+  </body>
+</html>

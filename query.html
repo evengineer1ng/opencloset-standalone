@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>loom query - deterministic tape synth</title>
+<style>
+ :root{
+  --bg:#f5efe1;
+  --ink:#1c1a17;
+  --muted:#6b6257;
+  --panel:#fff9ec;
+  --line:#d9ceb8;
+  --accent:#b5522d;
+  --accent2:#0f6a73;
+  --good:#35633b;
+  --warn:#9a6a12;
+ }
+ *{box-sizing:border-box}
+ body{
+  margin:0;
+  background:
+   radial-gradient(circle at top left, rgba(181,82,45,.14), transparent 28%),
+   radial-gradient(circle at top right, rgba(15,106,115,.12), transparent 26%),
+   linear-gradient(180deg, #f7f1e4, #efe6d2 58%, #eadfc9);
+  color:var(--ink);
+  font:16px/1.5 Georgia, "Palatino Linotype", serif;
+ }
+ .wrap{max-width:1180px;margin:0 auto;padding:24px 18px 40px}
+ h1{
+  margin:0;
+  font:700 34px/1.05 "Book Antiqua", Georgia, serif;
+  letter-spacing:.01em;
+ }
+ .sub{color:var(--muted);margin:8px 0 0;max-width:860px}
+ .grid{display:grid;grid-template-columns:360px 1fr;gap:16px;margin-top:20px}
+ @media (max-width:980px){.grid{grid-template-columns:1fr}}
+ .card{
+  background:rgba(255,249,236,.88);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 10px 30px rgba(60,45,20,.08);
+  padding:16px;
+ }
+ .ttl{
+  color:var(--accent);
+  text-transform:uppercase;
+  letter-spacing:.09em;
+  font:700 12px/1 Consolas, monospace;
+  margin:0 0 12px;
+ }
+ .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+ label{display:block;color:var(--muted);font-size:13px;margin:10px 0 6px}
+ input[type=text], input[type=number], textarea, select{
+  width:100%;
+  background:#fffdf6;
+  color:var(--ink);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px 13px;
+  font:15px/1.4 Consolas, "Courier New", monospace;
+ }
+ textarea{min-height:110px;resize:vertical}
+ button{
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:11px 16px;
+  background:#fff8ea;
+  color:var(--ink);
+  cursor:pointer;
+  font:700 14px/1.1 Georgia, serif;
+ }
+ button.primary{background:var(--accent);border-color:var(--accent);color:#fff8ef}
+ button.secondary{background:var(--accent2);border-color:var(--accent2);color:#eefcfd}
+ button.ghost{background:transparent}
+ .pill{
+  display:inline-block;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:4px 9px;
+  color:var(--muted);
+  font:12px/1 Consolas, monospace;
+  background:rgba(255,255,255,.45);
+ }
+ .list{
+  margin:10px 0 0;
+  padding:0;
+  list-style:none;
+  display:grid;
+  gap:8px;
+  max-height:220px;
+  overflow:auto;
+ }
+ .list li{
+  background:#fffdf6;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px 12px;
+ }
+ .list .meta{display:block;color:var(--muted);font:12px/1.3 Consolas, monospace;margin-top:4px}
+ .out{
+  white-space:pre-wrap;
+  background:#fffdf7;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  min-height:160px;
+  font:14px/1.5 Consolas, "Courier New", monospace;
+ }
+ .big{min-height:240px}
+ .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+ @media (max-width:900px){.split{grid-template-columns:1fr}}
+ .fine{font-size:12px;color:var(--muted)}
+ .warn{color:var(--warn)}
+ .good{color:var(--good)}
+ .actions{margin-top:12px}
+ .section-gap{margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <h1>loom query</h1>
+ <div class="sub">One HTML file. No backend. This is the browser twin of <code>oradio_tape_synth_v2 copy.py</code>: load tape files, ask a query, get deterministic meaning plus evidence. Search is treated as acquired tape, but browser CORS may block live DuckDuckGo fetches, so uploaded tapes remain the reliable path.</div>
+
+ <div class="grid">
+  <div class="card">
+   <div class="ttl">Inputs</div>
+
+   <label for="tape-files">Load tape files</label>
+   <input id="tape-files" type="file" accept=".json,.ndjson,.jsonl,.oradio,.loom,.txt,application/json,text/plain" multiple>
+
+   <div class="section-gap row">
+    <button id="load-sample" class="ghost">Load sample tape</button>
+    <span class="pill" id="row-count">0 rows</span>
+    <span class="pill" id="search-status">search off</span>
+   </div>
+
+   <label for="manual-tape">Paste tape rows</label>
+   <textarea id="manual-tape" placeholder='Paste a JSON array, NDJSON rows, or plain lines. Example:
+[
+  {"actor":"Leclerc","action":"win","object":"the race","lap":16,"priority":0.98}
+]'></textarea>
+
+   <div class="row actions">
+    <button id="append-manual">Append pasted tape</button>
+    <button id="clear-all" class="ghost">Clear all tapes</button>
+   </div>
+
+   <label for="query">Query</label>
+   <input id="query" type="text" placeholder="who won the race? what happened after the pit stop? what is telemetry?">
+
+   <div class="row">
+    <label style="margin:0"><input id="search-toggle" type="checkbox"> try live search repair</label>
+    <label style="margin:0">target confidence <input id="target-confidence" type="number" value="0.74" min="0" max="1" step="0.01" style="width:88px;display:inline-block;margin-left:8px"></label>
+   </div>
+
+   <div class="row actions">
+    <button id="run" class="primary">Run query</button>
+    <button id="download-result" class="secondary">Download result</button>
+   </div>
+
+   <div class="fine section-gap">What works in static HTML: tape loading, scoring, synthesis, export. What is limited: folder scan, automatic local session writes, and live web search if the browser blocks cross-origin fetches.</div>
+
+   <div class="ttl section-gap">Loaded Tapes</div>
+   <ul class="list" id="tape-list"></ul>
+  </div>
+
+  <div>
+   <div class="card">
+    <div class="ttl">Meaning</div>
+    <div class="out big" id="meaning">Load one or more tapes, then ask a query.</div>
+   </div>
+
+   <div class="split section-gap">
+    <div class="card">
+     <div class="ttl">Evidence</div>
+     <div class="out" id="evidence">No evidence yet.</div>
+    </div>
+    <div class="card">
+     <div class="ttl">Diagnostics</div>
+     <div class="out" id="diagnostics">No diagnostics yet.</div>
+    </div>
+   </div>
+
+   <div class="split section-gap">
+    <div class="card">
+     <div class="ttl">Search Log</div>
+     <div class="out" id="search-log">Search disabled.</div>
+    </div>
+    <div class="card">
+     <div class="ttl">Packet Preview</div>
+     <div class="out" id="packet-preview">The browser result packet preview will appear here.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<script>
+const DEFAULT_CONFIG = {
+  target_confidence: 0.74,
+  word_confidence_threshold: 0.62,
+  relation_confidence_threshold: 0.58,
+  meaning_confidence_threshold: 0.62,
+  evidence_confidence_threshold: 0.56,
+  max_search_rounds: 5,
+  max_results_per_search: 5,
+  fetch_timeout_seconds: 9,
+  max_native_evidence: 8,
+  max_total_evidence: 12
+};
+const FILLERS = new Set([
+  "the","a","an","of","to","for","is","are","was","were","did","does","do",
+  "can","could","would","should","and","or","if","it","this","that","today",
+  "now","me","my","we","our","you","your","in","on","at","by","with","from",
+  "as","be","been","being","into","about","what","who","when","where","why",
+  "how","which","anything","something","please","tell","ask","show","explain",
+  "vs","versus","compare","than","there","their","his","her","they","them",
+  "any","all","some","thing","things","stuff","one","ones","these","those",
+  "here","there","over","under","through","around","like","just","really",
+  "very","much","more","less","kind","sort","maybe","perhaps","query",
+  "question","answer","source","tape","tapes","loaded","current","folder"
+]);
+const TRANSFORM_HINTS = [
+  ["why", "causal"], ["because", "causal"], ["cause", "causal"],
+  ["how", "sequence"], ["after", "sequence"], ["before", "sequence"],
+  ["next", "sequence"], ["then", "sequence"], ["when", "time"],
+  ["lap", "time"], ["tick", "time"], ["count", "count"], ["many", "count"],
+  ["number", "count"], ["most", "rank"], ["highest", "rank"], ["biggest", "rank"],
+  ["top", "rank"], ["leader", "rank"], ["best", "rank"], ["worst", "rank"],
+  ["good", "evaluation"], ["bad", "evaluation"], ["important", "evaluation"],
+  ["noteworthy", "evaluation"], ["coefficient", "interpretive"], ["factor", "interpretive"],
+  ["weight", "interpretive"], ["recap", "summary"], ["summary", "summary"],
+  ["summarize", "summary"], ["overview", "summary"], ["happened", "summary"]
+];
+const VERBS_PAST = {
+  make: "made", win: "won", lose: "lost", draw: "drew", steal: "stole",
+  split: "split", build: "built", lead: "led", run: "ran", go: "went",
+  come: "came", rise: "rose", fall: "fell", write: "wrote",
+  publish: "published", return: "returned", observe: "observed",
+  observed: "observed", say: "said", emit: "emitted", start_mixtape: "started mixtape",
+  play: "played", pause: "paused", adopt: "adopted", establish: "established",
+  enable: "enabled", connect: "connected", standardize: "standardized"
+};
+const CONTROL_ACTORS = new Set(["booth", "player", "recorder"]);
+const CONTROL_ACTIONS = new Set(["play", "pause", "start_mixtape", "save", "load", "emit"]);
+
+const SAMPLE_TAPE = [
+  { actor: "Russell", action: "launch", object: "clean start", lap: 1, priority: 0.82, valence: "hype" },
+  { actor: "Hamilton", action: "pit", object: "soft tyres", lap: 5, priority: 0.70, valence: "calm" },
+  { actor: "Leclerc", action: "overtake", object: "Russell", lap: 8, priority: 0.86, valence: "hype" },
+  { actor: "Norris", action: "clock", object: "fastest lap", lap: 15, priority: 0.88, valence: "hype" },
+  { actor: "Leclerc", action: "win", object: "the race", lap: 16, priority: 0.98, valence: "hype" }
+];
+
+let loadedRows = [];
+let loadedTapeMeta = [];
+let lastResult = null;
+
+const $ = id => document.getElementById(id);
+
+function nowIso() {
+  return new Date().toISOString();
+}
+function clamp01(n) {
+  const x = Number(n);
+  if (!Number.isFinite(x)) return 0;
+  return Math.max(0, Math.min(1, x));
+}
+function stableId(...parts) {
+  const text = parts.map(x => String(x ?? "")).join("|");
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(16).padStart(8, "0");
+}
+function cleanText(x, limit = 500) {
+  return String(x ?? "").replace(/\s+/g, " ").trim().slice(0, limit);
+}
+function lower(x) {
+  return String(x ?? "").toLowerCase();
+}
+function regularPast(v) {
+  const word = String(v || "").trim();
+  if (!word) return word;
+  if (word === "emit") return "emitted";
+  if (word.endsWith("e")) return word + "d";
+  if (word.length > 2 && word.endsWith("y") && !"aeiou".includes(word[word.length - 2])) return word.slice(0, -1) + "ied";
+  return word + "ed";
+}
+function splitAlphaNum(text) {
+  return lower(text).split(/[^a-z0-9]+/).filter(Boolean);
+}
+function unique(seq) {
+  const seen = new Set();
+  const out = [];
+  for (const item of seq) {
+    const token = lower(item).trim();
+    if (!token || seen.has(token)) continue;
+    seen.add(token);
+    out.push(token);
+  }
+  return out;
+}
+function quotedTerms(query) {
+  const out = [];
+  const rx = /"([^"]+)"|'([^']+)'/g;
+  let m;
+  while ((m = rx.exec(query))) out.push(lower((m[1] || m[2] || "").trim()));
+  return out;
+}
+function queryFocusPhrase(query) {
+  const q = String(query || "").replace(/[?!.]+$/, "").trim();
+  const pats = [
+    /^\s*what\s+is\s+(.+)$/i,
+    /^\s*who\s+is\s+(.+)$/i,
+    /^\s*what\s+did\s+(.+?)\s+do\s*$/i,
+    /^\s*how\s+did\s+(.+?)\s+happen\s*$/i,
+    /^\s*why\s+(.+)$/i
+  ];
+  for (const pat of pats) {
+    const m = q.match(pat);
+    if (m) return cleanText(m[1], 120);
+  }
+  return questionTokens(q).slice(0, 5).join(" ");
+}
+function questionTokens(query) {
+  const qterms = new Set(quotedTerms(query));
+  const out = [];
+  for (const token of splitAlphaNum(query)) {
+    if (FILLERS.has(token) && !qterms.has(token)) continue;
+    if (token.length <= 1 && !qterms.has(token)) continue;
+    out.push(token);
+  }
+  return unique(out);
+}
+function charTrigrams(token) {
+  const t = lower(token);
+  if (t.length < 3) return t ? [t] : [];
+  const out = [];
+  for (let i = 0; i <= t.length - 3; i++) out.push(t.slice(i, i + 3));
+  return out;
+}
+function tokenAffinity(left, right) {
+  const a = lower(left), b = lower(right);
+  if (!a || !b) return 0;
+  if (a.length < 3 || b.length < 3) return a === b ? 1 : 0;
+  if (a === b) return 1;
+  if (a.includes(b) || b.includes(a)) return 0.92;
+  let prefix = 0;
+  while (prefix < a.length && prefix < b.length && a[prefix] === b[prefix]) prefix++;
+  let prefixScore = 0;
+  const maxLen = Math.max(a.length, b.length);
+  if (prefix >= 5 && (prefix / maxLen) >= 0.8) prefixScore = Math.min(0.86, 0.45 + (prefix / maxLen) * 0.4);
+  const at = new Set(charTrigrams(a));
+  const bt = new Set(charTrigrams(b));
+  let overlap = 0;
+  for (const tri of at) if (bt.has(tri)) overlap++;
+  const union = new Set([...at, ...bt]).size || 1;
+  const triScoreRaw = overlap / union;
+  const triScore = triScoreRaw >= 0.58 ? triScoreRaw : 0;
+  return Math.max(prefixScore, triScore);
+}
+function bestTokenAffinity(token, candidates) {
+  let best = 0, bestMatch = "";
+  for (const candidate of candidates) {
+    const score = tokenAffinity(token, candidate);
+    if (score > best) {
+      best = score;
+      bestMatch = candidate;
+    }
+  }
+  return [clamp01(best), bestMatch];
+}
+function domainOf(raw) {
+  try {
+    const url = new URL(String(raw || ""));
+    return lower(url.hostname.replace(/^www\./, ""));
+  } catch (_err) {}
+  const m = String(raw || "").match(/\b([a-z0-9-]+(?:\.[a-z0-9-]+)+)\b/i);
+  return m ? lower(m[1].replace(/^www\./, "")) : "";
+}
+function tagValue(row, key) {
+  const prefix = key + ":";
+  const tags = Array.isArray(row.tags) ? row.tags : [];
+  const hit = tags.find(tag => typeof tag === "string" && tag.startsWith(prefix));
+  return hit ? hit.slice(prefix.length) : "";
+}
+function extractYamlishValue(text, key) {
+  const rx = new RegExp("^\\s*" + key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s*:\\s*(.+?)\\s*$", "m");
+  const m = String(text || "").match(rx);
+  return m ? m[1].trim() : "";
+}
+function normalizeRow(item, i, tapeId, sourceKind = "source") {
+  if (typeof item === "string") {
+    return {
+      tape_id: tapeId, row_index: i, actor: "line", action: "say",
+      object: cleanText(item, 1000), lap: i + 1, priority: 0.5, valence: "calm",
+      source: "", source_domain: "", headline: "", thread: "", topic: "", time: "",
+      kind: "line", source_kind: sourceKind, raw: { text: item, _source_kind: sourceKind }, tags: []
+    };
+  }
+  const row = item && typeof item === "object" ? item : { object: item };
+  const raw = row.raw && typeof row.raw === "object" ? row.raw : {};
+  return {
+    tape_id: tapeId,
+    row_index: i,
+    actor: cleanText(tagValue(row, "actor") || row.content_actor || row.actor || raw.actor || row.source || "tape", 180),
+    action: cleanText(tagValue(row, "action") || row.content_action || row.action || raw.action || row.kind || "emit", 80),
+    object: cleanText(tagValue(row, "object") || row.content_object || row.content_text || row.object || raw.object || row.title || row.text || row.body || row.message || "", 1000),
+    lap: parseInt(Number(row.lap ?? (i + 1)), 10) || i + 1,
+    priority: clamp01(row.priority ?? raw.priority ?? 0.5),
+    valence: cleanText(tagValue(row, "valence") || row.valence || "calm", 40),
+    source: cleanText(tagValue(row, "source") || row.source || row.url || raw.link || raw.source || "", 500),
+    source_domain: cleanText(row.source_domain || domainOf(tagValue(row, "source") || row.source || row.url || raw.link || raw.source || ""), 120),
+    headline: cleanText(row.headline || raw.title || row.title || "", 500),
+    thread: cleanText(tagValue(row, "thread") || row.thread || "", 200),
+    topic: cleanText(tagValue(row, "topic") || row.topic || "", 100),
+    time: cleanText(tagValue(row, "time") || row.time || raw.published || "", 100),
+    kind: cleanText(row.kind || tagValue(row, "kind") || sourceKind, 100),
+    source_kind: sourceKind,
+    raw: Object.assign({}, row, { _source_kind: sourceKind }),
+    tags: Array.isArray(row.tags) ? row.tags.map(String) : []
+  };
+}
+function rowText(row) {
+  return [row.actor, row.action, row.object, row.headline, row.thread, row.topic, row.source_domain, row.source, (row.tags || []).join(" ")].filter(Boolean).join(" ");
+}
+function contentActor(row) {
+  return String((row.raw || {}).content_actor || row.actor || "").trim();
+}
+function contentAction(row) {
+  return String((row.raw || {}).content_action || row.action || "").trim();
+}
+function contentObject(row) {
+  return String((row.raw || {}).content_object || (row.raw || {}).content_text || row.object || row.headline || "").trim();
+}
+function isControl(row) {
+  return CONTROL_ACTORS.has(lower(row.actor)) && CONTROL_ACTIONS.has(lower(row.action));
+}
+function clause(row) {
+  if (isControl(row) && contentObject(row)) return cleanText(contentObject(row), 240);
+  const actor = contentActor(row) || row.source_domain || "source";
+  const action = VERBS_PAST[lower(contentAction(row))] || regularPast(contentAction(row));
+  const obj = contentObject(row);
+  return [actor, action, obj].filter(Boolean).join(" ").trim();
+}
+function refId(row) {
+  return `${row.tape_id}#lap${row.lap}:row${row.row_index}`;
+}
+function parseJsonOrNdjsonText(text) {
+  const stripped = String(text || "").trim();
+  if (!stripped) return [];
+  if (stripped.startsWith("[")) {
+    const data = JSON.parse(stripped);
+    if (!Array.isArray(data)) throw new Error("JSON root is not a list");
+    return data;
+  }
+  const rows = [];
+  for (const line of stripped.split(/\r?\n/)) {
+    const item = line.trim();
+    if (!item) continue;
+    if (item.startsWith("{")) rows.push(JSON.parse(item));
+    else rows.push(item);
+  }
+  return rows;
+}
+function parseTextMetadataTapeText(text, tapeId) {
+  const rows = [];
+  const universe = extractYamlishValue(text, "universe") || extractYamlishValue(text, "oradio") || tapeId;
+  const intent = extractYamlishValue(text, "intent") || universe;
+  rows.push({ actor: tapeId, action: "define", object: universe, valence: "calm", lap: 1, priority: 0.7, source: tapeId, kind: "metadata", thread: `file:${tapeId}`, evidence: "loaded metadata file" });
+  if (intent && intent !== universe) rows.push({ actor: tapeId, action: "intend", object: intent, valence: "calm", lap: 2, priority: 0.65, source: tapeId, kind: "metadata", thread: `file:${tapeId}`, evidence: "intent field" });
+  const lines = String(text || "").split(/\r?\n/);
+  for (let idx = 0; idx < lines.length; idx++) {
+    const line = lines[idx].trim();
+    if (!line || line.startsWith("#")) continue;
+    if (["plugin:", "path:", "from:", "to:", "transform:", "name:", "connection:"].some(k => line.includes(k))) {
+      rows.push({ actor: tapeId, action: "declare", object: line, valence: "calm", lap: idx + 3, priority: 0.45, source: tapeId, kind: "metadata", thread: `file:${tapeId}` });
+    }
+  }
+  return rows;
+}
+function parseTapeText(text, tapeId, kindHint = "") {
+  const lowerName = lower(tapeId + " " + kindHint);
+  let items;
+  if (lowerName.endsWith(".oradio") || lowerName.endsWith(".loom")) {
+    items = parseTextMetadataTapeText(text, tapeId);
+  } else {
+    items = parseJsonOrNdjsonText(text);
+  }
+  return items.map((item, index) => normalizeRow(item, index, tapeId, "source"));
+}
+function eventTokens(row) {
+  if (row.kind === "search_failure" || lower(row.object).includes("search failed for")) return ["search_failure", "duckduckgo"];
+  return unique(splitAlphaNum(rowText(row)));
+}
+function tapeVocabulary(rows) {
+  const toks = [];
+  for (const row of rows) toks.push(...eventTokens(row));
+  return unique(toks);
+}
+function inferTransform(query) {
+  const q = lower(query);
+  if (/^\s*what\s+is\b/.test(q)) return "define";
+  if (/^\s*what\s+did\b/.test(q)) return "actor_action";
+  if (q.includes("coefficient") || q.includes("factor") || q.includes("weight")) return "interpretive";
+  const toks = new Set(questionTokens(query));
+  for (const [hint, transform] of TRANSFORM_HINTS) {
+    if (toks.has(hint) || new RegExp("\\b" + hint.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(q)) return transform;
+  }
+  return "summary";
+}
+function scoreWords(query, rows) {
+  const toks = questionTokens(query);
+  const vocab = tapeVocabulary(rows);
+  return toks.map(token => {
+    const [score, match] = bestTokenAffinity(token, vocab);
+    return {
+      type: "word",
+      item: token,
+      confidence: Number(score.toFixed(3)),
+      gap: Number((1 - score).toFixed(3)),
+      match,
+      reason: score >= DEFAULT_CONFIG.word_confidence_threshold ? "covered by tape vocabulary" : "foreign or weakly covered by tape vocabulary"
+    };
+  });
+}
+function scoreRelation(query, rows) {
+  const toks = questionTokens(query);
+  if (!toks.length) return 0;
+  const wordScores = scoreWords(query, rows).map(w => w.confidence);
+  const avg = wordScores.reduce((a, b) => a + b, 0) / Math.max(1, wordScores.length);
+  const direct = wordScores.filter(s => s >= 0.92).length / Math.max(1, wordScores.length);
+  let rowHits = 0;
+  for (const row of rows) {
+    const rt = eventTokens(row);
+    if (toks.some(t => bestTokenAffinity(t, rt)[0] >= 0.72)) rowHits++;
+  }
+  const rowCoverage = rows.length ? Math.min(1, rowHits / Math.max(3, Math.min(rows.length, toks.length * 3))) : 0;
+  return Number(clamp01(avg * 0.52 + direct * 0.18 + rowCoverage * 0.30).toFixed(3));
+}
+function scoreEvidence(query, rows) {
+  const toks = questionTokens(query);
+  const hits = [];
+  for (const row of rows) {
+    const rt = eventTokens(row);
+    const matched = [];
+    const scores = [];
+    for (const t of toks) {
+      const [score, match] = bestTokenAffinity(t, rt);
+      scores.push(score);
+      if (score >= 0.72) matched.push(match && match !== t ? `${t}->${match}` : t);
+    }
+    const lexical = toks.length ? scores.reduce((a, b) => a + b, 0) / Math.max(1, scores.length) : 0.2;
+    const priority = clamp01(row.priority);
+    const chronology = row.time || (row.tags || []).some(tag => String(tag).startsWith("chronology:")) ? 0.12 : 0;
+    const sourceScore = row.source_kind === "search" || row.kind === "search_result" ? 0.08 : 0;
+    const controlPenalty = isControl(row) && !(row.raw || {}).content_actor ? -0.18 : 0;
+    const isSearchFailure = row.kind === "search_failure" || lower(row.object).includes("search failed for");
+    let score = clamp01(lexical * 0.70 + priority * 0.18 + chronology + sourceScore + controlPenalty);
+    if (isSearchFailure) {
+      score = Math.min(score, 0.12);
+      matched.length = 0;
+    }
+    if (lexical < 0.15 && !isSearchFailure) continue;
+    if (score > 0.05) {
+      hits.push({
+        row,
+        score: Number(score.toFixed(3)),
+        token_score: Number(lexical.toFixed(3)),
+        priority_score: Number(priority.toFixed(3)),
+        chronology_score: Number(chronology.toFixed(3)),
+        source_score: Number(sourceScore.toFixed(3)),
+        matched_terms: matched,
+        native: row.source_kind !== "search" && row.kind !== "search_result"
+      });
+    }
+  }
+  hits.sort((a, b) => b.score - a.score || (a.native === b.native ? 0 : a.native ? -1 : 1) || a.row.tape_id.localeCompare(b.row.tape_id) || a.row.lap - b.row.lap || a.row.row_index - b.row.row_index);
+  return hits;
+}
+function scoreMeaning(query, rows) {
+  const relation = scoreRelation(query, rows);
+  const transform = inferTransform(query);
+  const words = scoreWords(query, rows);
+  const anchors = words.some(w => w.confidence >= 0.82);
+  const tokenMass = Math.min(1, questionTokens(query).length / 4);
+  const transformBonus = !["describe", "summary"].includes(transform) ? 0.24 : 0.10;
+  return Number(clamp01(relation * 0.5 + transformBonus + (anchors ? 0.18 : 0.05) + tokenMass * 0.10).toFixed(3));
+}
+function computeConfidence(query, rows) {
+  const words = scoreWords(query, rows);
+  const relation = scoreRelation(query, rows);
+  const meaning = scoreMeaning(query, rows);
+  const evidence = scoreEvidence(query, rows);
+  const wordAvg = words.length ? words.reduce((a, b) => a + b.confidence, 0) / words.length : 0.35;
+  const top = evidence.slice(0, 4);
+  const evidenceAvg = top.length ? top.reduce((a, b) => a + b.score, 0) / top.length : 0;
+  const total = clamp01(wordAvg * 0.28 + relation * 0.24 + meaning * 0.24 + evidenceAvg * 0.24);
+  return { total: Number(total.toFixed(3)), words, relation, meaning, evidence };
+}
+function hasCriticalLowWord(conf, cfg) {
+  return conf.words.some(w => w.confidence < cfg.word_confidence_threshold);
+}
+async function ddgInstantAnswer(query) {
+  const url = "https://api.duckduckgo.com/?" + new URLSearchParams({ q: query, format: "json", no_html: "1", skip_disambig: "1" }).toString();
+  const resp = await fetch(url, { headers: { "Accept": "application/json,text/html,*/*" } });
+  const data = await resp.json();
+  const results = [];
+  if (data.AbstractText) results.push({ title: data.Heading || query, snippet: data.AbstractText, url: data.AbstractURL || "", domain: domainOf(data.AbstractURL || "") });
+  for (const item of (data.RelatedTopics || []).slice(0, 12)) {
+    if (item && typeof item === "object" && item.Text) {
+      results.push({ title: item.Text.split(" - ")[0].slice(0, 120), snippet: item.Text, url: item.FirstURL || "", domain: domainOf(item.FirstURL || "") || "duckduckgo.com" });
+    } else if (item && Array.isArray(item.Topics)) {
+      for (const sub of item.Topics.slice(0, 3)) {
+        if (sub && typeof sub === "object" && sub.Text) results.push({ title: sub.Text.split(" - ")[0].slice(0, 120), snippet: sub.Text, url: sub.FirstURL || "", domain: domainOf(sub.FirstURL || "") || "duckduckgo.com" });
+      }
+    }
+  }
+  return results;
+}
+async function ddgSearchTape(query, roundNo, itemType) {
+  try {
+    const results = await ddgInstantAnswer(query);
+    if (!results.length) {
+      return [normalizeRow({ actor: "duckduckgo", action: "return", object: `no instant-answer result for ${query}`, lap: roundNo * 100 + 1, priority: 0.15, valence: "calm", source: `https://duckduckgo.com/?q=${encodeURIComponent(query)}`, source_domain: "duckduckgo.com", kind: "search_result", thread: `search:${query}`, search_query: query }, 0, `search:${stableId(query, roundNo)}`, "search")];
+    }
+    return results.slice(0, DEFAULT_CONFIG.max_results_per_search).map((r, i) => normalizeRow({
+      actor: r.domain || "duckduckgo",
+      action: "return",
+      object: cleanText([r.title, r.snippet].filter(Boolean).join(" - "), 1000),
+      lap: roundNo * 100 + i + 1,
+      priority: clamp01(0.78 - i * 0.08),
+      valence: "calm",
+      source: r.url || `https://duckduckgo.com/?q=${encodeURIComponent(query)}`,
+      source_domain: r.domain || domainOf(r.url || "") || "duckduckgo.com",
+      headline: r.title || "",
+      kind: "search_result",
+      thread: `search:${query}`,
+      search_query: query,
+      tags: ["actor:duckduckgo", "action:return", "kind:search_result", `query:${query}`, `thread:search:${query}`, "source:duckduckgo", `repair_type:${itemType}`]
+    }, i, `search:${stableId(query, roundNo)}`, "search"));
+  } catch (err) {
+    return [normalizeRow({ actor: "duckduckgo", action: "return", object: `search failed for ${query}: ${err.message || err}`, lap: roundNo * 100 + 1, priority: 0.2, valence: "alarm", source: `https://duckduckgo.com/?q=${encodeURIComponent(query)}`, source_domain: "duckduckgo.com", kind: "search_failure", thread: `search:${query}`, search_query: query }, 0, `search:${stableId(query, roundNo)}`, "search")];
+  }
+}
+async function acquireConfidence(query, rows, cfg, enableSearch) {
+  let working = rows.slice();
+  const searched = new Set();
+  const searchLog = [];
+  const searchRowsAll = [];
+  let conf = computeConfidence(query, working);
+  if (!enableSearch) return { working, conf, search_log: searchLog, search_rows: searchRowsAll };
+  for (let roundNo = 1; roundNo <= Number(cfg.max_search_rounds || 0); roundNo++) {
+    if (conf.total >= cfg.target_confidence && !hasCriticalLowWord(conf, cfg)) break;
+    const debt = weakestNodes(conf, cfg, searched);
+    if (!debt.length) break;
+    const node = debt[0];
+    const searchQuery = node.type === "relation" ? query : node.type === "meaning" ? `${inferTransform(query)} meaning ${query}` : node.search_query;
+    searched.add(`${node.type}:${node.item}`);
+    const before = conf.total;
+    const searchRows = await ddgSearchTape(searchQuery, roundNo, node.type);
+    working = working.concat(searchRows);
+    searchRowsAll.push(...searchRows);
+    conf = computeConfidence(query, working);
+    searchLog.push({
+      round: roundNo,
+      searched: searchQuery,
+      debt_type: node.type,
+      debt_item: node.item,
+      before_node_confidence: Number(node.confidence.toFixed(3)),
+      before_total_confidence: Number(before.toFixed(3)),
+      after_total_confidence: Number(conf.total.toFixed(3)),
+      rows_added: searchRows.length
+    });
+  }
+  return { working, conf, search_log: searchLog, search_rows: searchRowsAll };
+}
+function weakestNodes(conf, cfg, searched) {
+  const items = [];
+  for (const w of conf.words) {
+    if (w.confidence < cfg.word_confidence_threshold) {
+      const key = `word:${w.item}`;
+      if (!searched.has(key)) items.push({ type: "word", item: w.item, confidence: w.confidence, gap: 1 - w.confidence, search_query: w.item, reason: "low word confidence" });
+    }
+  }
+  if (conf.relation < cfg.relation_confidence_threshold && !searched.has("relation:query")) items.push({ type: "relation", item: "query_to_source", confidence: conf.relation, gap: 1 - conf.relation, search_query: "", reason: "low query-to-source relation confidence" });
+  if (conf.meaning < cfg.meaning_confidence_threshold && !searched.has("meaning:query")) items.push({ type: "meaning", item: "answer_shape", confidence: conf.meaning, gap: 1 - conf.meaning, search_query: "", reason: "low answer meaning confidence" });
+  const weakEvidence = conf.evidence.slice(0, 5).filter(e => e.score < cfg.evidence_confidence_threshold && e.row.kind !== "search_failure" && !lower(e.row.object).includes("search failed for")).slice(0, 2);
+  for (const e of weakEvidence) {
+    const q = [e.row.headline, contentObject(e.row), contentActor(e.row), contentAction(e.row)].join(" ").trim().slice(0, 180);
+    const key = `evidence:${stableId(q)}`;
+    if (q && !searched.has(key)) items.push({ type: "evidence", item: q, confidence: e.score, gap: 1 - e.score, search_query: q, reason: "low evidence confidence" });
+  }
+  items.sort((a, b) => b.gap - a.gap || a.type.localeCompare(b.type) || a.item.localeCompare(b.item));
+  return items;
+}
+function contextTrail(row, allRows, radius = 1) {
+  const sameTape = allRows.filter(r => r.tape_id === row.tape_id).sort((a, b) => a.lap - b.lap || a.row_index - b.row_index);
+  const idx = sameTape.findIndex(r => r.row_index === row.row_index && r.lap === row.lap);
+  if (idx < 0) return [row];
+  return sameTape.slice(Math.max(0, idx - radius), Math.min(sameTape.length, idx + radius + 1));
+}
+function shortRef(row) {
+  const src = row.source_domain || row.source ? ` source=${row.source_domain || row.source}` : "";
+  return `${row.tape_id} lap ${row.lap} row ${row.row_index}${src}`;
+}
+function focusHits(hits, native = null, n = 5) {
+  return hits.filter(h => native === null || h.native === native).slice(0, n);
+}
+function strongestSubject(hits, fallback) {
+  if (!hits.length) return fallback;
+  const row = hits[0].row;
+  if (isControl(row) && contentObject(row)) return fallback;
+  return contentActor(row) || row.thread || row.topic || fallback;
+}
+function makeDefinitionClause(subject, hits) {
+  if (!hits.length) return `${subject} is not sufficiently represented in the loaded tapes`;
+  const native = focusHits(hits, true, 5).filter(h => h.token_score >= 0.5);
+  const acquired = focusHits(hits, false, 5).filter(h => h.token_score >= 0.5 && h.row.kind !== "search_failure");
+  const failedSearch = focusHits(hits, false, 5).filter(h => h.row.kind === "search_failure");
+  if (native.length) return `${subject} appears natively in the loaded tapes through ${clause(native[0].row)}`;
+  if (acquired.length) return `${subject} is not native to the loaded source tapes; acquired search tape frames it through ${clause(acquired[0].row)}`;
+  if (failedSearch.length) return `${subject} is not native to the loaded source tapes, and the attempted search tape did not return usable context`;
+  return `${subject} is only weakly represented by the available tape rows`;
+}
+function makeActorActionClause(subject, hits) {
+  if (!hits.length) return `I cannot find what ${subject} did in the loaded tapes`;
+  const actions = [];
+  for (const h of hits.slice(0, 5)) {
+    const c = clause(h.row);
+    if (!actions.includes(c)) actions.push(c);
+  }
+  return `${subject} shows up through ${actions.slice(0, 4).join("; ")}`;
+}
+function makeSequenceClause(subject, hits) {
+  if (!hits.length) return "the sequence cannot be justified from the available rows";
+  const ordered = hits.slice(0, 6).sort((a, b) => a.row.lap - b.row.lap || a.row.row_index - b.row.row_index);
+  return `the trace runs from ${clause(ordered[0].row)} toward ${clause(ordered[ordered.length - 1].row)}`;
+}
+function makeRankClause(subject, hits, allRows) {
+  const counts = {};
+  for (const h of hits.slice(0, 20)) {
+    const actor = contentActor(h.row) || h.row.actor;
+    if (actor && !CONTROL_ACTORS.has(lower(actor))) counts[actor] = (counts[actor] || 0) + 1;
+  }
+  if (!Object.keys(counts).length) {
+    for (const row of allRows) {
+      const actor = contentActor(row) || row.actor;
+      if (actor && !CONTROL_ACTORS.has(lower(actor))) counts[actor] = (counts[actor] || 0) + 1;
+    }
+  }
+  const leader = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
+  return leader ? `${leader[0]} is on top by repeated relevant appearances, with ${leader[1]} supporting rows in the current view` : "no non-control actor rises clearly to the top";
+}
+function makeInterpretiveClause(subject, hits, query) {
+  const q = lower(query);
+  if (q.includes("coefficient")) return "if 'coefficient' means a measurable multiplier or weighting factor, the tape's closest equivalent is not one single number but a bundle of weights: lexical match, row priority, chronology, recurrence, and evidence strength";
+  if (hits.length) return `the interpretive answer is anchored by ${clause(hits[0].row)}, then widened by the surrounding evidence trail`;
+  return "the interpretive answer remains under-supported because the available tapes do not provide enough anchors";
+}
+function evidenceClause(hits) {
+  const native = focusHits(hits, true, 3);
+  const acquired = focusHits(hits, false, 3);
+  if (native.length && acquired.length) return "native tape rows provide the local anchor, while search tape repairs missing outside context";
+  if (native.length) return "the support is native to the loaded tape folder";
+  if (acquired.length) return "the support is externally acquired from DuckDuckGo search tape";
+  return "there is no strong evidence support";
+}
+function relationClause(conf) {
+  if (conf.relation >= 0.8) return "the query is strongly related to the current tape set";
+  if (conf.relation >= 0.55) return "the query is partially related to the current tape set";
+  return "the query is weakly related to the native tape set";
+}
+function implicationClause(transform) {
+  if (transform === "define") return "so the answer should be read as a bounded identity, not an exhaustive definition";
+  if (transform === "sequence") return "so the answer is chronological rather than causal proof";
+  if (transform === "causal") return "so the answer can describe supported pressure and sequence, but not hidden cause";
+  if (transform === "rank") return "so the answer is a ranking over the loaded tape view";
+  if (transform === "interpretive") return "so the answer is a computed analogy between the query language and the tape telemetry";
+  if (transform === "summary") return "so the answer compresses the strongest visible thread";
+  return "so the answer stays bounded by the cited rows";
+}
+function boundaryClause(hits) {
+  const native = focusHits(hits, true, 2);
+  const acquired = focusHits(hits, false, 2);
+  if (acquired.length && !native.length) return "This is external context, not something proven native to the loaded source tapes";
+  if (acquired.length && native.length) return "This combines native tape evidence with acquired search context";
+  if (native.length) return "This is bounded to the loaded tape folder";
+  return "This remains low-evidence and should be treated as unresolved";
+}
+function confidenceClause(conf, cfg) {
+  const label = conf.total >= 0.84 ? "high" : conf.total >= cfg.target_confidence ? "sufficient" : conf.total >= 0.55 ? "partial" : "low";
+  return `confidence: ${label} (${conf.total.toFixed(2)}); relation=${conf.relation.toFixed(2)}; meaning=${conf.meaning.toFixed(2)}`;
+}
+function buildAnswerForm(query, rows, conf, cfg) {
+  const transform = inferTransform(query);
+  const subject = queryFocusPhrase(query) || strongestSubject(conf.evidence, "the query");
+  const hits = conf.evidence.slice(0, 12);
+  let claim = "";
+  if (transform === "define") claim = makeDefinitionClause(subject, hits);
+  else if (transform === "actor_action") claim = makeActorActionClause(subject, hits);
+  else if (["sequence", "causal", "time"].includes(transform)) claim = makeSequenceClause(subject, hits);
+  else if (transform === "rank") claim = makeRankClause(subject, hits, rows);
+  else if (transform === "interpretive") claim = makeInterpretiveClause(subject, hits, query);
+  else if (transform === "count") claim = `${hits.slice(0, 10).length} high-signal rows currently carry the answer to ${subject}`;
+  else claim = hits.length ? `${subject} is best summarized by ${clause(hits[0].row)}` : `I cannot justify a direct answer to ${subject} from the current tapes`;
+  return {
+    transform,
+    subject,
+    claim,
+    evidence_clause: evidenceClause(hits),
+    relation_clause: relationClause(conf),
+    implication_clause: implicationClause(transform),
+    boundary_clause: boundaryClause(hits),
+    confidence_clause: confidenceClause(conf, cfg),
+    hits
+  };
+}
+function chooseSupportSets(form) {
+  const hits = form.hits || [];
+  const native = focusHits(hits, true, 4);
+  const acquired = focusHits(hits, false, 4);
+  const sets = [[form.claim, hits.slice(0, 4)]];
+  if (form.evidence_clause) {
+    if (native.length && acquired.length) sets.push([form.evidence_clause, native.slice(0, 2).concat(acquired.slice(0, 2))]);
+    else if (native.length) sets.push([form.evidence_clause, native.slice(0, 3)]);
+    else if (acquired.length) sets.push([form.evidence_clause, acquired.slice(0, 3)]);
+  }
+  if (form.boundary_clause && form.boundary_clause !== form.evidence_clause) {
+    const basis = acquired.length ? acquired.slice(0, 2) : native.slice(0, 2);
+    if (basis.length) sets.push([form.boundary_clause, basis]);
+  }
+  if (form.transform === "interpretive") sets.push(["The measurable factors are lexical match, priority, chronology, and evidence strength", hits.slice(0, 5)]);
+  return sets.filter(([text, hs]) => text && hs && hs.length);
+}
+function assembleMeaning(form, supportSets) {
+  const footnotes = [];
+  const refToId = new Map();
+  const parts = [];
+  for (const [text, hs] of supportSets) {
+    const key = hs.map(h => refId(h.row)).join("|");
+    let n = refToId.get(key);
+    if (!n) {
+      n = footnotes.length + 1;
+      refToId.set(key, n);
+      footnotes.push({ id: n, claim_glob: text, support: hs });
+    }
+    parts.push(`${text} [${n}]`);
+  }
+  if (!parts.length) parts.push(form.claim);
+  let meaning = parts.join(" ");
+  meaning += footnotes.length ? ` ${form.implication_clause} [${footnotes[0].id}].` : ` ${form.implication_clause}.`;
+  meaning += `\n\n${form.confidence_clause}.`;
+  return { meaning, footnotes };
+}
+function synthesize(query, rows, conf, cfg) {
+  const form = buildAnswerForm(query, rows, conf, cfg);
+  const supportSets = chooseSupportSets(form);
+  const assembled = assembleMeaning(form, supportSets);
+  const evidenceLines = [];
+  const evidenceJson = [];
+  for (const footnote of assembled.footnotes) {
+    evidenceLines.push(`[${footnote.id}] ${footnote.claim_glob}`);
+    const trailItems = [];
+    for (const hit of footnote.support) {
+      const row = hit.row;
+      const trail = contextTrail(row, rows, 1);
+      const nativeLabel = hit.native ? "native" : "acquired/search";
+      evidenceLines.push(`  - ${shortRef(row)} | ${nativeLabel} | score=${hit.score.toFixed(2)} token=${hit.token_score.toFixed(2)} priority=${hit.priority_score.toFixed(2)} chrono=${hit.chronology_score.toFixed(2)} source_bonus=${hit.source_score.toFixed(2)} | ${clause(row)}`);
+      if (hit.matched_terms.length) evidenceLines.push(`    matched: ${hit.matched_terms.join(", ")}`);
+      if (row.source) evidenceLines.push(`    source: ${row.source}`);
+      evidenceLines.push("    trail:");
+      const trailDesc = [];
+      for (const tr of trail) {
+        evidenceLines.push(`      • ${tr.tape_id} lap ${tr.lap}: ${clause(tr)}`);
+        trailDesc.push({ ref: refId(tr), lap: tr.lap, actor: tr.actor, action: tr.action, object: tr.object, source: tr.source, source_domain: tr.source_domain, source_kind: tr.source_kind });
+      }
+      trailItems.push({ evidence_ref: refId(row), score: hit.score, native: hit.native, matched_terms: hit.matched_terms, row, trail: trailDesc });
+    }
+    evidenceJson.push({ id: footnote.id, claim_glob: footnote.claim_glob, trail: trailItems });
+  }
+  return {
+    meaning: assembled.meaning,
+    evidence_text: evidenceLines.join("\n") || "No cited evidence.",
+    evidence: evidenceJson,
+    confidence: {
+      total: conf.total,
+      relation: conf.relation,
+      meaning: conf.meaning,
+      words: conf.words,
+      top_evidence: conf.evidence.slice(0, 10).map(e => ({ ref: refId(e.row), score: e.score, native: e.native, matched_terms: e.matched_terms, clause: clause(e.row) }))
+    },
+    diagnostics: {
+      answer_form: Object.fromEntries(Object.entries(form).filter(([k]) => k !== "hits")),
+      words: conf.words,
+      top_evidence: conf.evidence.slice(0, 10).map(e => ({ ref: refId(e.row), score: e.score, native: e.native, matched_terms: e.matched_terms, clause: clause(e.row) }))
+    }
+  };
+}
+async function answerOnce(query, sourceRows, cfg, enableSearch) {
+  const acquired = await acquireConfidence(query, sourceRows, cfg, enableSearch);
+  const result = synthesize(query, acquired.working, acquired.conf, cfg);
+  result.search_log = acquired.search_log;
+  result.rows_loaded = sourceRows.length;
+  result.rows_after_search = acquired.working.length;
+  return { result, conf: acquired.conf, working: acquired.working, search_rows: acquired.search_rows };
+}
+function browserPacket(query, result, rows) {
+  return {
+    query,
+    source_rows: rows.map(r => ({ ref: refId(r), tape_id: r.tape_id, lap: r.lap, actor: r.actor, action: r.action, object: r.object, priority: r.priority, valence: r.valence, source_kind: r.source_kind })),
+    answer_tape: [{
+      subject: result.diagnostics.answer_form.subject,
+      transform: result.diagnostics.answer_form.transform,
+      claim: result.diagnostics.answer_form.claim,
+      object: result.meaning,
+      evidence_refs: result.confidence.top_evidence.slice(0, 6).map(e => e.ref)
+    }],
+    confidence: result.confidence,
+    search_log: result.search_log || []
+  };
+}
+function refreshTapeList() {
+  $("row-count").textContent = `${loadedRows.length} rows`;
+  const list = $("tape-list");
+  list.innerHTML = "";
+  if (!loadedTapeMeta.length) {
+    const li = document.createElement("li");
+    li.textContent = "No tapes loaded yet.";
+    list.appendChild(li);
+    return;
+  }
+  for (const meta of loadedTapeMeta) {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${meta.name}</strong><span class="meta">${meta.rows} rows · ${meta.kind}</span>`;
+    list.appendChild(li);
+  }
+}
+function downloadJson(filename, obj) {
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function renderResult(result, packet) {
+  $("meaning").textContent = result.meaning;
+  $("evidence").textContent = result.evidence_text;
+  $("diagnostics").textContent = [
+    `rows loaded: ${result.rows_loaded}`,
+    `rows after search: ${result.rows_after_search}`,
+    `confidence total: ${result.confidence.total}`,
+    `relation: ${result.confidence.relation}`,
+    `meaning: ${result.confidence.meaning}`,
+    "",
+    "word coverage:",
+    ...result.confidence.words.map(w => `- ${w.item}: ${w.confidence} (${w.reason})`)
+  ].join("\n");
+  $("search-log").textContent = result.search_log && result.search_log.length
+    ? result.search_log.map(item => `round ${item.round}: searched "${item.searched}" (${item.debt_type} ${item.before_node_confidence}) total ${item.before_total_confidence} -> ${item.after_total_confidence}; rows +${item.rows_added}`).join("\n")
+    : ($("search-toggle").checked ? "Search was enabled, but no search rounds were needed or the browser blocked fetches." : "Search disabled.");
+  $("packet-preview").textContent = JSON.stringify(packet, null, 2);
+}
+async function loadFiles(files) {
+  for (const file of files) {
+    const text = await file.text();
+    const rows = parseTapeText(text, file.name, file.name);
+    loadedRows.push(...rows);
+    loadedTapeMeta.push({ name: file.name, rows: rows.length, kind: "uploaded file" });
+  }
+  refreshTapeList();
+}
+
+$("tape-files").addEventListener("change", async function() {
+  const files = Array.from(this.files || []);
+  if (!files.length) return;
+  await loadFiles(files);
+});
+
+$("append-manual").onclick = function() {
+  const text = $("manual-tape").value.trim();
+  if (!text) return;
+  try {
+    const rows = parseTapeText(text, `manual_${stableId(text)}`, "manual");
+    loadedRows.push(...rows);
+    loadedTapeMeta.push({ name: `manual_${loadedTapeMeta.length + 1}`, rows: rows.length, kind: "pasted tape" });
+    $("manual-tape").value = "";
+    refreshTapeList();
+  } catch (err) {
+    $("meaning").textContent = `Could not parse pasted tape: ${err.message || err}`;
+  }
+};
+
+$("clear-all").onclick = function() {
+  loadedRows = [];
+  loadedTapeMeta = [];
+  lastResult = null;
+  refreshTapeList();
+  $("meaning").textContent = "All tapes cleared.";
+  $("evidence").textContent = "No evidence yet.";
+  $("diagnostics").textContent = "No diagnostics yet.";
+  $("search-log").textContent = "Search disabled.";
+  $("packet-preview").textContent = "The browser result packet preview will appear here.";
+};
+
+$("load-sample").onclick = function() {
+  const rows = SAMPLE_TAPE.map((item, index) => normalizeRow(item, index, "sample_f1.tape.json", "source"));
+  loadedRows.push(...rows);
+  loadedTapeMeta.push({ name: "sample_f1.tape.json", rows: rows.length, kind: "inline sample" });
+  refreshTapeList();
+};
+
+$("search-toggle").addEventListener("change", function() {
+  $("search-status").textContent = this.checked ? "search on" : "search off";
+});
+
+$("run").onclick = async function() {
+  const query = $("query").value.trim();
+  if (!loadedRows.length) {
+    $("meaning").textContent = "Load or paste at least one tape first.";
+    return;
+  }
+  if (!query) {
+    $("meaning").textContent = "Enter a query first.";
+    return;
+  }
+  const cfg = Object.assign({}, DEFAULT_CONFIG, {
+    target_confidence: Number($("target-confidence").value || DEFAULT_CONFIG.target_confidence)
+  });
+  try {
+    const response = await answerOnce(query, loadedRows, cfg, $("search-toggle").checked);
+    const packet = browserPacket(query, response.result, response.working);
+    lastResult = { result: response.result, packet };
+    renderResult(response.result, packet);
+  } catch (err) {
+    $("meaning").textContent = `Query failed: ${err.message || err}`;
+  }
+};
+
+$("download-result").onclick = function() {
+  if (!lastResult) {
+    $("meaning").textContent = "Run a query first so there is something to download.";
+    return;
+  }
+  downloadJson(`loom_query_result_${stableId(nowIso())}.json`, lastResult);
+};
+
+refreshTapeList();
+</script>
+</body>
+</html>

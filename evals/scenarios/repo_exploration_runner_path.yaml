@@ -1,0 +1,20 @@
+id: repo_exploration_runner_path
+title: Identify the synchronous run execution path
+category: repo_exploration
+goal: Verify the model can explore the repo and identify the real execute path.
+tags: [repo, exploration, api]
+profile:
+  provider: llamacpp
+  model: qwen3.6-27b
+  harness_profile: default
+setup:
+  context_window: 32768
+turns:
+  - role: user
+    content: "Find the file and function that handle the synchronous `POST /api/sessions/<session_id>/runs/<run_id>/execute` path, then answer with the file path and function name only."
+checks:
+  rules:
+    - type: final_text_contains
+      value: execute_run
+    - type: final_text_contains
+      value: routes.py

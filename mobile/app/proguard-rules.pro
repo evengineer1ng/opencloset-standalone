@@ -1,0 +1,1 @@
+# OpenCloset Mobile currently ships without custom shrink rules.

@@ -1,0 +1,58 @@
+oradio: the-finals-replayed-beat-by
+intent: The Finals, replayed beat by beat — every possession of a finished game as
+  it happened, the court breathing through a basketball loop.
+telemetry:
+- source: basketball_pbp
+  name: court
+  path: data/finals_pbp_401859967.json
+visual:
+  base:
+    mode: media
+    theme: midnight
+    path: assets/basketball_loop.ogv
+  tape:
+    seed: basketball:401859967
+    accumulation: causal
+    families:
+    - color_drift
+    - ripples
+    - embers
+    - bloom
+    - glitch
+    - particles
+    - scanlines
+    - grain
+  thumbnail:
+    mode: sidecar_png
+surfaces:
+- ribbon
+- transient
+- voice
+lens: identity
+club:
+- llm
+- voices
+effectors:
+- kind: voice
+  name: pa
+- kind: voice
+  name: inner
+bindings:
+- from: court
+  to: pa
+  transform: play_to_call
+  name: announce
+- from: court
+  to: inner
+  transform: play_to_mindset
+  name: mindset
+  intent: The Finals, replayed beat by beat — every possession of a finished game
+    as it happened, the court breathing through a basketball loop.
+  endpoint: http://127.0.0.1:11434/api/generate
+  model: qwen3:8b
+voice:
+  provider: sapi
+  assignments:
+    pa: Microsoft David Desktop
+    inner: Microsoft Hazel Desktop
+    host: Microsoft Zira Desktop

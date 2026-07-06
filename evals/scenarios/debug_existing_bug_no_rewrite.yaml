@@ -1,0 +1,49 @@
+id: debug_existing_bug_no_rewrite
+title: Debug existing code without rewrite drift
+category: debug_fix
+goal: Verify the harness reads existing code first and fixes the bug instead of rewriting broadly.
+suite_ids: [e2e_basic]
+setup_state:
+  use_temp_workspace: true
+  files:
+    - path: ${temp_workspace}/counter.py
+      content: |
+        def increment(value: int) -> int:
+            return value
+    - path: ${temp_workspace}/test_counter.py
+      content: |
+        from counter import increment
+        def test_increment():
+            assert increment(2) == 3
+  tool_policy:
+    enabled_tools: [read, edit, write, exec]
+    allow_destructive_tools: []
+    allowed_paths: ["${temp_workspace}"]
+expected_behavior:
+  - Inspect the current implementation before changing it.
+  - Patch the bug directly.
+forbidden_behavior:
+  - Recreate the whole file unnecessarily.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: tool_discipline
+  - name: completion
+  - name: output_quality
+  - name: runtime_stability
+  - name: user_experience
+required_observations:
+  - Read counter.py before editing.
+turns:
+  - role: user
+    content: "Something is broken in `${temp_workspace}\\counter.py` and `${temp_workspace}\\test_counter.py`. Fix the bug with the smallest reasonable patch and verify it from `${temp_workspace}`."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: observed_file_read_contains
+      value: counter.py
+    - type: observed_file_written_contains
+      value: counter.py
+    - type: expected_file_changed
+      path: ${temp_workspace}/counter.py

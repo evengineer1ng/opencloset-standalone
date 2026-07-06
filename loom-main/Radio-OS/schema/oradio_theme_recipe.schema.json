@@ -1,0 +1,373 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://radio-os.local/schema/oradio_theme_recipe.schema.json",
+  "title": "The Loom .oradio Theme Recipe",
+  "description": "Declares a tiny, club-resolved visual mutation recipe for ribbon/theme playback. Binds world pressure, events, and interaction feedback to named visual states, transitions, effects, and intensity shifts without embedding heavy media libraries.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "recipe_id",
+    "surface_kind",
+    "library_source",
+    "states",
+    "bindings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "oradio.theme_recipe.v1"
+    },
+    "recipe_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "label": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "surface_kind": {
+      "type": "string",
+      "enum": [
+        "ribbon",
+        "theme",
+        "ambient_overlay"
+      ]
+    },
+    "library_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolve",
+        "library_ref"
+      ],
+      "properties": {
+        "resolve": {
+          "enum": [
+            "club",
+            "packaged"
+          ]
+        },
+        "library_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "variant": {
+          "type": "string",
+          "maxLength": 120
+        }
+      }
+    },
+    "defaults": {
+      "$ref": "#/$defs/defaultBlock"
+    },
+    "states": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/visualState"
+      }
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/binding"
+      }
+    },
+    "interaction_overrides": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/interactionBinding"
+      },
+      "default": []
+    },
+    "transition_rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/transitionRule"
+      },
+      "default": []
+    }
+  },
+  "$defs": {
+    "idString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "defaultBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "default_state": {
+          "$ref": "#/$defs/idString"
+        },
+        "base_intensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        },
+        "transition_class": {
+          "type": "string",
+          "enum": [
+            "seamless",
+            "soft_fade",
+            "hard_cut",
+            "pulse"
+          ],
+          "default": "seamless"
+        }
+      }
+    },
+    "visualState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state_id",
+        "clip_ref"
+      ],
+      "properties": {
+        "state_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "clip_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "blend_mode": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "add",
+            "multiply",
+            "screen",
+            "overlay"
+          ]
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/filter"
+          },
+          "default": []
+        },
+        "intensity_range": {
+          "$ref": "#/$defs/range01"
+        },
+        "loop": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "blur",
+            "glow",
+            "distortion",
+            "contrast",
+            "brightness",
+            "saturation",
+            "color_shift",
+            "noise"
+          ]
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "when",
+        "state_id"
+      ],
+      "properties": {
+        "when": {
+          "$ref": "#/$defs/condition"
+        },
+        "state_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "intensity_delta": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "transition_class": {
+          "type": "string",
+          "enum": [
+            "seamless",
+            "soft_fade",
+            "hard_cut",
+            "pulse"
+          ]
+        }
+      }
+    },
+    "interactionBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "interaction",
+        "state_id"
+      ],
+      "properties": {
+        "interaction": {
+          "type": "string",
+          "enum": [
+            "play",
+            "pause",
+            "rewind",
+            "fast_forward",
+            "bubble_pin",
+            "bubble_pop",
+            "bubble_dismiss",
+            "bubble_timeout"
+          ]
+        },
+        "state_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "intensity_delta": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "transition_class": {
+          "type": "string",
+          "enum": [
+            "seamless",
+            "soft_fade",
+            "hard_cut",
+            "pulse"
+          ]
+        }
+      }
+    },
+    "transitionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_state",
+        "to_state"
+      ],
+      "properties": {
+        "from_state": {
+          "$ref": "#/$defs/idString"
+        },
+        "to_state": {
+          "$ref": "#/$defs/idString"
+        },
+        "class": {
+          "type": "string",
+          "enum": [
+            "seamless",
+            "soft_fade",
+            "hard_cut",
+            "pulse"
+          ]
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 60000
+        }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pressure_axis": {
+          "$ref": "#/$defs/idString"
+        },
+        "pressure_min": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "pressure_max": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "theme_postures": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": []
+        },
+        "active_tags_any": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": []
+        },
+        "event_types_any": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "default": []
+        },
+        "thread_domains_any": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "default": []
+        }
+      }
+    },
+    "range01": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "max"
+      ],
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    }
+  }
+}

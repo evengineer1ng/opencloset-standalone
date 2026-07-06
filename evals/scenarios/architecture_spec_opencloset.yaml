@@ -1,0 +1,27 @@
+id: architecture_spec_opencloset
+title: Architecture thinking should be structured
+category: theory_architecture
+goal: Verify design questions get structure, tradeoffs, and implementation path.
+suite_ids: [e2e_basic]
+expected_behavior:
+  - Produce a structured architecture response.
+  - Include tradeoffs and an implementation path.
+forbidden_behavior:
+  - Vague motivational filler.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: completion
+  - name: output_quality
+  - name: user_experience
+required_observations:
+  - No tools needed for pure architecture thinking.
+turns:
+  - role: user
+    content: "Design a local-first eval harness for OpenCloset that tests harness behavior, not just model cleverness. Give me architecture, tradeoffs, and an implementation path."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: tool_name_not_used
+      value: exec

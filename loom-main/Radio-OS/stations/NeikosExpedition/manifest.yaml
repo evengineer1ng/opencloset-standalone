@@ -1,0 +1,199 @@
+station:
+  id: NeikosExpedition
+  name: Neikos Expedition
+  host: Archivist
+  category: Creature expedition / containment conspiracy
+  logo: logos/neikos.png
+
+# ── LLM ────────────────────────────────────────────────────────────────────────
+llm:
+  provider: ollama
+  endpoint: http://127.0.0.1:11434/api/generate
+
+models:
+  producer: qwen3:8b
+  host: qwen3:8b
+  navigator: qwen3:8b
+  fast: qwen3:8b
+  embedding: nomic-embed-text:v1.5
+
+embedding:
+  enabled: false
+
+# ── TTS ─────────────────────────────────────────────────────────────────────────
+audio:
+  piper_bin: C:/Users/evana/Documents/radio_os/voices/piper_windows_amd64/piper/piper.exe
+
+# ── NPC voice roster ────────────────────────────────────────────────────────────
+#   Each archetype maps to a distinct voice.
+#   The "Knower" uses the most distinctive voice — tired, measured, like someone
+#   who has been on this island a very long time.
+#
+#   Archetype → Kokoro voice ID (fallback to piper .onnx path if kokoro unavailable)
+voices:
+  host: C:/Users/evana/Documents/radio_os/voices/en_US-danny-low.onnx
+
+  knower_elder:        C:/Users/evana/Documents/radio_os/voices/en_GB-southern_english_female-low.onnx
+  knower_scientist:    C:/Users/evana/Documents/radio_os/voices/en_US-hfc_female-medium.onnx
+  knower_rebel:        C:/Users/evana/Documents/radio_os/voices/en_US-eminem-medium.onnx
+  knower_cartographer: C:/Users/evana/Documents/radio_os/voices/en_US-danny-low.onnx
+  knower_ghost:        C:/Users/evana/Documents/radio_os/voices/en_US-lessac-high.onnx
+
+  trainer_0: C:/Users/evana/Documents/radio_os/voices/en_US-hfc_female-medium.onnx
+  trainer_1: C:/Users/evana/Documents/radio_os/voices/en_GB-alba-medium.onnx
+  trainer_2: C:/Users/evana/Documents/radio_os/voices/en_US-eminem-medium.onnx
+  trainer_3: C:/Users/evana/Documents/radio_os/voices/en_US-amy-medium.onnx
+  trainer_4: C:/Users/evana/Documents/radio_os/voices/en_US-lessac-high.onnx
+
+  faction_league:       C:/Users/evana/Documents/radio_os/voices/en_US-danny-low.onnx
+  faction_research:     C:/Users/evana/Documents/radio_os/voices/en_GB-southern_english_female-low.onnx
+  faction_feral:        C:/Users/evana/Documents/radio_os/voices/en_US-eminem-medium.onnx
+  faction_cartographer: C:/Users/evana/Documents/radio_os/voices/en_US-danny-low.onnx
+
+  narrator: C:/Users/evana/Documents/radio_os/voices/en_US-lessac-high.onnx
+
+# ── Characters ──────────────────────────────────────────────────────────────────
+characters:
+  host:
+    role: archivist
+    traits:
+      - neutral
+      - precise
+      - institutional
+    focus:
+      - island_state
+      - containment_tier
+      - event_logging
+
+  knower:
+    role: observer
+    traits:
+      - weary
+      - cryptic
+      - resigned
+      - careful
+    focus:
+      - project_hundred
+      - long_memory
+      - trust_calibration
+      - revelation_pacing
+
+  trainer:
+    role: competitor
+    traits:
+      - competitive
+      - enthusiastic
+      - varied
+    focus:
+      - battle_challenge
+      - creature_knowledge
+      - league_standings
+
+# ── Meta plugin ─────────────────────────────────────────────────────────────────
+meta_plugin: neikos_meta
+
+# ── Feeds ───────────────────────────────────────────────────────────────────────
+feeds:
+  neikos_audio_engine:
+    enabled: true
+    poll_sec: 0.1
+
+  neikos_npc_feed:
+    enabled: true
+    tick_sec: 5.0
+    startup_delay: 3
+
+# ── Mix weights ─────────────────────────────────────────────────────────────────
+mix:
+  weights:
+    neikos_audio_engine: 0.05
+    neikos_npc_feed: 1.0
+
+scheduler:
+  source_quotas:
+    neikos_audio_engine: 2
+    neikos_npc_feed: 1
+
+# ── Pacing ──────────────────────────────────────────────────────────────────────
+pacing:
+  min_commentary_gap_sec: 8
+  routine_commentary_gap_sec: 30
+  idle_riff_sec: 60
+  between_segments_sec: 2
+  queue_target_depth: 4
+  queue_max_depth: 10
+  producer_tick_sec: 60
+  audio_target_depth: 3
+  audio_max_depth: 8
+  audio_tick_sleep: 0.05
+
+# ── Neikos-specific config ───────────────────────────────────────────────────────
+neikos:
+  # Which island to load on station start (0 = use NGP+ profile or prompt)
+  default_seed: 0
+
+  # How often the NPC feed checks for dialogue triggers (seconds)
+  npc_poll_sec: 5.0
+
+  # Voice delivery settings per archetype
+  voice_profiles:
+    ELDER:
+      speed: 0.82
+      pitch: -2
+      pause_after_ms: 800
+    SCIENTIST:
+      speed: 1.0
+      pitch: 0
+      pause_after_ms: 400
+    REBEL:
+      speed: 1.08
+      pitch: 1
+      pause_after_ms: 300
+    CARTOGRAPHER:
+      speed: 0.9
+      pitch: -1
+      pause_after_ms: 600
+    GHOST:
+      speed: 0.75
+      pitch: -4
+      pause_after_ms: 1200
+    TRAINER:
+      speed: 1.05
+      pitch: 0
+      pause_after_ms: 350
+    DEFAULT:
+      speed: 1.0
+      pitch: 0
+      pause_after_ms: 400
+
+  # Relay node sub-bass pulse — 47 second interval, lore-significant
+  relay_pulse_interval_sec: 47
+
+  # Fragment audio — AUDIO_ARTIFACT fragments get degraded TTS treatment
+  fragment_audio:
+    REDACTED_LOG:
+      voice: narrator
+      speed: 0.95
+      degraded: false
+    RESEARCH_NOTE:
+      voice: narrator
+      speed: 1.0
+      degraded: false
+    AUDIO_ARTIFACT:
+      voice: narrator
+      speed: 0.78
+      degraded: true       # low-pass filter + static overlay
+      pitch: -3
+    SPECIES_REGISTRY_GLITCH:
+      voice: narrator
+      speed: 0.9
+      degraded: false
+    STATISTICAL_SUMMARY:
+      voice: narrator
+      speed: 1.0
+      degraded: false
+
+# ── Paths ────────────────────────────────────────────────────────────────────────
+paths:
+  db: station.sqlite
+  memory: station_memory.json

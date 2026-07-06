@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>loom carrier decoder</title>
+<style>
+:root{--bg:#05060a;--pan:#10131b;--ln:#293040;--tx:#eef3f7;--mut:#99a4b3;--acc:#7ad7f0;--warn:#ffd166;--good:#5ad27a;--bad:#ff6b6b}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top,#10182a,#05060a 54%);color:var(--tx);font:15px/1.45 -apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:18px} h1{margin:0;color:var(--acc);font:700 24px Consolas,monospace}.sub{color:var(--mut);font-size:13px;margin:4px 0 14px}
+.deck{background:rgba(16,19,27,.92);border:1px solid var(--ln);border-radius:14px;padding:12px 14px;margin:12px 0}.ttl{color:var(--acc);font:bold 12px Consolas,monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0} label{font-size:13px;color:var(--mut)}
+input,select,button,textarea{background:#121723;color:var(--tx);border:1px solid var(--ln);border-radius:9px;padding:9px 11px;font-size:14px}button{cursor:pointer}button.primary{background:var(--good);color:#001008;font-weight:800}button.warn{background:var(--warn);color:#1d1400;font-weight:800}input[type=range]{width:130px;padding:0}textarea{width:100%;min-height:88px;font:13px Consolas,monospace}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.pill{display:inline-block;border:1px solid var(--ln);border-radius:999px;padding:2px 8px;font:11px Consolas,monospace;color:var(--mut)}
+canvas{width:100%;height:130px;background:#020309;border:1px solid #151b28;border-radius:10px;display:block}.mono{font-family:Consolas,monospace}.out{white-space:pre-wrap;background:#070a10;border:1px solid #1d2635;border-radius:10px;padding:10px;min-height:120px;color:#dce9f2}.bad{color:var(--bad)}.good{color:var(--good)}.warntext{color:var(--warn)}
+#loomPreview{height:auto;max-height:360px}
+.stage{height:360px;overflow:hidden;position:relative;background:linear-gradient(#020207,#07020c);border:1px solid #20273a;border-radius:16px;margin-top:10px;perspective:390px}.crawl{position:absolute;left:9%;right:9%;bottom:-120%;font:bold 24px/1.55 Consolas,monospace;color:#ffd84d;text-align:justify;transform-origin:50% 100%;transform:rotateX(34deg);text-shadow:0 0 8px rgba(255,216,77,.35)}
+.crawl.playing{animation:crawl var(--crawlDur,40s) linear forwards}@keyframes crawl{from{bottom:-120%}to{bottom:105%}}
+.small{font-size:12px;color:var(--mut)}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:800px){.two{grid-template-columns:1fr}.crawl{font-size:18px}}
+</style>
+</head>
+<body><div class="wrap">
+<h1>loom carrier decoder</h1>
+<div class="sub">one file. no server. decode timestamp audio honestly, and decode booth v2 loom-pixel PNG carriers by sampling their fixed cell geometry.</div>
+
+<div class="deck">
+ <div class="ttl">1. audio</div>
+ <div class="row">
+  <label>load audio <input id="file" type="file" accept="audio/*"></label>
+  <button class="primary" id="decode">decode / refresh</button>
+  <button id="play">▶ play mp3</button>
+  <button id="stop">■ stop</button>
+  <span class="pill" id="status">no audio loaded</span>
+ </div>
+<canvas id="wave"></canvas>
+</div>
+
+<div class="deck">
+ <div class="ttl">1b. loom-pixel image</div>
+ <div class="row">
+  <label>load png <input id="loomFile" type="file" accept="image/png,image/*"></label>
+  <button class="warn" id="decodeLoom">decode loom-pixel</button>
+  <span class="pill" id="loomStatus">no loom-pixel loaded</span>
+ </div>
+ <div class="grid">
+  <label>columns <input id="loomCols" type="number" value="32" min="1" max="512"></label>
+  <label>cell px <input id="loomCell" type="number" value="12" min="4" max="64"></label>
+  <label>pad px <input id="loomPad" type="number" value="14" min="0" max="128"></label>
+  <label>membrane px <input id="loomMembrane" type="number" value="1" min="0" max="8"></label>
+ </div>
+ <canvas id="loomPreview" width="640" height="360"></canvas>
+ <div class="small">This path expects the current booth v2 loom-pixel frame: `LPX1` header, varint lengths, checksum, then payload bytes. Wrong geometry should fail honestly.</div>
+</div>
+
+<div class="deck">
+ <div class="ttl">2. expected booth settings</div>
+ <div class="grid">
+  <label>style <select id="style"><option value="opera" selected>opera</option><option value="rap">rap</option><option value="blues">blues</option><option value="country">country</option><option value="speak">speak</option><option value="podcast">podcast</option></select></label>
+  <label>sing <select id="sing"><option value="notes" selected>notes</option><option value="words">words</option></select></label>
+ <label>pitch <select id="pitch"><option value="timestamp" selected>timestamp</option><option value="word">word = note</option><option value="arc">arc</option></select></label>
+  <label>bpm <input type="range" id="tempo" min="60" max="180" step="5" value="120"><span id="tempoV">120</span></label>
+  <label>vibrato expected <input type="range" id="vib" min="0" max="0.06" step="0.001" value="0.035"><span id="vibV">0.035</span></label>
+  <label>brightness expected <input type="range" id="bright" min="0.3" max="1.6" step="0.01" value="1"><span id="brightV">1.00</span></label>
+  <label>continuity expected <input type="range" id="cont" min="0" max="1" step="0.01" value="0.4"><span id="contV">0.40</span></label>
+  <label>modulator <select id="mod-style"><option value="off">off</option><option value="opera" selected>opera heat</option><option value="rap">rap heat</option><option value="blues">blues heat</option><option value="country">country heat</option><option value="speak">speak heat</option><option value="podcast">podcast heat</option></select></label>
+  <label>mod amount <input type="range" id="mod-amt" min="0" max="1" step="0.01" value="0.75"><span id="modAmtV">0.75</span></label>
+  <label>mod speed <input type="range" id="mod-speed" min="1" max="16" step="0.25" value="10"><span id="modSpeedV">10.00</span></label>
+  <label>pitch x <input type="range" id="mod-pitch" min="0" max="1" step="0.01" value="0.55"><span id="modPitchV">0.55</span></label>
+  <label>rate x <input type="range" id="mod-rate" min="0" max="1" step="0.01" value="0.55"><span id="modRateV">0.55</span></label>
+  <label>gain x <input type="range" id="mod-gain" min="0" max="1" step="0.01" value="0.65"><span id="modGainV">0.65</span></label>
+  <label>filter x <input type="range" id="mod-filter" min="0" max="1" step="0.01" value="0.75"><span id="modFilterV">0.75</span></label>
+ </div>
+ <div class="small">For timestamp mode this decoder follows the selected booth style's native frequency bins and can reconstruct the same deterministic mod field the booth used. Spaces/punctuation are inferred mostly from rests/gaps. Wrong settings should produce honest garble.</div>
+</div>
+
+<div class="deck">
+ <div class="ttl">3. decoder tuning</div>
+ <div class="grid">
+  <label>analysis hop ms <input id="hopMs" type="number" value="24" min="8" max="100"></label>
+  <label>window ms <input id="winMs" type="number" value="72" min="32" max="200"></label>
+  <label>min RMS <input id="minRms" type="number" value="0.012" step="0.001"></label>
+  <label>min segment ms <input id="minSeg" type="number" value="55" min="20" max="300"></label>
+  <label>merge gap ms <input id="mergeGap" type="number" value="46" min="0" max="300"></label>
+  <label>space gap ms <input id="spaceGap" type="number" value="210" min="60" max="900"></label>
+  <label>pair timeout ms <input id="pairGap" type="number" value="170" min="40" max="800"></label>
+  <label>confidence harshness <input id="harsh" type="number" value="0.42" step="0.01"></label>
+  <label>mask floor <input id="maskFloor" type="number" value="0.16" step="0.01" min="0" max="1"></label>
+ </div>
+</div>
+
+<div class="two">
+ <div class="deck">
+  <div class="ttl">decoded text</div>
+  <div class="out mono" id="decoded">Load audio, then decode.</div>
+ </div>
+ <div class="deck">
+  <div class="ttl">honesty report</div>
+  <div class="out mono" id="report">No measurements yet.</div>
+ </div>
+</div>
+
+<div class="two">
+ <div class="deck">
+  <div class="ttl">loom-pixel decoded text</div>
+  <div class="out mono" id="loomDecoded">Load a loom-pixel PNG, then decode.</div>
+ </div>
+ <div class="deck">
+  <div class="ttl">loom-pixel report</div>
+  <div class="out mono" id="loomReport">No loom-pixel measurements yet.</div>
+ </div>
+</div>
+
+<div class="deck">
+ <div class="ttl">playback crawl</div>
+ <div class="row"><span class="pill" id="clock">0.00 / 0.00</span><span class="pill" id="liveChar">current: —</span></div>
+ <div class="stage"><div class="crawl" id="crawl">LOAD AUDIO. DECODE. PLAY BACK. THE CRAWL WILL FOLLOW THE CURRENT BEST MESSAGE, INCLUDING GARBLED CHARACTERS WHERE CONFIDENCE IS LOW.</div></div>
+</div>
+
+<div class="deck">
+ <div class="ttl">note events</div>
+ <textarea id="events" readonly></textarea>
+</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let audioBuf=null, audioEl=null, decodedEvents=[], decodedChars=[];
+let loomImage=null, loomImageUrl="";
+// Shared timestamp protocol. Keep this block mirrored with dbooth.html.
+const TIMESTAMP_PROTOCOL={
+ alphabet:"abcdefghijklmnopqrstuvwxyz",
+ punctuationMap:{".":0,",":1,"?":2,"!":3,";":4,":":5},
+ fallbackScale:[220.00,246.94,277.18,329.63,369.99,440.00,493.88],
+ stylePresets:{
+  opera:{dur:0.32,freqs:[220.00,261.63,293.66,329.63,392.00,440.00,523.25]},
+  rap:{dur:0.17},
+  blues:{dur:0.38,freqs:[220.00,261.63,293.66,311.13,329.63,392.00,440.00]},
+  country:{dur:0.30,freqs:[220.00,246.94,277.18,329.63,369.99,440.00,493.88]},
+  speak:{dur:0.105},
+  podcast:{dur:0.135}
+ },
+ timing:{
+  cellRatio:0.52,
+  noteAdvanceMultiplier:1.04,
+  spaceRestMultiplier:2.35,
+  punctRestMultiplier:3.25,
+  pairGapMs:170,
+  spaceGapMs:210,
+  punctGapMultiplier:1.45,
+  maskFloor:0.16
+ },
+ decoderDefaults:{
+  hopMs:24,
+  winMs:72,
+  minRms:0.012,
+  minSegMs:55,
+  mergeGapMs:46,
+  pairGapMs:170,
+  spaceGapMs:210,
+  harsh:0.42,
+  maskFloor:0.16
+ }
+};
+const SOURCE_SYMBOLS="abcdefghijklmnopqrstuvwxyz .,!?;:";
+const LOOM_PIXEL_CODEC={magic:[76,80,88,49],pad:14,cell:12,membrane:1};
+const ALPHABET=TIMESTAMP_PROTOCOL.alphabet;
+function timestampPreset(styleKey){
+ const preset=TIMESTAMP_PROTOCOL.stylePresets[styleKey] || TIMESTAMP_PROTOCOL.stylePresets.opera;
+ const freqs=(preset.freqs && preset.freqs.length===7) ? preset.freqs.slice() : TIMESTAMP_PROTOCOL.fallbackScale.slice();
+ return {key:styleKey,dur:Number(preset.dur||0.32),freqs:freqs};
+}
+function timestampBase(){ return expectedFreqs().length || TIMESTAMP_PROTOCOL.fallbackScale.length || 7; }
+function nval(id,fallback){const el=$(id);return el?Number(el.value||fallback):fallback}
+function sval(id,fallback){const el=$(id);return el?String(el.value||fallback):fallback}
+function clamp(n,lo,hi){return Math.max(lo,Math.min(hi,n))}
+function parsePositiveInt(value,fallback){
+ const n=Number(value);
+ return Number.isFinite(n) && n>0 ? Math.floor(n) : fallback;
+}
+function fnv1a(text){
+ let h=2166136261>>>0;
+ const s=String(text||"");
+ for(let i=0;i<s.length;i++){
+  h^=s.charCodeAt(i);
+  h=Math.imul(h,16777619)>>>0;
+ }
+ return (h>>>0).toString(16).padStart(8,"0");
+}
+function hslToRgb(h,s,l){
+ const hue=((h%360)+360)%360;
+ const sat=clamp(s,0,1);
+ const lig=clamp(l,0,1);
+ const c=(1-Math.abs(2*lig-1))*sat;
+ const hp=hue/60;
+ const x=c*(1-Math.abs(hp%2-1));
+ let r1=0,g1=0,b1=0;
+ if(hp<1){r1=c;g1=x;}
+ else if(hp<2){r1=x;g1=c;}
+ else if(hp<3){g1=c;b1=x;}
+ else if(hp<4){g1=x;b1=c;}
+ else if(hp<5){r1=x;b1=c;}
+ else{r1=c;b1=x;}
+ const m=lig-c/2;
+ return {r:Math.round((r1+m)*255),g:Math.round((g1+m)*255),b:Math.round((b1+m)*255)};
+}
+function loomPixelBaseColor(index,total){
+ const ratio=total>1 ? index/(total-1) : 0;
+ return hslToRgb(210 + ratio*240,0.78,0.56);
+}
+function loomPixelVariant(base,value){
+ const max=Math.max(base.r,base.g,base.b,1);
+ const min=Math.min(base.r,base.g,base.b);
+ const delta=max-min;
+ let hue=0;
+ if(delta){
+  if(max===base.r) hue=60*(((base.g-base.b)/delta)%6);
+  else if(max===base.g) hue=60*(((base.b-base.r)/delta)+2);
+  else hue=60*(((base.r-base.g)/delta)+4);
+ }
+ const lightness=(max+min)/510;
+ const sat=delta ? delta/(255*(1-Math.abs(2*lightness-1))) : 0;
+ const shifts=[
+  {h:-26,s:0.72,l:0.22},
+  {h:-8,s:0.82,l:0.38},
+  {h:10,s:0.88,l:0.56},
+  {h:26,s:0.94,l:0.74}
+ ];
+ const shift=shifts[value&3];
+ return hslToRgb(hue+shift.h,sat*0.55+shift.s*0.45,shift.l);
+}
+function rgbDistance(a,b){
+ const dr=a.r-b.r,dg=a.g-b.g,db=a.b-b.b;
+ return dr*dr + dg*dg + db*db;
+}
+function sampleRgb(data,width,height,x,y){
+ const sx=clamp(Math.round(x),0,width-1);
+ const sy=clamp(Math.round(y),0,height-1);
+ const idx=(sy*width+sx)*4;
+ return {r:data[idx],g:data[idx+1],b:data[idx+2]};
+}
+function readVarint(bytes,start){
+ let result=0,shift=0,pos=start;
+ while(pos<bytes.length){
+  const b=bytes[pos++];
+  result |= (b & 0x7f) << shift;
+  if(!(b & 0x80)) return {value:result>>>0,next:pos};
+  shift += 7;
+  if(shift>28) break;
+ }
+ return null;
+}
+function decodePayloadBytesToText(payloadBytes,expectedChars){
+ const ids=[];
+ let pos=0;
+ while(pos<payloadBytes.length && ids.length<expectedChars){
+  const parsed=readVarint(payloadBytes,pos);
+  if(!parsed) break;
+  pos=parsed.next;
+  const id=(parsed.value>>>0)-1;
+  if(id<0 || id>=SOURCE_SYMBOLS.length) break;
+  ids.push(id);
+ }
+ return {
+  ids:ids,
+  text:ids.map(id=>SOURCE_SYMBOLS[id]||" ").join(""),
+  consumed:pos
+ };
+}
+function drawLoomPreview(){
+ const canvas=$('loomPreview'),ctx=canvas.getContext('2d');
+ const W=canvas.width=canvas.clientWidth*devicePixelRatio;
+ const H=canvas.height=Math.max(120,Math.round(canvas.clientWidth*0.56))*devicePixelRatio;
+ ctx.clearRect(0,0,W,H);
+ ctx.fillStyle='#020309';
+ ctx.fillRect(0,0,W,H);
+ if(!loomImage){
+  ctx.fillStyle='#99a4b3';
+  ctx.fillText('no loom-pixel image',20,30);
+  return;
+ }
+ const scale=Math.min(W/loomImage.width,H/loomImage.height);
+ const drawW=loomImage.width*scale, drawH=loomImage.height*scale;
+ const x=(W-drawW)/2, y=(H-drawH)/2;
+ ctx.drawImage(loomImage,x,y,drawW,drawH);
+}
+async function loadLoomFile(file){
+ if(loomImageUrl) URL.revokeObjectURL(loomImageUrl);
+ loomImageUrl=URL.createObjectURL(file);
+ const img=new Image();
+ await new Promise(function(resolve,reject){
+  img.onload=resolve;
+  img.onerror=reject;
+  img.src=loomImageUrl;
+ });
+ loomImage=img;
+ $('loomStatus').textContent=`loaded ${file.name} · ${img.width}x${img.height}`;
+ drawLoomPreview();
+}
+function decodeLoomPixel(){
+ if(!loomImage) return alert('Load a loom-pixel PNG first.');
+ const cols=parsePositiveInt($('loomCols').value,32);
+ const cell=parsePositiveInt($('loomCell').value,LOOM_PIXEL_CODEC.cell);
+ const pad=parsePositiveInt($('loomPad').value,LOOM_PIXEL_CODEC.pad);
+ const membrane=parsePositiveInt($('loomMembrane').value,LOOM_PIXEL_CODEC.membrane);
+ const usableWidth=loomImage.width - pad*2;
+ const usableHeight=loomImage.height - pad*2;
+ const rows=Math.floor(usableHeight / Math.max(1,cell));
+ if(cols<1 || rows<1 || usableWidth<cell){
+  $('loomDecoded').textContent='geometry invalid for loom-pixel decode';
+  $('loomReport').textContent=`image: ${loomImage.width}x${loomImage.height}\ncols=${cols} cell=${cell} pad=${pad} membrane=${membrane}\nstatus: invalid geometry`;
+  return;
+ }
+ const scratch=document.createElement('canvas');
+ scratch.width=loomImage.width;
+ scratch.height=loomImage.height;
+ const sctx=scratch.getContext('2d');
+ sctx.drawImage(loomImage,0,0);
+ const pixels=sctx.getImageData(0,0,scratch.width,scratch.height).data;
+ const framedCount=rows*cols;
+ const bytes=[];
+ const inner=cell - membrane*2;
+ const half=inner/2;
+ for(let i=0;i<framedCount;i++){
+  const x=pad + (i % cols) * cell;
+  const y=pad + Math.floor(i / cols) * cell;
+  let byte=0;
+  const base=loomPixelBaseColor(i,framedCount);
+  for(let q=0;q<4;q++){
+   const sx=x + membrane + (q % 2) * half + half/2;
+   const sy=y + membrane + Math.floor(q / 2) * half + half/2;
+   const sample=sampleRgb(pixels,scratch.width,scratch.height,sx,sy);
+   let bestValue=0,bestDist=Infinity;
+   for(let v=0;v<4;v++){
+    const target=loomPixelVariant(base,v);
+    const dist=rgbDistance(sample,target);
+    if(dist<bestDist){
+      bestDist=dist;
+      bestValue=v;
+    }
+   }
+   byte=(byte<<2) | bestValue;
+  }
+  bytes.push(byte);
+ }
+ const magic=String.fromCharCode(bytes[0]||0,bytes[1]||0,bytes[2]||0,bytes[3]||0);
+ if(magic!=='LPX1'){
+  $('loomDecoded').textContent='frame error: expected LPX1 magic';
+  $('loomReport').textContent=`magic: ${magic || '(none)'}\nstatus: wrong frame or wrong geometry\nimage: ${loomImage.width}x${loomImage.height}\nrows=${rows} cols=${cols}`;
+  return;
+ }
+ let pos=4;
+ const byteLen=readVarint(bytes,pos);
+ if(!byteLen){ $('loomDecoded').textContent='frame error: byte length varint unreadable'; return; }
+ pos=byteLen.next;
+ const charLen=readVarint(bytes,pos);
+ if(!charLen){ $('loomDecoded').textContent='frame error: char length varint unreadable'; return; }
+ pos=charLen.next;
+ if(pos+4>bytes.length){
+  $('loomDecoded').textContent='frame error: checksum bytes missing';
+  return;
+ }
+ const checksum=[bytes[pos],bytes[pos+1],bytes[pos+2],bytes[pos+3]].map(function(b){ return (b||0).toString(16).padStart(2,'0'); }).join('');
+ pos += 4;
+ const payloadBytes=bytes.slice(pos,pos + byteLen.value);
+ const decoded=decodePayloadBytesToText(payloadBytes,charLen.value);
+ const computed=fnv1a(decoded.text);
+ const checksumOk=computed===checksum;
+ $('loomDecoded').textContent=(decoded.text || '(empty)') + `\n\nraw bytes:\n${payloadBytes.slice(0,128).map(function(b){ return b.toString(16).padStart(2,'0'); }).join(' ')}`;
+ $('loomReport').textContent=
+  `frame magic: ${magic}` +
+  `\nframed cells read: ${bytes.length}` +
+  `\npayload bytes declared: ${byteLen.value}` +
+  `\npayload bytes recovered: ${payloadBytes.length}` +
+  `\nchars declared: ${charLen.value}` +
+  `\nchars recovered: ${decoded.ids.length}` +
+  `\nchecksum declared: ${checksum}` +
+  `\nchecksum computed: ${computed}` +
+  `\nchecksum ok: ${checksumOk}` +
+  `\nimage: ${loomImage.width}x${loomImage.height}` +
+  `\nrows=${rows} cols=${cols} cell=${cell} pad=${pad} membrane=${membrane}` +
+  `\n\nThis decoder samples fixed loom-pixel quadrants. If the image was resized, filtered, or encoded with different geometry, failure is expected and honest.`;
+}
+const DECODER_STYLES={
+ opera:{dur:0.32,vib:null,shape:"arch",synthSpeak:false},
+ rap:{dur:0.17,vib:0.004,shape:"flat",synthSpeak:false},
+ blues:{dur:0.38,vib:0.03,shape:"fall",synthSpeak:false},
+ country:{dur:0.30,vib:0.015,shape:"wave",synthSpeak:false},
+ speak:{dur:0.105,vib:0.003,shape:"flat",synthSpeak:true,base:145,spread:42,breath:0.18},
+ podcast:{dur:0.135,vib:0.002,shape:"flat",synthSpeak:true,base:125,spread:26,breath:0.09}
+};
+function modHash(s){let h=2166136261;s=String(s||"");for(let i=0;i<s.length;i++)h=(h^s.charCodeAt(i))*16777619>>>0;return h>>>0}
+function heatFor(text,i,styleKey){
+ const style=DECODER_STYLES[styleKey]||DECODER_STYLES.opera;
+ const raw=String(text||""), words=raw.toLowerCase().match(/[a-z']+|[!?]/g)||[];
+ const joined=words.join(" "), h=modHash(styleKey+"|"+i+"|"+joined);
+ const alarm=/\b(fail|fire|alarm|risk|crash|miss|lose|spike|break|drop|outage|beware|uh oh|abort|error|storm)\b/.test(joined)?1:0;
+ const hype=/\b(win|make|clear|rise|overtake|save|block|steal|confirm|recover|nice|great|launch|ignite|reach)\b/.test(joined)?1:0;
+ const punct=(raw.match(/[!?]/g)||[]).length;
+ const density=clamp(words.length/22,0,1);
+ const stylePush=styleKey==="opera"?1:styleKey==="rap"?0.82:styleKey==="blues"?0.58:styleKey==="country"?0.42:styleKey==="podcast"?0.24:0.28;
+ const grain=clamp(((h>>>3)%1000)/1000,0,1);
+ return {
+  energy:clamp(0.08+density*.32+grain*.18+alarm*.26+hype*.22+punct*.09+stylePush*.24,0,1),
+  pitch:clamp(0.22+((h>>>11)%1000)/1550+hype*.12-alarm*.05+(style.shape==="arch"?.18:0)+(style.shape==="fall"?-.1:0),0,1),
+  motion:clamp(0.12+density*.36+((h>>>19)%1000)/2100+(styleKey==="rap"?.32:0)+(styleKey==="opera"?.22:0),0,1),
+  rough:clamp(0.08+alarm*.45+stylePush*.2+((h>>>27)%1000)/3000,0,1),
+  density:density,
+  hash:h
+ };
+}
+function modulationFor(text,i){
+ const style=sval("mod-style","off");
+ if(style==="off") return {on:false,style:"off",amount:0,energy:0,pitch:.5,motion:0,rough:0,density:0,hash:0};
+ const amount=nval("mod-amt",.75);
+ const speed=nval("mod-speed",10);
+ const h1=heatFor(text,i,style), h2=heatFor(String(text).split(/\s+/).reverse().join(" "),i+31,style);
+ return {on:true,style:style,amount:amount,speed:speed,hash:h1.hash,
+  energy:clamp((h1.energy*.72+h2.energy*.28)*amount,0,1),
+  pitch:clamp(h1.pitch*.75+h2.pitch*.25,0,1),
+  motion:clamp((h1.motion*.72+h2.motion*.28)*amount,0,1),
+  rough:clamp((h1.rough*.7+h2.rough*.3)*amount,0,1),
+  density:clamp((h1.density*.8+h2.density*.2)*amount,0,1)};
+}
+function baseKnobs(){const b=parseFloat($('bright').value); return {tempo:120/currentBpm(), bright:b, Q:5+b*7}}
+function moddedKnobs(k,mod){
+ if(!mod.on) return k;
+ return {tempo:clamp(k.tempo/(1+mod.motion*nval("mod-rate",.55)*1.35),.22,3.5), bright:clamp(k.bright+mod.energy*nval("mod-filter",.75)*1.8,.2,3.2), Q:clamp(k.Q+mod.rough*nval("mod-filter",.75)*26,2,36)};
+}
+function moddedStyle(style,mod){
+ const out=Object.assign({}, style||DECODER_STYLES.podcast);
+ if(!mod.on) return out;
+ if(out.synthSpeak){
+  out.base=clamp((out.base||130)+(mod.pitch-.5)*nval("mod-pitch",.55)*130,70,260);
+  out.spread=clamp((out.spread||28)+mod.motion*nval("mod-pitch",.55)*120,5,190);
+  out.dur=clamp((out.dur||.13)/(1+mod.motion*nval("mod-rate",.55)*1.8),.035,.28);
+  out.vib=clamp((out.vib||0)+mod.energy*.026*nval("mod-pitch",.55),0,.07);
+  out.breath=clamp((out.breath||.08)+mod.rough*.45*nval("mod-gain",.65),0,.8);
+ }else{
+  out.dur=clamp((out.dur||.3)/(1+mod.motion*nval("mod-rate",.55)*1.8),.045,.7);
+  out.vib=clamp((out.vib==null?nval("vib",.035):out.vib)+mod.energy*.085*nval("mod-pitch",.55),0,.16);
+ }
+ return out;
+}
+function provisionalDecodedText(chars){
+ return (chars||[]).map(c=>c.ch||"").join('').replace(/[^a-z .,!?:;]+/gi,' ').replace(/\s+/g,' ').trim();
+}
+function modProfileForText(text){
+ const styleKey=$('style').value||'opera';
+ const baseStyle=Object.assign({}, DECODER_STYLES[styleKey]||DECODER_STYLES.opera, {dur:activePreset().dur||0.32});
+ const mod=modulationFor(text||"",0);
+ const style=moddedStyle(baseStyle,mod);
+ const knobs=moddedKnobs(baseKnobs(),mod);
+ return {text:text||"", mod:mod, style:style, knobs:knobs, expectedCell:(style.dur||baseStyle.dur||0.32)*TIMESTAMP_PROTOCOL.timing.cellRatio*knobs.tempo};
+}
+function freqToMidi(f){return 69+12*Math.log2(f/440)}
+function rms(x){let s=0;for(let i=0;i<x.length;i++)s+=x[i]*x[i];return Math.sqrt(s/Math.max(1,x.length))}
+function median(a){if(!a.length)return 0;const b=a.slice().sort((x,y)=>x-y);return b[Math.floor(b.length/2)]}
+function activePreset(){return timestampPreset($('style').value)}
+function currentBpm(){
+ return Math.max(1, Number($('tempo').value) || 120);
+}
+function styleCellSeconds(profile){
+ if(profile && profile.expectedCell) return profile.expectedCell;
+ const preset=activePreset();
+ if(!preset) return 0;
+ return (preset.dur||0.32)*TIMESTAMP_PROTOCOL.timing.cellRatio*(120/currentBpm());
+}
+function autocorrPitch(samples,sr,minF=70,maxF=1200){
+ const r=rms(samples); if(r<Number($('minRms').value)) return {freq:0,conf:0,rms:r};
+ let bestLag=0,best=0; const minLag=Math.floor(sr/maxF), maxLag=Math.floor(sr/minF);
+ for(let lag=minLag;lag<=maxLag;lag++){
+  let sum=0,a=0,b=0;
+  for(let i=0;i<samples.length-lag;i++){const x=samples[i],y=samples[i+lag];sum+=x*y;a+=x*x;b+=y*y}
+  const c=sum/Math.sqrt((a*b)||1);
+  if(c>best){best=c;bestLag=lag}
+ }
+ return {freq:bestLag?sr/bestLag:0,conf:Math.max(0,Math.min(1,best)),rms:r};
+}
+function expectedFreqs(){
+ const preset=activePreset();
+ return preset && preset.freqs && preset.freqs.length ? preset.freqs.slice() : [];
+}
+function quantile(list,q){
+ const arr=(list||[]).filter(Number.isFinite).slice().sort((a,b)=>a-b);
+ if(!arr.length) return 0;
+ const idx=(arr.length-1)*Math.max(0,Math.min(1,q));
+ const lo=Math.floor(idx), hi=Math.ceil(idx);
+ if(lo===hi) return arr[lo];
+ const mix=idx-lo;
+ return arr[lo]*(1-mix)+arr[hi]*mix;
+}
+function nearestBin(freq){
+ const fs=expectedFreqs(); let best=0,bd=Infinity,bf=freq,bo=0;
+ const candidates=[freq,freq*2,freq*3,freq*4,Math.max(1,freq/2)];
+ for(let j=0;j<candidates.length;j++){
+  const cand=candidates[j];
+  for(let i=0;i<fs.length;i++){
+   const d=Math.abs(freqToMidi(cand)-freqToMidi(fs[i])) + j*0.08;
+   if(d<bd){bd=d;best=i;bf=cand;bo=j}
+  }
+ }
+ const conf=Math.exp(-bd/(Number($('harsh').value)||0.42));
+ return {bin:best,dist:bd,conf:Math.max(0,Math.min(1,conf)),target:fs[best],mappedFreq:bf,octaveHint:bo};
+}
+function smoothFrames(frames){
+ if(!frames.length) return frames;
+ return frames.map(function(fr,i){
+  const prev=frames[i-1], next=frames[i+1];
+  if(prev && next && prev.bin===next.bin && fr.bin!==prev.bin){
+   return Object.assign({}, fr, {
+    bin:prev.bin,
+    mappedFreq:median([prev.mappedFreq||prev.f, fr.mappedFreq||fr.f, next.mappedFreq||next.f]),
+    conf:Math.max(fr.conf, Math.min(prev.conf,next.conf)*0.92),
+    smoothed:true
+   });
+  }
+  return fr;
+ });
+}
+function deriveTimingModel(events,profile){
+ const presetCell=styleCellSeconds(profile);
+ const cell=presetCell || 0.16;
+ const pairGapUi=Number($('pairGap').value)/1000;
+ const spaceGapUi=Number($('spaceGap').value)/1000;
+ return {
+  cell:cell,
+  pairGap:Math.max(0.05,Math.min(0.95,pairGapUi || (TIMESTAMP_PROTOCOL.timing.pairGapMs/1000))),
+  spaceGap:Math.max(0.09,Math.min(1.4,spaceGapUi || (TIMESTAMP_PROTOCOL.timing.spaceGapMs/1000))),
+  punctGap:Math.max(0.14,Math.min(2.2,(spaceGapUi || (TIMESTAMP_PROTOCOL.timing.spaceGapMs/1000))*TIMESTAMP_PROTOCOL.timing.punctGapMultiplier))
+ };
+}
+function maskThreshold(chars){
+ const floor=Number($('maskFloor').value)||TIMESTAMP_PROTOCOL.timing.maskFloor;
+ const confs=chars.map(c=>c.conf).filter(Number.isFinite);
+ if(!confs.length) return floor;
+ return Math.max(floor,Math.min(0.23,quantile(confs,0.28)));
+}
+function drawWave(){
+ const c=$('wave'),ctx=c.getContext('2d'); const W=c.width=c.clientWidth*devicePixelRatio,H=c.height=c.clientHeight*devicePixelRatio;
+ ctx.clearRect(0,0,W,H); ctx.strokeStyle='#7ad7f0'; ctx.lineWidth=1*devicePixelRatio; ctx.beginPath();
+ if(!audioBuf){ctx.fillStyle='#99a4b3';ctx.fillText('no audio',20,30);return}
+ const data=audioBuf.getChannelData(0); const step=Math.max(1,Math.floor(data.length/W));
+ for(let x=0;x<W;x++){let mn=1,mx=-1; for(let j=0;j<step;j++){const v=data[x*step+j]||0; if(v<mn)mn=v;if(v>mx)mx=v} ctx.moveTo(x,H/2+mn*H*.45);ctx.lineTo(x,H/2+mx*H*.45)}
+ ctx.stroke();
+ ctx.fillStyle='rgba(255,216,77,.8)';
+ decodedEvents.forEach(e=>{const x=e.t/audioBuf.duration*W;ctx.fillRect(x,0,1*devicePixelRatio,H)});
+}
+async function loadFile(file){
+ const arr=await file.arrayBuffer(); const ac=new (window.AudioContext||window.webkitAudioContext)(); audioBuf=await ac.decodeAudioData(arr.slice(0));
+ if(audioEl) URL.revokeObjectURL(audioEl.src); audioEl=new Audio(URL.createObjectURL(file));
+ audioEl.ontimeupdate=updateClock; audioEl.onplay=()=>startCrawl(); audioEl.onpause=()=>stopCrawl(false); audioEl.onended=()=>stopCrawl(true);
+ $('status').textContent=`loaded ${file.name} · ${audioBuf.duration.toFixed(2)}s`; drawWave();
+}
+function analyze(){
+ if(!audioBuf)return alert('Load audio first.');
+ const sr=audioBuf.sampleRate, data=audioBuf.getChannelData(0);
+ const hop=Math.floor(sr*Number($('hopMs').value)/1000), win=Math.floor(sr*Number($('winMs').value)/1000);
+  const frames=[];
+ for(let pos=0;pos+win<data.length;pos+=hop){
+  const sl=data.subarray(pos,pos+win); const p=autocorrPitch(sl,sr); const t=(pos+win/2)/sr;
+  if(p.freq>0){const nb=nearestBin(p.freq); frames.push({t,f:p.freq,mappedFreq:nb.mappedFreq,bin:nb.bin,conf:p.conf*nb.conf,rms:p.rms,dist:nb.dist,octaveHint:nb.octaveHint})}
+ }
+ decodedEvents=segmentFrames(smoothFrames(frames), null);
+ decodeEvents(null);
+ const provisionalText=provisionalDecodedText(decodedChars);
+ const profile=modProfileForText(provisionalText);
+ decodedEvents=segmentFrames(smoothFrames(frames), profile);
+ decodeEvents(profile);
+ drawWave();
+ renderOutputsFortified(profile);
+}
+function expandRepeatedBins(events,profile){
+ const cell=styleCellSeconds(profile);
+ const advance=cell*TIMESTAMP_PROTOCOL.timing.noteAdvanceMultiplier;
+ if(!advance || !events.length) return events;
+ const out=[];
+ for(const ev of events){
+  const count=Math.max(1,Math.round(ev.dur/advance));
+  if(count===1){out.push(ev);continue}
+  const span=Math.max(ev.dur, advance*count);
+  for(let i=0;i<count;i++){
+   const start=ev.start + span*(i/count);
+   const end=(i===count-1)?ev.end:(ev.start + span*((i+1)/count));
+   out.push({
+    t:(start+end)/2,
+    start,
+    end,
+    dur:end-start,
+    bin:ev.bin,
+    conf:ev.conf,
+    freq:ev.freq,
+    mappedFreq:ev.mappedFreq,
+    gap:0
+   });
+  }
+ }
+ return out.map((e,i,a)=>{e.gap=i?Math.max(0,e.start-a[i-1].end):0;return e});
+}
+function protocolAdvanceSeconds(profile){
+ const cell=styleCellSeconds(profile);
+ return cell ? cell*TIMESTAMP_PROTOCOL.timing.noteAdvanceMultiplier : 0;
+}
+function protocolEventScore(ev,timing,profile){
+ if(!ev) return -Infinity;
+ const cell=(timing && timing.cell) || styleCellSeconds(profile) || 0.16;
+ const advance=protocolAdvanceSeconds(profile) || cell;
+ const durFit=Math.exp(-Math.abs((ev.dur||cell)-cell)/Math.max(0.03,cell*0.75));
+ const advanceFit=Math.exp(-Math.abs((ev.dur||advance)-advance)/Math.max(0.04,advance*0.95));
+ const octavePenalty=(ev.octaveHint||0)*0.05;
+ const mod=profile && profile.mod ? profile.mod : {on:false,energy:0,motion:0,rough:0,pitch:.5};
+ const durationWeight=0.24 + mod.motion*0.12;
+ const pitchWeight=0.14 + mod.rough*0.08;
+ return (ev.conf||0)*0.62 + Math.max(durFit,advanceFit)*durationWeight + (1/(1+Math.max(0,ev.dist||0)))*pitchWeight - octavePenalty;
+}
+function protocolPairScore(left,right,timing,profile){
+ if(!left||!right) return -Infinity;
+ const cell=(timing && timing.cell) || styleCellSeconds(profile) || 0.16;
+ const gap=Math.max(0,(right.start||0)-(left.end||0));
+ const gapFit=Math.exp(-gap/Math.max(0.02,cell*0.35));
+ const mod=profile && profile.mod ? profile.mod : {on:false,motion:0};
+ return ((protocolEventScore(left,timing,profile)+protocolEventScore(right,timing,profile))/2) + gapFit*(0.18 + mod.motion*0.08);
+}
+function filterCarrierResidue(events,timing,profile){
+ if(!events.length) return events;
+ const cell=(timing && timing.cell) || styleCellSeconds(profile) || 0.16;
+  const minUseful=Math.max(0.02,cell*0.42);
+  const filtered=[];
+  for(let i=0;i<events.length;i++){
+   const ev=events[i];
+  const score=protocolEventScore(ev,timing,profile);
+  const threshold=0.44 - ((profile && profile.mod && profile.mod.energy) ? profile.mod.energy*0.08 : 0);
+  if((ev.dur||0) < minUseful && score < threshold) continue;
+  filtered.push(Object.assign({}, ev, {protocolScore:score}));
+ }
+ return filtered.map((e,i,a)=>Object.assign({}, e, {gap:i?Math.max(0,e.start-a[i-1].end):0}));
+}
+function segmentFrames(frames,profile){
+ const minSeg=Number($('minSeg').value)/1000, mergeGap=Number($('mergeGap').value)/1000;
+ const segs=[]; let cur=null;
+ for(const fr of frames){
+  if(!cur){cur={start:fr.t,end:fr.t,frames:[fr]};continue}
+  const prev=cur.frames[cur.frames.length-1];
+  const same=fr.t-cur.end<=mergeGap && fr.bin===prev.bin;
+  if(same){cur.end=fr.t;cur.frames.push(fr)} else {segs.push(cur);cur={start:fr.t,end:fr.t,frames:[fr]}}
+ }
+ if(cur)segs.push(cur);
+ const events=segs.filter(s=>s.end-s.start>=minSeg).map(s=>{
+  const bins=s.frames.map(f=>f.bin); const b=mode(bins); const conf=median(s.frames.map(f=>f.conf)); const freq=median(s.frames.map(f=>f.f));
+  const mappedFreq=median(s.frames.map(f=>f.mappedFreq||f.f));
+  return {t:(s.start+s.end)/2,start:s.start,end:s.end,dur:s.end-s.start,bin:b,conf,freq,mappedFreq,gap:0};
+ }).map((e,i,a)=>{e.gap=i?e.start-a[i-1].end:0;return e});
+ return expandRepeatedBins(events,profile);
+}
+function mode(a){const m={};let best=a[0]||0,bc=0;for(const x of a){m[x]=(m[x]||0)+1;if(m[x]>bc){bc=m[x];best=x}}return best}
+function decodeEvents(profile){
+ decodedChars=[]; let pending=null, out=[]; const timing=deriveTimingModel(decodedEvents,profile);
+ const events=filterCarrierResidue(decodedEvents,timing,profile);
+ const spaceGap=timing.spaceGap, pairGap=timing.pairGap, punctGap=timing.punctGap;
+ const punctMap=Object.fromEntries(Object.entries(TIMESTAMP_PROTOCOL.punctuationMap).map(([ch,bin])=>[bin,ch]));
+ const base=timestampBase();
+ for(let i=0;i<events.length;i++){
+  const ev=events[i];
+  const next=events[i+1]||null;
+  if(ev.gap>punctGap && punctMap[ev.bin]){flushPending(out,pending,ev.t); pending=null; addChar(out,punctMap[ev.bin],ev.start,ev.conf,'punct-marker '+ev.bin); continue}
+  if(ev.gap>spaceGap){flushPending(out,pending,ev.t); pending=null; addChar(out,' ',ev.start,ev.conf,'gap-space')}
+  if(!pending){pending=ev;continue}
+  if(ev.start-pending.end>pairGap){flushPending(out,pending,ev.t); pending=ev; continue}
+  if(next && next.start-pending.end<=pairGap){
+   const pairNow=protocolPairScore(pending,ev,timing,profile);
+   const pairSkipCurrent=protocolPairScore(pending,next,timing,profile);
+   const residueCurrent=protocolEventScore(ev,timing,profile);
+   if(pairSkipCurrent > pairNow + 0.1 && residueCurrent < pairNow + 0.04){
+    continue;
+   }
+  }
+  const code=pending.bin*base+ev.bin;
+  let ch='�', why='out-of-range';
+  if(code>=0&&code<ALPHABET.length){ch=ALPHABET[code];why='letter'}
+  addChar(out,ch,(pending.t+ev.t)/2,Math.min(pending.conf,ev.conf),why+` ${pending.bin},${ev.bin}`);
+  pending=null;
+ }
+ flushPending(out,pending,audioBuf?audioBuf.duration:0);
+decodedChars=out;
+}
+function flushPending(out,p,t){ if(p) addChar(out,'�',p.t,p.conf,'unpaired '+p.bin) }
+function addChar(out,ch,t,conf,why){out.push({ch,t,conf,why})}
+function renderOutputs(profile){
+ const text=decodedChars.map(c=>c.conf<0.23?'·':c.ch).join('').replace(/ +/g,' ');
+ $('decoded').innerHTML=escapeHtml(text||'No decoded characters.')
+ const good=decodedChars.filter(c=>c.conf>=0.5).length, weak=decodedChars.filter(c=>c.conf<0.23).length;
+ const avg=decodedChars.length?decodedChars.reduce((s,c)=>s+c.conf,0)/decodedChars.length:0;
+ const freqs=expectedFreqs().map(f=>f.toFixed(2)).join(', ');
+ const modLine=profile && profile.mod && profile.mod.on ? `\nmod: ${profile.mod.style} amount=${profile.mod.amount.toFixed(2)} motion=${profile.mod.motion.toFixed(2)} energy=${profile.mod.energy.toFixed(2)} rough=${profile.mod.rough.toFixed(2)}` : `\nmod: off`;
+ $('report').innerHTML=`events: ${decodedEvents.length}\nchars: ${decodedChars.length}\navg confidence: ${avg.toFixed(3)}\nhigh confidence chars: ${good}\nmasked/weak chars: ${weak}\nexpected bins (Hz): ${freqs}\nstyle cell s: ${styleCellSeconds(profile).toFixed(3)}\ncodec base: ${timestampBase()}${modLine}\n\nThis is not speech recognition. It is a timestamp/base-${timestampBase()} note decoder. If the source was not encoded with matching settings, garble is expected and honest.`;
+ $('events').value=decodedEvents.map((e,i)=>`${String(i).padStart(4,'0')} t=${e.t.toFixed(3)} bin=${e.bin} freq=${e.freq.toFixed(1)} mapped=${(e.mappedFreq||e.freq).toFixed(1)} conf=${e.conf.toFixed(2)} gap=${e.gap.toFixed(3)}`).join('\n');
+ const crawlText=(text||'NO DECODABLE MESSAGE').replace(/�/g,'?').replace(/·/g,'*').toUpperCase(); $('crawl').textContent=crawlText;
+}
+function codeToChar(code){
+ if(code>=0&&code<ALPHABET.length) return ALPHABET[code];
+ return 'ï¿½';
+}
+function bestRepairFromNeighbors(prev,next){
+ const candidates=[];
+ const base=timestampBase();
+ for(let a=-1;a<=1;a++){
+  for(let b=-1;b<=1;b++){
+   const left=prev.bin+a, right=next.bin+b;
+   if(left<0||left>=base||right<0||right>=base) continue;
+   const code=left*base+right;
+   const ch=codeToChar(code);
+   if(ch==='ï¿½') continue;
+   const penalty=Math.abs(a)+Math.abs(b);
+   const punctuation=/[.,!?]/.test(ch)?0.12:0;
+   candidates.push({ch,score:(prev.conf+next.conf)/2 - penalty*0.18 - punctuation,left,right});
+  }
+ }
+ candidates.sort((x,y)=>y.score-x.score);
+ return candidates[0]||null;
+}
+function cleanupPunctuation(chars){
+ const out=[];
+ for(let i=0;i<chars.length;i++){
+  const cur=Object.assign({}, chars[i]);
+  const prev=out[out.length-1];
+  const next=chars[i+1];
+  if(/[.,!?;:]/.test(cur.ch) && prev && /[.,!?;: ]/.test(prev.ch) && cur.conf<0.42) continue;
+  if(cur.ch===' ' && prev && prev.ch===' ') continue;
+  if(cur.ch==='ï¿½' && prev && next && /[a-z]/i.test(prev.ch) && /[a-z]/i.test(next.ch) && cur.conf<0.22) continue;
+  out.push(cur);
+ }
+ return out;
+}
+function repairDecodedChars(chars){
+ const repaired=chars.map(c=>Object.assign({}, c));
+ for(let i=0;i<repaired.length;i++){
+  const cur=repaired[i];
+  if(cur.ch!=='ï¿½' && cur.conf>=0.24) continue;
+  const prevEvent=decodedEvents[i*2];
+  const nextEvent=decodedEvents[i*2+1];
+  if(!prevEvent||!nextEvent) continue;
+  const best=bestRepairFromNeighbors(prevEvent,nextEvent);
+  if(!best) continue;
+  if(best.score>=0.08 || (cur.ch==='ï¿½' && cur.conf<0.2)){
+   cur.ch=best.ch;
+   cur.conf=Math.max(cur.conf, Math.min(0.49, best.score+0.18));
+   cur.why=`repair ${best.left},${best.right}`;
+  }
+ }
+ return cleanupPunctuation(repaired);
+}
+function renderOutputsFortified(profile){
+ const raw=decodedChars.map(c=>c.ch).join('').replace(/ +/g,' ');
+ const threshold=maskThreshold(decodedChars);
+ const text=decodedChars.map(c=>c.conf<threshold?'Â·':c.ch).join('').replace(/ +/g,' ');
+ $('decoded').innerHTML=escapeHtml((text||'No decoded characters.') + `\n\nraw: ${raw||'(empty)'}`);
+ const good=decodedChars.filter(c=>c.conf>=0.5).length, weak=decodedChars.filter(c=>c.conf<threshold).length;
+ const avg=decodedChars.length?decodedChars.reduce((s,c)=>s+c.conf,0)/decodedChars.length:0;
+ const freqs=expectedFreqs().map(f=>f.toFixed(2)).join(', ');
+ const timing=deriveTimingModel(decodedEvents,profile);
+ const modLine=profile && profile.mod && profile.mod.on ? `\nmod: ${profile.mod.style} amount=${profile.mod.amount.toFixed(2)} motion=${profile.mod.motion.toFixed(2)} energy=${profile.mod.energy.toFixed(2)} rough=${profile.mod.rough.toFixed(2)}\nmod text: ${profile.text||'(empty)'}` : `\nmod: off`;
+ $('report').innerHTML=`events: ${decodedEvents.length}\nchars: ${decodedChars.length}\navg confidence: ${avg.toFixed(3)}\nhigh confidence chars: ${good}\nmasked/weak chars: ${weak}\nmask threshold: ${threshold.toFixed(3)}\nexpected bins (Hz): ${freqs}\nstyle cell s: ${styleCellSeconds(profile).toFixed(3)}\ncodec base: ${timestampBase()}${modLine}\nderived cell s: ${timing.cell.toFixed(3)}\nderived pair gap s: ${timing.pairGap.toFixed(3)}\nderived space gap s: ${timing.spaceGap.toFixed(3)}\n\nThis is not speech recognition. It is a timestamp/base-${timestampBase()} note decoder. If the source was not encoded with matching settings, garble is expected and honest.`;
+ $('events').value=decodedEvents.map((e,i)=>`${String(i).padStart(4,'0')} t=${e.t.toFixed(3)} bin=${e.bin} freq=${e.freq.toFixed(1)} mapped=${(e.mappedFreq||e.freq).toFixed(1)} conf=${e.conf.toFixed(2)} gap=${e.gap.toFixed(3)}`).join('\n');
+ const crawlText=(text||'NO DECODABLE MESSAGE').replace(/ï¿½/g,'?').replace(/Â·/g,'*').toUpperCase();
+ $('crawl').textContent=crawlText;
+}
+function escapeHtml(s){return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}
+function updateClock(){
+ if(!audioEl)return; $('clock').textContent=`${audioEl.currentTime.toFixed(2)} / ${(audioEl.duration||0).toFixed(2)}`;
+ let cur='—'; for(const c of decodedChars){if(c.t<=audioEl.currentTime)cur=c.ch;else break} $('liveChar').textContent='current: '+cur;
+}
+function startCrawl(){const cr=$('crawl');cr.classList.remove('playing');void cr.offsetWidth; const dur=Math.max(12,audioEl.duration||40);cr.style.setProperty('--crawlDur',dur+'s');cr.classList.add('playing')}
+function stopCrawl(done){$('crawl').classList.remove('playing'); if(done) updateClock()}
+$('file').onchange=e=>{const f=e.target.files&&e.target.files[0]; if(f)loadFile(f)};
+$('loomFile').onchange=e=>{const f=e.target.files&&e.target.files[0]; if(f)loadLoomFile(f)};
+$('decode').onclick=analyze;$('play').onclick=()=>{if(audioEl)audioEl.play()};$('stop').onclick=()=>{if(audioEl){audioEl.pause();audioEl.currentTime=0;updateClock()}stopCrawl(false)};
+$('decodeLoom').onclick=decodeLoomPixel;
+const DISPLAY_PRECISION={tempo:0,vib:3,bright:2,cont:2,'mod-amt':2,'mod-speed':2,'mod-pitch':2,'mod-rate':2,'mod-gain':2,'mod-filter':2};
+const DISPLAY_TARGET={tempo:'tempoV',vib:'vibV',bright:'brightV',cont:'contV','mod-amt':'modAmtV','mod-speed':'modSpeedV','mod-pitch':'modPitchV','mod-rate':'modRateV','mod-gain':'modGainV','mod-filter':'modFilterV'};
+Object.keys(DISPLAY_TARGET).forEach(function(id){
+ const el=$(id), out=$(DISPLAY_TARGET[id]);
+ if(!el||!out) return;
+ const update=function(){ out.textContent=Number(el.value).toFixed(DISPLAY_PRECISION[id]); };
+ el.oninput=update;
+ update();
+});
+function applyTimestampProtocolDefaults(){
+ $('hopMs').value=TIMESTAMP_PROTOCOL.decoderDefaults.hopMs;
+ $('winMs').value=TIMESTAMP_PROTOCOL.decoderDefaults.winMs;
+ $('minRms').value=TIMESTAMP_PROTOCOL.decoderDefaults.minRms;
+ $('minSeg').value=TIMESTAMP_PROTOCOL.decoderDefaults.minSegMs;
+ $('mergeGap').value=TIMESTAMP_PROTOCOL.decoderDefaults.mergeGapMs;
+ $('spaceGap').value=TIMESTAMP_PROTOCOL.decoderDefaults.spaceGapMs;
+ $('pairGap').value=TIMESTAMP_PROTOCOL.decoderDefaults.pairGapMs;
+ $('harsh').value=TIMESTAMP_PROTOCOL.decoderDefaults.harsh;
+ $('maskFloor').value=TIMESTAMP_PROTOCOL.decoderDefaults.maskFloor;
+}
+applyTimestampProtocolDefaults();
+drawLoomPreview();
+setInterval(updateClock,100);
+</script></body></html>

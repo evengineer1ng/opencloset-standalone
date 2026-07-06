@@ -1,0 +1,19 @@
+# The spatial house: a tiny .oradio that listens to your spatial array AND speaks back.
+# The Loom authors it; the club resolves the array + voice; the sim does the rest.
+# Binding: presence at a node -> the house speaks (outbound, via the voice effector).
+# (simulated_spatial_array stands in for the ESP32 node array — no hardware needed.)
+oradio: home-region
+world:
+  organ: neikos
+  seed: 42
+telemetry:
+  - source: simulated_spatial_array
+    name: array
+    nodes: [front_door, living_room, kitchen, bedroom, town_avenue]
+effectors:
+  - { kind: voice, name: house_voice }
+bindings:
+  - { from: array, to: house_voice, transform: presence_to_speech }
+lens: identity
+surfaces: [voice, spatial_audio]
+club: [llm, voices, spatial_array]

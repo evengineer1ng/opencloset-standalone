@@ -1,0 +1,31 @@
+id: context_compaction_continuity
+title: Continuity under longer conversation pressure
+category: continuity
+goal: Verify the harness preserves the active thread across a longer exchange.
+suite_ids: [e2e_basic]
+expected_behavior:
+  - Preserve the anchor detail.
+  - Answer the final question directly.
+forbidden_behavior:
+  - Losing the thread.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: completion
+  - name: output_quality
+  - name: runtime_stability
+turns:
+  - role: user
+    content: "Remember this anchor phrase exactly: cobalt-lemur-signal."
+  - role: user
+    content: "Now imagine we are planning an eval harness. Keep going."
+  - role: user
+    content: "What was the anchor phrase and why did I give it to you? Answer in one sentence."
+checks:
+  rules:
+    - type: status_is
+      turn: 3
+      value: succeeded
+    - type: final_text_contains
+      turn: 3
+      value: cobalt-lemur-signal

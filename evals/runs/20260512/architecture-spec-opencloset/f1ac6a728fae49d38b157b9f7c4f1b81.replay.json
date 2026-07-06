@@ -1,0 +1,34 @@
+{
+  "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\architecture_spec_opencloset.yaml",
+  "session_id": "195927f9242d4330905ac10bb3a55cd4",
+  "turns": [
+    {
+      "role": "user",
+      "content": "Design a local-first eval harness for OpenCloset that tests harness behavior, not just model cleverness. Give me architecture, tradeoffs, and an implementation path.",
+      "run_id": "ad6b273401284f2dafb90163616d7b83",
+      "tool_results": []
+    }
+  ],
+  "messages": [
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Design a local-first eval harness for OpenCloset that tests harness behavior, not just model cleverness. Give me architecture, tradeoffs, and an implementation path.",
+      "created_at": "2026-05-12T14:15:12.557Z",
+      "id": "91fde1e5bef244d28bbd4ab2129b0227",
+      "position": 1,
+      "role": "user",
+      "token_estimate": 41
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Here is the design for a local-first eval harness tailored to OpenClosetâs constraints: durable progress, low token waste, and explicit state management.\n\n### 1. Architecture: The \"Deterministic Core\"\n\nThe harness is a standalone Python CLI tool (`oc_eval`) that sits outside the main application logic. It treats the LLM not as a \"chat partner\" but as a function to be tested against known inputs and expected outputs.\n\n**Components:**\n*   **Scenario Registry:** A directory of JSON/YAML files defining test cases. Each case includes:\n    *   `input`: The prompt or user query.\n    *   `context`: Mocked local state (e.g., a specific wardrobe inventory, a specific outfit history).\n    *   `expected`: The ground truth (exact string, regex pattern, or semantic embedding threshold).\n    *   `tags`: Metadata for filtering (e.g., `#retrieval`, `#formatting`, `#safety`).\n*   **Mock Context Provider:** A lightweight layer that intercepts calls to the local",
+      "created_at": "2026-05-12T14:17:01.981Z",
+      "id": "e8f998bbdf064152bbc1003e5485c7c4",
+      "position": 2,
+      "role": "assistant",
+      "token_estimate": 239
+    }
+  ]
+}

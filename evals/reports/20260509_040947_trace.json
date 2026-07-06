@@ -1,0 +1,1769 @@
+{
+  "suite_id": "stalled_run_recovery",
+  "generated_at": "2026-05-09T04:09:47.436367Z",
+  "scenario_count": 1,
+  "artifacts": [
+    {
+      "schema_version": "eval-run.v2",
+      "artifact_id": "7f7b80f0cade49bd87eb55f6af20dcd2",
+      "created_at": "2026-05-09T04:06:11.860078Z",
+      "api_base_url": "http://127.0.0.1:5000/api",
+      "scenario": {
+        "id": "stalled_run_recovery",
+        "title": "Recover from a blocked command honestly",
+        "category": "error_recovery",
+        "goal": "Verify the harness recovers honestly from a missing command without widening the task.",
+        "tags": [],
+        "path": "D:\\openclaw\\opencloset\\evals\\scenarios\\stalled_run_recovery.yaml",
+        "notes_path": null,
+        "suite_ids": [
+          "e2e_basic"
+        ],
+        "expected_behavior": [
+          "Verify the command.",
+          "Recover honestly.",
+          "Avoid broad unrelated fixes."
+        ],
+        "forbidden_behavior": [
+          "Pretending the command worked.",
+          "Broad install detours."
+        ],
+        "required_observations": [
+          "One concrete verification step should occur."
+        ],
+        "max_turns": null,
+        "scoring_rubric": [
+          {
+            "name": "intent_capture",
+            "description": "",
+            "weight": 1.0
+          },
+          {
+            "name": "tool_discipline",
+            "description": "",
+            "weight": 1.0
+          },
+          {
+            "name": "completion",
+            "description": "",
+            "weight": 1.0
+          },
+          {
+            "name": "output_quality",
+            "description": "",
+            "weight": 1.0
+          },
+          {
+            "name": "runtime_stability",
+            "description": "",
+            "weight": 1.0
+          },
+          {
+            "name": "user_experience",
+            "description": "",
+            "weight": 1.0
+          }
+        ]
+      },
+      "profile": {
+        "provider": "llamacpp",
+        "model": "qwen3.6-27b",
+        "harness_profile": "default"
+      },
+      "baseline": {
+        "git_commit": "5a0e9e5a047522fe93a346aabc19aba0f4882284",
+        "harness_profile": "default",
+        "provider": "llamacpp",
+        "model": "qwen3.6-27b",
+        "scenario_id": "stalled_run_recovery",
+        "category": "error_recovery"
+      },
+      "session": {
+        "id": "ae75f4fe39904db7b0e8cd99165024b1"
+      },
+      "summary": {
+        "status": "succeeded",
+        "finish_reason": "stop",
+        "hard_pass": true,
+        "check_pass_count": 3,
+        "check_fail_count": 0,
+        "final_text_preview": "The command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted.",
+        "failure_taxonomy": [
+          "slow_turn",
+          "tool_use_present"
+        ]
+      },
+      "turns": [
+        {
+          "turn_index": 1,
+          "role": "user",
+          "content": "First verify whether `definitely_not_a_real_command_xyz --version` exists. Then recover and answer in one sentence that the command is unavailable and no broader fix should be attempted.",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "message_id": "df22b27ef17047c6b95cfec15a7745f3",
+          "status": "succeeded",
+          "finish_reason": "stop",
+          "final_text": "The command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted.",
+          "transient_text": "\n\nThe command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted.",
+          "error": "",
+          "latency_ms": 215347,
+          "input_tokens": 2900,
+          "output_tokens": 26,
+          "tool_results": [
+            {
+              "call_id": "call_ba30e2afaa49",
+              "content": "Exit code: 1\nElapsed: 0.41s\nOutput:\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \nwas included, verify that the path is correct and try again.\nAt line:1 char:1\n+ definitely_not_a_real_command_xyz --version\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \n   Exception\n    + FullyQualifiedErrorId : CommandNotFoundException\n \n",
+              "error": "exit 1:\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \nwas included, verify that the path is correct and try again.\nAt line:1 char:1\n+ definitely_not_a_real_command_xyz --version\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \n   Exception\n    + FullyQualifiedErrorId : CommandNotFoundException",
+              "error_code": "exec.exit_nonzero",
+              "status": "execution_error",
+              "token_estimate": 147,
+              "tool_name": "exec"
+            }
+          ],
+          "provider_route": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 186,
+              "needs_frontier_tools": true,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "run_events": [
+            {
+              "created_at": "2026-05-09T04:06:11.975200Z",
+              "data": {
+                "run_id": "70f5be77b07643d3a682aaff38629363",
+                "turn_number": 1
+              },
+              "id": "f386360ad7a14e08ae32437f7e6ea903",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "run_queued"
+            },
+            {
+              "created_at": "2026-05-09T04:06:11.994491Z",
+              "data": {
+                "provider_capabilities": {
+                  "frontier": false,
+                  "latency_tier": "local",
+                  "locality": "local",
+                  "supports_audio_input": false,
+                  "supports_tool_use": true,
+                  "supports_vision": false
+                },
+                "requested_model": "qwen3.6-27b",
+                "requested_provider": "llamacpp",
+                "resolved_model": "qwen3.6-27b",
+                "resolved_provider": "llamacpp",
+                "route_reason": "session_provider_pinned",
+                "task_profile": {
+                  "attachment_types": [],
+                  "message_length": 186,
+                  "needs_frontier_tools": true,
+                  "requires_audio": false,
+                  "requires_vision": false
+                },
+                "used_auto_routing": false
+              },
+              "id": "4390adfdacd64682a92540b117ef8f41",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "provider_routed"
+            },
+            {
+              "created_at": "2026-05-09T04:06:12.016881Z",
+              "data": {
+                "run_id": "70f5be77b07643d3a682aaff38629363",
+                "turn_number": 1
+              },
+              "id": "f1ac48a1013b4e6590d41b70a5e87528",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "run_started"
+            },
+            {
+              "created_at": "2026-05-09T04:06:34.682046Z",
+              "data": {
+                "text": "\n\n"
+              },
+              "id": "3915d073b4ca4fa7b99b682bfa1933b8",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:06:37.028548Z",
+              "data": {
+                "input": {
+                  "command": "definitely_not_a_real_command_xyz --version"
+                },
+                "tool_id": "exec"
+              },
+              "id": "91907fabb0f74ac5aacbcbba315f1389",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "tool_called"
+            },
+            {
+              "created_at": "2026-05-09T04:06:37.032369Z",
+              "data": {
+                "input": {
+                  "command": "definitely_not_a_real_command_xyz --version"
+                },
+                "tool_name": "exec"
+              },
+              "id": "d5d3dcb2a6f946f192c15876d9b3380a",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "tool_call"
+            },
+            {
+              "created_at": "2026-05-09T04:06:37.138245Z",
+              "data": {
+                "input_tokens": 2218,
+                "output_tokens": 1
+              },
+              "id": "4f108d4382e9417f80910e9579a833b2",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "usage"
+            },
+            {
+              "created_at": "2026-05-09T04:06:37.560319Z",
+              "data": {
+                "content": "Exit code: 1\nElapsed: 0.41s\nOutput:\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \nwas included, verify that the path is correct and try again.\nAt line:1 char:1\n+ definitely_not_a_real_command_xyz --version\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \n   Exception\n    + FullyQualifiedErrorId : CommandNotFoundException\n \n",
+                "error": "exit 1:\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \nwas included, verify that the path is correct and try again.\nAt line:1 char:1\n+ definitely_not_a_real_command_xyz --version\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \n   Exception\n    + FullyQualifiedErrorId : CommandNotFoundException",
+                "error_code": "exec.exit_nonzero",
+                "status": "execution_error",
+                "tool_id": "call_ba30e2afaa49",
+                "tool_name": "exec"
+              },
+              "id": "a13b680e86df448e939d801aa826844b",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "tool_result"
+            },
+            {
+              "created_at": "2026-05-09T04:06:37.564157Z",
+              "data": {
+                "snapshot": {
+                  "blocked_strategies": {},
+                  "facts": {
+                    "exec:definitely_not_a_real_command_xyz": [
+                      "Executable or entrypoint missing for command root 'definitely_not_a_real_command_xyz'."
+                    ]
+                  },
+                  "frozen_subgoals": [],
+                  "pending_action_attempts": 0,
+                  "pending_action_signature": "",
+                  "pending_action_signature_repeats": 0,
+                  "recovery_attempts": {},
+                  "subgoal_attempts": {
+                    "exec:definitely_not_a_real_command_xyz": 1
+                  }
+                }
+              },
+              "id": "debcd5911f0148009adcbe5dd8abb507",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "run_governor_decision"
+            },
+            {
+              "created_at": "2026-05-09T04:06:37.567443Z",
+              "data": {
+                "message": {
+                  "content": "The last exec call confirmed the requested command is unavailable on this system. Do not broaden into installation, PATH edits, or replacement scripts. Answer the user directly in one sentence. Use the word 'unavailable' verbatim and the phrase 'no broader fix should be attempted' verbatim.",
+                  "role": "user"
+                },
+                "snapshot": {
+                  "blocked_strategies": {},
+                  "facts": {
+                    "exec:definitely_not_a_real_command_xyz": [
+                      "Executable or entrypoint missing for command root 'definitely_not_a_real_command_xyz'."
+                    ]
+                  },
+                  "frozen_subgoals": [],
+                  "pending_action_attempts": 0,
+                  "pending_action_signature": "",
+                  "pending_action_signature_repeats": 0,
+                  "recovery_attempts": {
+                    "exec:definitely_not_a_real_command_xyz": 1
+                  },
+                  "subgoal_attempts": {
+                    "exec:definitely_not_a_real_command_xyz": 1
+                  }
+                }
+              },
+              "id": "68b469ff95b64b6a9f4e43c47a7f1370",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "run_governor_decision"
+            },
+            {
+              "created_at": "2026-05-09T04:09:45.914665Z",
+              "data": {
+                "text": "\n\nThe"
+              },
+              "id": "fb0eb3effe9c4665a32e36907582c4e9",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.013640Z",
+              "data": {
+                "text": " command"
+              },
+              "id": "578803f414da4a7d84af4513373ac454",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.065210Z",
+              "data": {
+                "text": " `"
+              },
+              "id": "fe5735d2a71748e78e788a6436601075",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.114319Z",
+              "data": {
+                "text": "def"
+              },
+              "id": "a60af3c9bfc74070aec4abbefb90a772",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.163220Z",
+              "data": {
+                "text": "initely"
+              },
+              "id": "e7ebae623a17479c921568af15094199",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.214890Z",
+              "data": {
+                "text": "_not"
+              },
+              "id": "1b10195f19d241daa1762d588417f1d4",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.266767Z",
+              "data": {
+                "text": "_a"
+              },
+              "id": "29f7182188c24f9997b141230e556417",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.314178Z",
+              "data": {
+                "text": "_real"
+              },
+              "id": "7ddea65dfdae4bf6ae2d17d26ab18759",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.369405Z",
+              "data": {
+                "text": "_command"
+              },
+              "id": "bff3f8b6e2804c51a048c280ae431479",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.418022Z",
+              "data": {
+                "text": "_xyz"
+              },
+              "id": "6e38cb81f6ee4e019e60ffaa4ed4cc5f",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.472674Z",
+              "data": {
+                "text": "`"
+              },
+              "id": "bc3e78447f92455aba2da546f6da3521",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.520746Z",
+              "data": {
+                "text": " is"
+              },
+              "id": "a6fe7ad1406048ef846382e30fd45bdb",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.569806Z",
+              "data": {
+                "text": " unavailable"
+              },
+              "id": "a556a1f8912744c09517f6177c189d91",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.618130Z",
+              "data": {
+                "text": " on"
+              },
+              "id": "e1945b571aba4ef79e3968a89d8e2091",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.678689Z",
+              "data": {
+                "text": " this"
+              },
+              "id": "e44f8facb3174bde89fb5e29c161c1ab",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.722474Z",
+              "data": {
+                "text": " system"
+              },
+              "id": "d64c5049572f41f99864d22254a5b074",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.775219Z",
+              "data": {
+                "text": ","
+              },
+              "id": "d3f21cf023094a1ead8c2f755b2875f2",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.830700Z",
+              "data": {
+                "text": " and"
+              },
+              "id": "608a4fcd22664d47a21970668ee8ee14",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:46.880448Z",
+              "data": {
+                "text": " no"
+              },
+              "id": "fcd3478b1e784c4e96421588d04239c2",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:47.001366Z",
+              "data": {
+                "text": " broader"
+              },
+              "id": "1ed960d9ff2a4035ab2b439834736be4",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:47.045861Z",
+              "data": {
+                "text": " fix"
+              },
+              "id": "f1328066b8a74eefadb6a9ff0675644a",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:47.094664Z",
+              "data": {
+                "text": " should"
+              },
+              "id": "20ea22dd50944bc6aae072b90c62eaf1",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:47.140437Z",
+              "data": {
+                "text": " be"
+              },
+              "id": "94b939ffc9a642e0a7fe41319e921178",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:47.189575Z",
+              "data": {
+                "text": " attempted"
+              },
+              "id": "8627a92e33ca417087fcb6d6976742a1",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:47.237247Z",
+              "data": {
+                "text": "."
+              },
+              "id": "5d79013a1cf344d0968c2d07a89fbdd8",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_delta"
+            },
+            {
+              "created_at": "2026-05-09T04:09:47.296991Z",
+              "data": {
+                "input_tokens": 2797,
+                "output_tokens": 25
+              },
+              "id": "e05538cf953d48dbb12b208f634696d6",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "usage"
+            },
+            {
+              "created_at": "2026-05-09T04:09:47.303786Z",
+              "data": {
+                "final_text": "\n\nThe command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted.",
+                "finish_reason": "stop",
+                "status": "succeeded",
+                "transcript_persisted": true,
+                "transient_text": "\n\nThe command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted."
+              },
+              "id": "d044e1d55633458aaa4d71ee65dcb6c1",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "assistant_final"
+            },
+            {
+              "created_at": "2026-05-09T04:09:47.316221Z",
+              "data": {
+                "duration_ms": 0
+              },
+              "id": "62404cbe384b46fb9baca9b4313ac3b9",
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "type": "run_completed"
+            }
+          ],
+          "stream_events": [],
+          "observations": {
+            "tool_calls": [
+              {
+                "tool_name": "exec",
+                "input": {
+                  "command": "definitely_not_a_real_command_xyz --version"
+                }
+              }
+            ],
+            "tool_result_count": 1,
+            "files_read": [],
+            "files_written": [],
+            "commands": [
+              "definitely_not_a_real_command_xyz --version"
+            ],
+            "runtime_event_types": [
+              "run_queued",
+              "provider_routed",
+              "run_started",
+              "assistant_delta",
+              "tool_called",
+              "tool_call",
+              "usage",
+              "tool_result",
+              "run_governor_decision",
+              "run_governor_decision",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "assistant_delta",
+              "usage",
+              "assistant_final",
+              "run_completed"
+            ],
+            "touched_temp_workspace": false
+          }
+        }
+      ],
+      "checks": [
+        {
+          "type": "status_is",
+          "passed": true,
+          "details": "expected succeeded, got succeeded",
+          "turn": null
+        },
+        {
+          "type": "tool_name_used",
+          "passed": true,
+          "details": "expected tool 'exec' to be used",
+          "turn": null
+        },
+        {
+          "type": "final_text_contains",
+          "passed": true,
+          "details": "expected final text to contain 'unavailable'",
+          "turn": null
+        }
+      ],
+      "metrics": {
+        "turn_count": 1,
+        "latency_ms_total": 215347,
+        "latency_ms_avg": 215347,
+        "input_tokens_total": 2900,
+        "output_tokens_total": 26,
+        "tool_call_count": 1,
+        "context_window": 65536,
+        "max_turns_requested": null
+      },
+      "judge": {
+        "enabled": false,
+        "status": "disabled",
+        "model": "qwen3.6-27b",
+        "provider": "llamacpp"
+      },
+      "self_critique": {
+        "enabled": false,
+        "status": "disabled",
+        "model": "qwen3.6-27b",
+        "provider": "llamacpp"
+      },
+      "replay": {
+        "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\stalled_run_recovery.yaml",
+        "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+        "turns": [
+          {
+            "role": "user",
+            "content": "First verify whether `definitely_not_a_real_command_xyz --version` exists. Then recover and answer in one sentence that the command is unavailable and no broader fix should be attempted.",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "tool_results": [
+              {
+                "call_id": "call_ba30e2afaa49",
+                "content": "Exit code: 1\nElapsed: 0.41s\nOutput:\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \nwas included, verify that the path is correct and try again.\nAt line:1 char:1\n+ definitely_not_a_real_command_xyz --version\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \n   Exception\n    + FullyQualifiedErrorId : CommandNotFoundException\n \n",
+                "error": "exit 1:\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \nwas included, verify that the path is correct and try again.\nAt line:1 char:1\n+ definitely_not_a_real_command_xyz --version\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \n   Exception\n    + FullyQualifiedErrorId : CommandNotFoundException",
+                "error_code": "exec.exit_nonzero",
+                "status": "execution_error",
+                "token_estimate": 147,
+                "tool_name": "exec"
+              }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "archive_ready": false,
+            "archive_state": null,
+            "content": "First verify whether `definitely_not_a_real_command_xyz --version` exists. Then recover and answer in one sentence that the command is unavailable and no broader fix should be attempted.",
+            "created_at": "2026-05-09T04:06:11.971Z",
+            "id": "df22b27ef17047c6b95cfec15a7745f3",
+            "position": 1,
+            "role": "user",
+            "token_estimate": 46
+          },
+          {
+            "archive_ready": false,
+            "archive_state": null,
+            "content": "The command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted.",
+            "created_at": "2026-05-09T04:09:47.300Z",
+            "id": "05329731aee5474aa90aa33faebf5d9e",
+            "position": 2,
+            "role": "assistant",
+            "token_estimate": 29
+          },
+          {
+            "archive_ready": false,
+            "archive_state": null,
+            "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_ba30e2afaa49\\\", \\\"tool_name\\\": \\\"exec\\\", \\\"status\\\": \\\"execution_error\\\", \\\"content\\\": \\\"Exit code: 1\\\\nElapsed: 0.41s\\\\nOutput:\\\\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \\\\nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \\\\nwas included, verify that the path is correct and try again.\\\\nAt line:1 char:1\\\\n+ definitely_not_a_real_command_xyz --version\\\\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\\\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \\\\n   Exception\\\\n    + FullyQualifiedErrorId : CommandNotFoundException\\\\n \\\\n\\\", \\\"error\\\": \\\"exit 1:\\\\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \\\\nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \\\\nwas included, verify that the path is correct and try again.\\\\nAt line:1 char:1\\\\n+ definitely_not_a_real_command_xyz --version\\\\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\\\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \\\\n   Exception\\\\n    + FullyQualifiedErrorId : CommandNotFoundException\\\"}\"}}",
+            "created_at": "2026-05-09T04:09:47.306Z",
+            "id": "76137f6000bf4c7aa8ccef56d7939144",
+            "position": 3,
+            "role": "tool",
+            "token_estimate": 354
+          }
+        ]
+      },
+      "paths": {
+        "artifact": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\stalled-run-recovery\\7f7b80f0cade49bd87eb55f6af20dcd2.json",
+        "replay": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\stalled-run-recovery\\7f7b80f0cade49bd87eb55f6af20dcd2.replay.json"
+      },
+      "trace": {
+        "temp_workspace": "D:\\openclaw\\opencloset\\evals\\tmp\\stalled-run-recovery-7f7b80f0\\workspace",
+        "fixture_dir": null,
+        "observed_files_read": [],
+        "observed_files_written": [],
+        "observed_commands": [
+          "definitely_not_a_real_command_xyz --version"
+        ],
+        "runtime_event_types": [
+          "run_queued",
+          "provider_routed",
+          "run_started",
+          "assistant_delta",
+          "tool_called",
+          "tool_call",
+          "usage",
+          "tool_result",
+          "run_governor_decision",
+          "run_governor_decision",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "assistant_delta",
+          "usage",
+          "assistant_final",
+          "run_completed"
+        ],
+        "session_events": [
+          {
+            "created_at": "2026-05-09T04:06:11.915197Z",
+            "data": {
+              "label": "eval:stalled_run_recovery",
+              "model": "qwen3.6-27b"
+            },
+            "id": "71796a430aef4f29b8ebc04a5cc871f1",
+            "run_id": null,
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "session_created"
+          },
+          {
+            "created_at": "2026-05-09T04:06:11.928351Z",
+            "data": {
+              "plan_id": "291e21d47b4449958aacff6a47fcb08a",
+              "previous_plan_id": null,
+              "reason": "bootstrap",
+              "title": "Session Plan"
+            },
+            "id": "98a941c435bb4fc1b9e9874024e829c1",
+            "run_id": null,
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "plan_activated"
+          },
+          {
+            "created_at": "2026-05-09T04:06:11.975200Z",
+            "data": {
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "turn_number": 1
+            },
+            "id": "f386360ad7a14e08ae32437f7e6ea903",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "run_queued"
+          },
+          {
+            "created_at": "2026-05-09T04:06:11.994491Z",
+            "data": {
+              "provider_capabilities": {
+                "frontier": false,
+                "latency_tier": "local",
+                "locality": "local",
+                "supports_audio_input": false,
+                "supports_tool_use": true,
+                "supports_vision": false
+              },
+              "requested_model": "qwen3.6-27b",
+              "requested_provider": "llamacpp",
+              "resolved_model": "qwen3.6-27b",
+              "resolved_provider": "llamacpp",
+              "route_reason": "session_provider_pinned",
+              "task_profile": {
+                "attachment_types": [],
+                "message_length": 186,
+                "needs_frontier_tools": true,
+                "requires_audio": false,
+                "requires_vision": false
+              },
+              "used_auto_routing": false
+            },
+            "id": "4390adfdacd64682a92540b117ef8f41",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "provider_routed"
+          },
+          {
+            "created_at": "2026-05-09T04:06:12.016881Z",
+            "data": {
+              "run_id": "70f5be77b07643d3a682aaff38629363",
+              "turn_number": 1
+            },
+            "id": "f1ac48a1013b4e6590d41b70a5e87528",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "run_started"
+          },
+          {
+            "created_at": "2026-05-09T04:06:34.682046Z",
+            "data": {
+              "text": "\n\n"
+            },
+            "id": "3915d073b4ca4fa7b99b682bfa1933b8",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:06:37.028548Z",
+            "data": {
+              "input": {
+                "command": "definitely_not_a_real_command_xyz --version"
+              },
+              "tool_id": "exec"
+            },
+            "id": "91907fabb0f74ac5aacbcbba315f1389",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "tool_called"
+          },
+          {
+            "created_at": "2026-05-09T04:06:37.032369Z",
+            "data": {
+              "input": {
+                "command": "definitely_not_a_real_command_xyz --version"
+              },
+              "tool_name": "exec"
+            },
+            "id": "d5d3dcb2a6f946f192c15876d9b3380a",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.tool_call"
+          },
+          {
+            "created_at": "2026-05-09T04:06:37.138245Z",
+            "data": {
+              "input_tokens": 2218,
+              "output_tokens": 1
+            },
+            "id": "4f108d4382e9417f80910e9579a833b2",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.usage"
+          },
+          {
+            "created_at": "2026-05-09T04:06:37.560319Z",
+            "data": {
+              "content": "Exit code: 1\nElapsed: 0.41s\nOutput:\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \nwas included, verify that the path is correct and try again.\nAt line:1 char:1\n+ definitely_not_a_real_command_xyz --version\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \n   Exception\n    + FullyQualifiedErrorId : CommandNotFoundException\n \n",
+              "error": "exit 1:\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \nwas included, verify that the path is correct and try again.\nAt line:1 char:1\n+ definitely_not_a_real_command_xyz --version\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \n   Exception\n    + FullyQualifiedErrorId : CommandNotFoundException",
+              "error_code": "exec.exit_nonzero",
+              "status": "execution_error",
+              "tool_id": "call_ba30e2afaa49",
+              "tool_name": "exec"
+            },
+            "id": "a13b680e86df448e939d801aa826844b",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.tool_result"
+          },
+          {
+            "created_at": "2026-05-09T04:06:37.564157Z",
+            "data": {
+              "snapshot": {
+                "blocked_strategies": {},
+                "facts": {
+                  "exec:definitely_not_a_real_command_xyz": [
+                    "Executable or entrypoint missing for command root 'definitely_not_a_real_command_xyz'."
+                  ]
+                },
+                "frozen_subgoals": [],
+                "pending_action_attempts": 0,
+                "pending_action_signature": "",
+                "pending_action_signature_repeats": 0,
+                "recovery_attempts": {},
+                "subgoal_attempts": {
+                  "exec:definitely_not_a_real_command_xyz": 1
+                }
+              }
+            },
+            "id": "debcd5911f0148009adcbe5dd8abb507",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "run_governor_decision"
+          },
+          {
+            "created_at": "2026-05-09T04:06:37.567443Z",
+            "data": {
+              "message": {
+                "content": "The last exec call confirmed the requested command is unavailable on this system. Do not broaden into installation, PATH edits, or replacement scripts. Answer the user directly in one sentence. Use the word 'unavailable' verbatim and the phrase 'no broader fix should be attempted' verbatim.",
+                "role": "user"
+              },
+              "snapshot": {
+                "blocked_strategies": {},
+                "facts": {
+                  "exec:definitely_not_a_real_command_xyz": [
+                    "Executable or entrypoint missing for command root 'definitely_not_a_real_command_xyz'."
+                  ]
+                },
+                "frozen_subgoals": [],
+                "pending_action_attempts": 0,
+                "pending_action_signature": "",
+                "pending_action_signature_repeats": 0,
+                "recovery_attempts": {
+                  "exec:definitely_not_a_real_command_xyz": 1
+                },
+                "subgoal_attempts": {
+                  "exec:definitely_not_a_real_command_xyz": 1
+                }
+              }
+            },
+            "id": "68b469ff95b64b6a9f4e43c47a7f1370",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "run_governor_decision"
+          },
+          {
+            "created_at": "2026-05-09T04:09:45.914665Z",
+            "data": {
+              "text": "\n\nThe"
+            },
+            "id": "fb0eb3effe9c4665a32e36907582c4e9",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.013640Z",
+            "data": {
+              "text": " command"
+            },
+            "id": "578803f414da4a7d84af4513373ac454",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.065210Z",
+            "data": {
+              "text": " `"
+            },
+            "id": "fe5735d2a71748e78e788a6436601075",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.114319Z",
+            "data": {
+              "text": "def"
+            },
+            "id": "a60af3c9bfc74070aec4abbefb90a772",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.163220Z",
+            "data": {
+              "text": "initely"
+            },
+            "id": "e7ebae623a17479c921568af15094199",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.214890Z",
+            "data": {
+              "text": "_not"
+            },
+            "id": "1b10195f19d241daa1762d588417f1d4",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.266767Z",
+            "data": {
+              "text": "_a"
+            },
+            "id": "29f7182188c24f9997b141230e556417",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.314178Z",
+            "data": {
+              "text": "_real"
+            },
+            "id": "7ddea65dfdae4bf6ae2d17d26ab18759",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.369405Z",
+            "data": {
+              "text": "_command"
+            },
+            "id": "bff3f8b6e2804c51a048c280ae431479",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.418022Z",
+            "data": {
+              "text": "_xyz"
+            },
+            "id": "6e38cb81f6ee4e019e60ffaa4ed4cc5f",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.472674Z",
+            "data": {
+              "text": "`"
+            },
+            "id": "bc3e78447f92455aba2da546f6da3521",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.520746Z",
+            "data": {
+              "text": " is"
+            },
+            "id": "a6fe7ad1406048ef846382e30fd45bdb",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.569806Z",
+            "data": {
+              "text": " unavailable"
+            },
+            "id": "a556a1f8912744c09517f6177c189d91",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.618130Z",
+            "data": {
+              "text": " on"
+            },
+            "id": "e1945b571aba4ef79e3968a89d8e2091",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.678689Z",
+            "data": {
+              "text": " this"
+            },
+            "id": "e44f8facb3174bde89fb5e29c161c1ab",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.722474Z",
+            "data": {
+              "text": " system"
+            },
+            "id": "d64c5049572f41f99864d22254a5b074",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.775219Z",
+            "data": {
+              "text": ","
+            },
+            "id": "d3f21cf023094a1ead8c2f755b2875f2",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.830700Z",
+            "data": {
+              "text": " and"
+            },
+            "id": "608a4fcd22664d47a21970668ee8ee14",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:46.880448Z",
+            "data": {
+              "text": " no"
+            },
+            "id": "fcd3478b1e784c4e96421588d04239c2",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:47.001366Z",
+            "data": {
+              "text": " broader"
+            },
+            "id": "1ed960d9ff2a4035ab2b439834736be4",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:47.045861Z",
+            "data": {
+              "text": " fix"
+            },
+            "id": "f1328066b8a74eefadb6a9ff0675644a",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:47.094664Z",
+            "data": {
+              "text": " should"
+            },
+            "id": "20ea22dd50944bc6aae072b90c62eaf1",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:47.140437Z",
+            "data": {
+              "text": " be"
+            },
+            "id": "94b939ffc9a642e0a7fe41319e921178",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:47.189575Z",
+            "data": {
+              "text": " attempted"
+            },
+            "id": "8627a92e33ca417087fcb6d6976742a1",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:47.237247Z",
+            "data": {
+              "text": "."
+            },
+            "id": "5d79013a1cf344d0968c2d07a89fbdd8",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_delta"
+          },
+          {
+            "created_at": "2026-05-09T04:09:47.296991Z",
+            "data": {
+              "input_tokens": 2797,
+              "output_tokens": 25
+            },
+            "id": "e05538cf953d48dbb12b208f634696d6",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.usage"
+          },
+          {
+            "created_at": "2026-05-09T04:09:47.303786Z",
+            "data": {
+              "final_text": "\n\nThe command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted.",
+              "finish_reason": "stop",
+              "status": "succeeded",
+              "transcript_persisted": true,
+              "transient_text": "\n\nThe command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted."
+            },
+            "id": "d044e1d55633458aaa4d71ee65dcb6c1",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "stream.assistant_final"
+          },
+          {
+            "created_at": "2026-05-09T04:09:47.316221Z",
+            "data": {
+              "duration_ms": 0
+            },
+            "id": "62404cbe384b46fb9baca9b4313ac3b9",
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+            "type": "run_completed"
+          }
+        ]
+      },
+      "messages": [
+        {
+          "archive_ready": false,
+          "archive_state": null,
+          "content": "First verify whether `definitely_not_a_real_command_xyz --version` exists. Then recover and answer in one sentence that the command is unavailable and no broader fix should be attempted.",
+          "created_at": "2026-05-09T04:06:11.971Z",
+          "id": "df22b27ef17047c6b95cfec15a7745f3",
+          "position": 1,
+          "role": "user",
+          "token_estimate": 46
+        },
+        {
+          "archive_ready": false,
+          "archive_state": null,
+          "content": "The command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted.",
+          "created_at": "2026-05-09T04:09:47.300Z",
+          "id": "05329731aee5474aa90aa33faebf5d9e",
+          "position": 2,
+          "role": "assistant",
+          "token_estimate": 29
+        },
+        {
+          "archive_ready": false,
+          "archive_state": null,
+          "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_ba30e2afaa49\\\", \\\"tool_name\\\": \\\"exec\\\", \\\"status\\\": \\\"execution_error\\\", \\\"content\\\": \\\"Exit code: 1\\\\nElapsed: 0.41s\\\\nOutput:\\\\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \\\\nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \\\\nwas included, verify that the path is correct and try again.\\\\nAt line:1 char:1\\\\n+ definitely_not_a_real_command_xyz --version\\\\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\\\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \\\\n   Exception\\\\n    + FullyQualifiedErrorId : CommandNotFoundException\\\\n \\\\n\\\", \\\"error\\\": \\\"exit 1:\\\\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \\\\nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \\\\nwas included, verify that the path is correct and try again.\\\\nAt line:1 char:1\\\\n+ definitely_not_a_real_command_xyz --version\\\\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\\\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \\\\n   Exception\\\\n    + FullyQualifiedErrorId : CommandNotFoundException\\\"}\"}}",
+          "created_at": "2026-05-09T04:09:47.306Z",
+          "id": "76137f6000bf4c7aa8ccef56d7939144",
+          "position": 3,
+          "role": "tool",
+          "token_estimate": 354
+        }
+      ],
+      "session_events": [
+        {
+          "created_at": "2026-05-09T04:06:11.915197Z",
+          "data": {
+            "label": "eval:stalled_run_recovery",
+            "model": "qwen3.6-27b"
+          },
+          "id": "71796a430aef4f29b8ebc04a5cc871f1",
+          "run_id": null,
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "session_created"
+        },
+        {
+          "created_at": "2026-05-09T04:06:11.928351Z",
+          "data": {
+            "plan_id": "291e21d47b4449958aacff6a47fcb08a",
+            "previous_plan_id": null,
+            "reason": "bootstrap",
+            "title": "Session Plan"
+          },
+          "id": "98a941c435bb4fc1b9e9874024e829c1",
+          "run_id": null,
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "plan_activated"
+        },
+        {
+          "created_at": "2026-05-09T04:06:11.975200Z",
+          "data": {
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "turn_number": 1
+          },
+          "id": "f386360ad7a14e08ae32437f7e6ea903",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "run_queued"
+        },
+        {
+          "created_at": "2026-05-09T04:06:11.994491Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 186,
+              "needs_frontier_tools": true,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "4390adfdacd64682a92540b117ef8f41",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-09T04:06:12.016881Z",
+          "data": {
+            "run_id": "70f5be77b07643d3a682aaff38629363",
+            "turn_number": 1
+          },
+          "id": "f1ac48a1013b4e6590d41b70a5e87528",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-09T04:06:34.682046Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "3915d073b4ca4fa7b99b682bfa1933b8",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:06:37.028548Z",
+          "data": {
+            "input": {
+              "command": "definitely_not_a_real_command_xyz --version"
+            },
+            "tool_id": "exec"
+          },
+          "id": "91907fabb0f74ac5aacbcbba315f1389",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-09T04:06:37.032369Z",
+          "data": {
+            "input": {
+              "command": "definitely_not_a_real_command_xyz --version"
+            },
+            "tool_name": "exec"
+          },
+          "id": "d5d3dcb2a6f946f192c15876d9b3380a",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.tool_call"
+        },
+        {
+          "created_at": "2026-05-09T04:06:37.138245Z",
+          "data": {
+            "input_tokens": 2218,
+            "output_tokens": 1
+          },
+          "id": "4f108d4382e9417f80910e9579a833b2",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.usage"
+        },
+        {
+          "created_at": "2026-05-09T04:06:37.560319Z",
+          "data": {
+            "content": "Exit code: 1\nElapsed: 0.41s\nOutput:\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \nwas included, verify that the path is correct and try again.\nAt line:1 char:1\n+ definitely_not_a_real_command_xyz --version\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \n   Exception\n    + FullyQualifiedErrorId : CommandNotFoundException\n \n",
+            "error": "exit 1:\ndefinitely_not_a_real_command_xyz : The term 'definitely_not_a_real_command_xyz' is not recognized as the \nname of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path \nwas included, verify that the path is correct and try again.\nAt line:1 char:1\n+ definitely_not_a_real_command_xyz --version\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (definitely_not_a_real_command_xyz:String) [], CommandNotFound \n   Exception\n    + FullyQualifiedErrorId : CommandNotFoundException",
+            "error_code": "exec.exit_nonzero",
+            "status": "execution_error",
+            "tool_id": "call_ba30e2afaa49",
+            "tool_name": "exec"
+          },
+          "id": "a13b680e86df448e939d801aa826844b",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.tool_result"
+        },
+        {
+          "created_at": "2026-05-09T04:06:37.564157Z",
+          "data": {
+            "snapshot": {
+              "blocked_strategies": {},
+              "facts": {
+                "exec:definitely_not_a_real_command_xyz": [
+                  "Executable or entrypoint missing for command root 'definitely_not_a_real_command_xyz'."
+                ]
+              },
+              "frozen_subgoals": [],
+              "pending_action_attempts": 0,
+              "pending_action_signature": "",
+              "pending_action_signature_repeats": 0,
+              "recovery_attempts": {},
+              "subgoal_attempts": {
+                "exec:definitely_not_a_real_command_xyz": 1
+              }
+            }
+          },
+          "id": "debcd5911f0148009adcbe5dd8abb507",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "run_governor_decision"
+        },
+        {
+          "created_at": "2026-05-09T04:06:37.567443Z",
+          "data": {
+            "message": {
+              "content": "The last exec call confirmed the requested command is unavailable on this system. Do not broaden into installation, PATH edits, or replacement scripts. Answer the user directly in one sentence. Use the word 'unavailable' verbatim and the phrase 'no broader fix should be attempted' verbatim.",
+              "role": "user"
+            },
+            "snapshot": {
+              "blocked_strategies": {},
+              "facts": {
+                "exec:definitely_not_a_real_command_xyz": [
+                  "Executable or entrypoint missing for command root 'definitely_not_a_real_command_xyz'."
+                ]
+              },
+              "frozen_subgoals": [],
+              "pending_action_attempts": 0,
+              "pending_action_signature": "",
+              "pending_action_signature_repeats": 0,
+              "recovery_attempts": {
+                "exec:definitely_not_a_real_command_xyz": 1
+              },
+              "subgoal_attempts": {
+                "exec:definitely_not_a_real_command_xyz": 1
+              }
+            }
+          },
+          "id": "68b469ff95b64b6a9f4e43c47a7f1370",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "run_governor_decision"
+        },
+        {
+          "created_at": "2026-05-09T04:09:45.914665Z",
+          "data": {
+            "text": "\n\nThe"
+          },
+          "id": "fb0eb3effe9c4665a32e36907582c4e9",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.013640Z",
+          "data": {
+            "text": " command"
+          },
+          "id": "578803f414da4a7d84af4513373ac454",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.065210Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "fe5735d2a71748e78e788a6436601075",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.114319Z",
+          "data": {
+            "text": "def"
+          },
+          "id": "a60af3c9bfc74070aec4abbefb90a772",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.163220Z",
+          "data": {
+            "text": "initely"
+          },
+          "id": "e7ebae623a17479c921568af15094199",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.214890Z",
+          "data": {
+            "text": "_not"
+          },
+          "id": "1b10195f19d241daa1762d588417f1d4",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.266767Z",
+          "data": {
+            "text": "_a"
+          },
+          "id": "29f7182188c24f9997b141230e556417",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.314178Z",
+          "data": {
+            "text": "_real"
+          },
+          "id": "7ddea65dfdae4bf6ae2d17d26ab18759",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.369405Z",
+          "data": {
+            "text": "_command"
+          },
+          "id": "bff3f8b6e2804c51a048c280ae431479",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.418022Z",
+          "data": {
+            "text": "_xyz"
+          },
+          "id": "6e38cb81f6ee4e019e60ffaa4ed4cc5f",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.472674Z",
+          "data": {
+            "text": "`"
+          },
+          "id": "bc3e78447f92455aba2da546f6da3521",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.520746Z",
+          "data": {
+            "text": " is"
+          },
+          "id": "a6fe7ad1406048ef846382e30fd45bdb",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.569806Z",
+          "data": {
+            "text": " unavailable"
+          },
+          "id": "a556a1f8912744c09517f6177c189d91",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.618130Z",
+          "data": {
+            "text": " on"
+          },
+          "id": "e1945b571aba4ef79e3968a89d8e2091",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.678689Z",
+          "data": {
+            "text": " this"
+          },
+          "id": "e44f8facb3174bde89fb5e29c161c1ab",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.722474Z",
+          "data": {
+            "text": " system"
+          },
+          "id": "d64c5049572f41f99864d22254a5b074",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.775219Z",
+          "data": {
+            "text": ","
+          },
+          "id": "d3f21cf023094a1ead8c2f755b2875f2",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.830700Z",
+          "data": {
+            "text": " and"
+          },
+          "id": "608a4fcd22664d47a21970668ee8ee14",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:46.880448Z",
+          "data": {
+            "text": " no"
+          },
+          "id": "fcd3478b1e784c4e96421588d04239c2",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:47.001366Z",
+          "data": {
+            "text": " broader"
+          },
+          "id": "1ed960d9ff2a4035ab2b439834736be4",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:47.045861Z",
+          "data": {
+            "text": " fix"
+          },
+          "id": "f1328066b8a74eefadb6a9ff0675644a",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:47.094664Z",
+          "data": {
+            "text": " should"
+          },
+          "id": "20ea22dd50944bc6aae072b90c62eaf1",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:47.140437Z",
+          "data": {
+            "text": " be"
+          },
+          "id": "94b939ffc9a642e0a7fe41319e921178",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:47.189575Z",
+          "data": {
+            "text": " attempted"
+          },
+          "id": "8627a92e33ca417087fcb6d6976742a1",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:47.237247Z",
+          "data": {
+            "text": "."
+          },
+          "id": "5d79013a1cf344d0968c2d07a89fbdd8",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_delta"
+        },
+        {
+          "created_at": "2026-05-09T04:09:47.296991Z",
+          "data": {
+            "input_tokens": 2797,
+            "output_tokens": 25
+          },
+          "id": "e05538cf953d48dbb12b208f634696d6",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.usage"
+        },
+        {
+          "created_at": "2026-05-09T04:09:47.303786Z",
+          "data": {
+            "final_text": "\n\nThe command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted.",
+            "finish_reason": "stop",
+            "status": "succeeded",
+            "transcript_persisted": true,
+            "transient_text": "\n\nThe command `definitely_not_a_real_command_xyz` is unavailable on this system, and no broader fix should be attempted."
+          },
+          "id": "d044e1d55633458aaa4d71ee65dcb6c1",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "stream.assistant_final"
+        },
+        {
+          "created_at": "2026-05-09T04:09:47.316221Z",
+          "data": {
+            "duration_ms": 0
+          },
+          "id": "62404cbe384b46fb9baca9b4313ac3b9",
+          "run_id": "70f5be77b07643d3a682aaff38629363",
+          "session_id": "ae75f4fe39904db7b0e8cd99165024b1",
+          "type": "run_completed"
+        }
+      ]
+    }
+  ]
+}

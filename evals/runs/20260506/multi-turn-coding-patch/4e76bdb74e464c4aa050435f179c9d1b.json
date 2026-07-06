@@ -1,0 +1,2097 @@
+{
+  "schema_version": "eval-run.v1",
+  "artifact_id": "4e76bdb74e464c4aa050435f179c9d1b",
+  "created_at": "2026-05-06T18:57:13.257361Z",
+  "api_base_url": "http://127.0.0.1:5067/api",
+  "scenario": {
+    "id": "multi_turn_coding_patch",
+    "title": "Patch a scratchpad file through the real harness",
+    "category": "multi_turn_coding",
+    "goal": "Verify a simple end-to-end coding change can be completed inside a sandbox file.",
+    "tags": [
+      "coding",
+      "edit",
+      "sandbox"
+    ],
+    "path": "D:\\openclaw\\opencloset\\evals\\scenarios\\multi_turn_coding_patch.yaml",
+    "notes_path": null
+  },
+  "profile": {
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "harness_profile": "default"
+  },
+  "baseline": {
+    "git_commit": "5a0e9e5a047522fe93a346aabc19aba0f4882284",
+    "harness_profile": "default",
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "scenario_id": "multi_turn_coding_patch",
+    "category": "multi_turn_coding"
+  },
+  "session": {
+    "id": "12a0901d6b864efb9161302cd2f2aa5d"
+  },
+  "summary": {
+    "status": "succeeded",
+    "finish_reason": "stop",
+    "hard_pass": true,
+    "check_pass_count": 3,
+    "check_fail_count": 0,
+    "final_text_preview": "Edit done. `TODO:placeholder` has been replaced with `TODO:implemented-by-eval`, and the second line (`status=not-started`) is unchanged.",
+    "failure_taxonomy": []
+  },
+  "turns": [
+    {
+      "turn_index": 1,
+      "role": "user",
+      "content": "Edit `D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt` so `TODO:placeholder` becomes `TODO:implemented-by-eval`, keep the second line, and then tell me the edit is done.",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "message_id": "77c01449241e4c1ea6f40df6081df98b",
+      "status": "succeeded",
+      "finish_reason": "stop",
+      "final_text": "Edit done. `TODO:placeholder` has been replaced with `TODO:implemented-by-eval`, and the second line (`status=not-started`) is unchanged.",
+      "transient_text": "\n\nI'll read the file first to see its current content, then make the edit.\n\nNow I'll make the edit to replace `TODO:placeholder` with `TODO:implemented-by-eval`.\n\nEdit done. `TODO:placeholder` has been replaced with `TODO:implemented-by-eval`, and the second line (`status=not-started`) is unchanged.",
+      "error": "",
+      "latency_ms": 12217,
+      "input_tokens": 2817,
+      "output_tokens": 75,
+      "tool_results": [
+        {
+          "call_id": "call_d30f80d79cdd",
+          "content": "TODO:placeholder\nstatus=not-started\n",
+          "error": null,
+          "error_code": null,
+          "status": "success",
+          "token_estimate": 9,
+          "tool_name": "read"
+        },
+        {
+          "call_id": "call_59a404701c78",
+          "content": "+1 -1 evals/fixtures/scratchpad/todo.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\fixtures\\scratchpad\\todo.txt",
+          "error": null,
+          "error_code": null,
+          "status": "success",
+          "token_estimate": 29,
+          "tool_name": "edit"
+        }
+      ],
+      "provider_route": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 179,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "run_events": [
+        {
+          "created_at": "2026-05-06T18:57:13.308955Z",
+          "data": {
+            "run_id": "91319e56d155455192117b112465cbf8",
+            "turn_number": 1
+          },
+          "id": "38cdad09627143bb8724edf1062c9a41",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "run_queued"
+        },
+        {
+          "created_at": "2026-05-06T18:57:13.331050Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 179,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "18dc054777af4223bd4a49fadd5049ee",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-06T18:57:13.360924Z",
+          "data": {
+            "run_id": "91319e56d155455192117b112465cbf8",
+            "turn_number": 1
+          },
+          "id": "6d90e6b8c4cc4e2f8df96f3071a47f0f",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.083555Z",
+          "data": {
+            "text": "\n\nI"
+          },
+          "id": "4a59701cfd644432a70ca3be8fadafe8",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.139880Z",
+          "data": {
+            "text": "'ll"
+          },
+          "id": "a436c1865f9748b7ae4750e5482a242b",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.193835Z",
+          "data": {
+            "text": " read"
+          },
+          "id": "19d885c79db347c3a6e716f6e9004ce1",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.241082Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "77c0841f1f664aeabb6a11a88dda3a5b",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.286348Z",
+          "data": {
+            "text": " file"
+          },
+          "id": "9ca56c27071e4a3dbc631d6c561dbf5b",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.337349Z",
+          "data": {
+            "text": " first"
+          },
+          "id": "848e90b5ffb0471cb906ae488d964362",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.385676Z",
+          "data": {
+            "text": " to"
+          },
+          "id": "6a45c8d7073e45d1ba721fb45be40729",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.432566Z",
+          "data": {
+            "text": " see"
+          },
+          "id": "d7f227d268264c82a3ab4491f29c909c",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.479551Z",
+          "data": {
+            "text": " its"
+          },
+          "id": "237a6bdcddcc4b478c55f6588262f0f0",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.528022Z",
+          "data": {
+            "text": " current"
+          },
+          "id": "6a8fc8569ebb4ae9a55f94712147d8f3",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.575928Z",
+          "data": {
+            "text": " content"
+          },
+          "id": "e235a5f5f1e0459a82671247c2396dc2",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.625926Z",
+          "data": {
+            "text": ","
+          },
+          "id": "a6fa150ccb0f4919ae99d005761062bf",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.672152Z",
+          "data": {
+            "text": " then"
+          },
+          "id": "53107e4ec87e4615893dcc1e60ab1bf7",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.717970Z",
+          "data": {
+            "text": " make"
+          },
+          "id": "42e2c962219a4219b0135f22093f8b05",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.767487Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "d4cb41f1b47c4992a7aa89eb1e270978",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.819577Z",
+          "data": {
+            "text": " edit"
+          },
+          "id": "63015f63e6c74c97bd0e90f569e62dc4",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.867167Z",
+          "data": {
+            "text": "."
+          },
+          "id": "bd9e0da63b4a43e290e2eb6796c36198",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:14.919104Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "574d5e2bf5eb44aaaf49e2c58a87d594",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:16.894037Z",
+          "data": {
+            "input": {
+              "path": "D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt"
+            },
+            "tool_id": "read"
+          },
+          "id": "b9a2305fc6094a8ba5517f1f71636068",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-06T18:57:16.897712Z",
+          "data": {
+            "input": {
+              "path": "D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt"
+            },
+            "tool_name": "read"
+          },
+          "id": "c36759eb2a5f49e1826f2081ecf9112b",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "tool_call"
+        },
+        {
+          "created_at": "2026-05-06T18:57:16.989000Z",
+          "data": {
+            "input_tokens": 2596,
+            "output_tokens": 18
+          },
+          "id": "bf9effe743404cd6868fb81719584ccb",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "usage"
+        },
+        {
+          "created_at": "2026-05-06T18:57:16.994523Z",
+          "data": {
+            "content": "TODO:placeholder\nstatus=not-started\n",
+            "status": "success",
+            "tool_id": "call_d30f80d79cdd",
+            "tool_name": "read"
+          },
+          "id": "fb7c97af44bd457dbae174e486bbc047",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "tool_result"
+        },
+        {
+          "created_at": "2026-05-06T18:57:17.855033Z",
+          "data": {
+            "text": "\n\nNow"
+          },
+          "id": "4fba07e31b324858af95de469ec53aad",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:17.910378Z",
+          "data": {
+            "text": " I"
+          },
+          "id": "a11dbedb04b14d438b42a1da7e6da7b6",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:17.962900Z",
+          "data": {
+            "text": "'ll"
+          },
+          "id": "d194247628fc40ab857ce0ccf427923d",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.010654Z",
+          "data": {
+            "text": " make"
+          },
+          "id": "48783b084d0e40e282fc0c94f8ffc9ec",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.060204Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "83bc8a0599d4442997c97e4e059498d1",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.108229Z",
+          "data": {
+            "text": " edit"
+          },
+          "id": "f21f0eb51e4642a6b0bf9cd33e73a149",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.158333Z",
+          "data": {
+            "text": " to"
+          },
+          "id": "0147d6b9dc63498fa117af90be0b112e",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.207405Z",
+          "data": {
+            "text": " replace"
+          },
+          "id": "48f3b33a3f114a71973708bbef528b1b",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.256828Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "0848f13ffcc7462b8b4b41e09c7d67f0",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.306018Z",
+          "data": {
+            "text": "TODO"
+          },
+          "id": "397d81221c344bdfae2fce9ddfd72a44",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.354614Z",
+          "data": {
+            "text": ":"
+          },
+          "id": "15cb557a9694470a9aeb69ea53241675",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.400879Z",
+          "data": {
+            "text": "placeholder"
+          },
+          "id": "b1e949f29226434095f30aeaba47ae29",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.448107Z",
+          "data": {
+            "text": "`"
+          },
+          "id": "72276d7c5ac34e589302b6957e19ed34",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.496150Z",
+          "data": {
+            "text": " with"
+          },
+          "id": "755707aeddf0466c9eb0e35a9c9934fc",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.543307Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "4a87c71c5bf243a09a456c2016bcfee7",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.590737Z",
+          "data": {
+            "text": "TODO"
+          },
+          "id": "43206fe2d3264ba488d45fb7b1033772",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.640810Z",
+          "data": {
+            "text": ":"
+          },
+          "id": "51ba26b916d945e0b2fc2fa207c9daa8",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.689862Z",
+          "data": {
+            "text": "implemented"
+          },
+          "id": "94a4b8e036ef433193f80213ce33efd8",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.736986Z",
+          "data": {
+            "text": "-by"
+          },
+          "id": "014c1175c40b4b42be063548e3731cda",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.783635Z",
+          "data": {
+            "text": "-e"
+          },
+          "id": "d828822c918743d385d45aede172a3cc",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.835363Z",
+          "data": {
+            "text": "val"
+          },
+          "id": "974f6da1960c456386f957aef4edc5ca",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.880268Z",
+          "data": {
+            "text": "`."
+          },
+          "id": "a9c4fde9f5f94ec8b1de9994f57e2f4e",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:18.927757Z",
+          "data": {
+            "text": "\n\n"
+          },
+          "id": "a42f1e7d3d4d4a709a6348a5d0cb69f0",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:22.621765Z",
+          "data": {
+            "input": {
+              "edits": [
+                {
+                  "newText": "TODO:implemented-by-eval",
+                  "oldText": "TODO:placeholder"
+                }
+              ],
+              "path": "D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt"
+            },
+            "tool_id": "edit"
+          },
+          "id": "1266f8a762354c09bc99888e0aa85c46",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "tool_called"
+        },
+        {
+          "created_at": "2026-05-06T18:57:22.625584Z",
+          "data": {
+            "input": {
+              "edits": [
+                {
+                  "newText": "TODO:implemented-by-eval",
+                  "oldText": "TODO:placeholder"
+                }
+              ],
+              "path": "D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt"
+            },
+            "tool_name": "edit"
+          },
+          "id": "37fb0d3b404b4591b746478d789ffe20",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "tool_call"
+        },
+        {
+          "created_at": "2026-05-06T18:57:22.716758Z",
+          "data": {
+            "input_tokens": 2678,
+            "output_tokens": 23
+          },
+          "id": "5cb69267edfa4420ba5994933551bf82",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "usage"
+        },
+        {
+          "created_at": "2026-05-06T18:57:22.722515Z",
+          "data": {
+            "content": "+1 -1 evals/fixtures/scratchpad/todo.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\fixtures\\scratchpad\\todo.txt",
+            "status": "success",
+            "tool_id": "call_59a404701c78",
+            "tool_name": "edit"
+          },
+          "id": "52e43a2f395e4215b45bbfb4324c9478",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "tool_result"
+        },
+        {
+          "created_at": "2026-05-06T18:57:23.815467Z",
+          "data": {
+            "text": "\n\nEdit"
+          },
+          "id": "64f9f8564f3a47dc8feea96ce8ea73fa",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:23.869561Z",
+          "data": {
+            "text": " done"
+          },
+          "id": "1cda2a4d737a4b94b1d9efdd1b07d09f",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:23.921234Z",
+          "data": {
+            "text": "."
+          },
+          "id": "00beb2cea1de43209b491d89e9708735",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:23.970053Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "ef920802453b48efab4fee731befe15d",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.014681Z",
+          "data": {
+            "text": "TODO"
+          },
+          "id": "60977e2403064777bef0d3779cc796ab",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.063485Z",
+          "data": {
+            "text": ":"
+          },
+          "id": "ec1f948a774c4ca1ae8b6d41165d9f00",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.112114Z",
+          "data": {
+            "text": "placeholder"
+          },
+          "id": "5d26459c2a0248c0ad04085d04db49e7",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.162027Z",
+          "data": {
+            "text": "`"
+          },
+          "id": "2f130b6dde5444bd954f06b98af6846b",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.210212Z",
+          "data": {
+            "text": " has"
+          },
+          "id": "af2a1974720749deb6a7c42f9991ad0e",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.259607Z",
+          "data": {
+            "text": " been"
+          },
+          "id": "444a5333158b4b55901463f87b95dac2",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.308594Z",
+          "data": {
+            "text": " replaced"
+          },
+          "id": "870dc616686446e8816bdca7507e1018",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.357212Z",
+          "data": {
+            "text": " with"
+          },
+          "id": "50208ca1b2154b89adda864d6b0bc319",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.407515Z",
+          "data": {
+            "text": " `"
+          },
+          "id": "12d61040e1274832a988caf486715da8",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.455545Z",
+          "data": {
+            "text": "TODO"
+          },
+          "id": "9ebfd56416534489991b59c0589c9697",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.503549Z",
+          "data": {
+            "text": ":"
+          },
+          "id": "0b5bbdf1991846b98c287af397768ca3",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.551485Z",
+          "data": {
+            "text": "implemented"
+          },
+          "id": "c94aa957e673472b85c7527ae256a33d",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.601530Z",
+          "data": {
+            "text": "-by"
+          },
+          "id": "a580643ffd314e7eba3ddec788ed6c0e",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.649154Z",
+          "data": {
+            "text": "-e"
+          },
+          "id": "5663f6dee96c44df91be9049d2c2415b",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.698158Z",
+          "data": {
+            "text": "val"
+          },
+          "id": "b9c9b640c4914543b1fa54d98c1af2fe",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.747227Z",
+          "data": {
+            "text": "`,"
+          },
+          "id": "ef37d7b7373547b5b1411aba8cc280eb",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.796351Z",
+          "data": {
+            "text": " and"
+          },
+          "id": "01fc6a0edb43499ea34cfcca760b8c64",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.847891Z",
+          "data": {
+            "text": " the"
+          },
+          "id": "a4dec7ddd9da4f92b4a8161c17715633",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.897448Z",
+          "data": {
+            "text": " second"
+          },
+          "id": "746bab9a17be41fcaad61be2adf8c42d",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.945591Z",
+          "data": {
+            "text": " line"
+          },
+          "id": "e1ecdc2e3587474697a2284ec3aace05",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:24.995184Z",
+          "data": {
+            "text": " (`"
+          },
+          "id": "a9194c7ea06a4a9bb7151d8f4cbf9909",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.043697Z",
+          "data": {
+            "text": "status"
+          },
+          "id": "4c2ca2f49acf4b459b750c9a1e8781a4",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.092456Z",
+          "data": {
+            "text": "="
+          },
+          "id": "eeddbe88291445f2a6a2d1744ac939ec",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.140768Z",
+          "data": {
+            "text": "not"
+          },
+          "id": "1877e23985aa42b7a639f517dc55125b",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.195972Z",
+          "data": {
+            "text": "-start"
+          },
+          "id": "ba18564584874d5a950db0745e681236",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.248942Z",
+          "data": {
+            "text": "ed"
+          },
+          "id": "bd1385ca58044aee9127b5b8cb2c060d",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.298828Z",
+          "data": {
+            "text": "`)"
+          },
+          "id": "4fc80faa28a2401ea6054da248a560ab",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.347702Z",
+          "data": {
+            "text": " is"
+          },
+          "id": "30e588e3ec994654b72597c556296255",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.397380Z",
+          "data": {
+            "text": " unchanged"
+          },
+          "id": "663d750141ba41d99af4d7251ca5f24b",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.446053Z",
+          "data": {
+            "text": "."
+          },
+          "id": "d7bb1429c7e5461f94a88f96367bf1a2",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_delta"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.496348Z",
+          "data": {
+            "input_tokens": 2784,
+            "output_tokens": 34
+          },
+          "id": "72941e9a64f44a54b5518dc3d5ccf250",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "usage"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.503020Z",
+          "data": {
+            "final_text": "\n\nEdit done. `TODO:placeholder` has been replaced with `TODO:implemented-by-eval`, and the second line (`status=not-started`) is unchanged.",
+            "finish_reason": "stop",
+            "status": "succeeded",
+            "transcript_persisted": true,
+            "transient_text": "\n\nI'll read the file first to see its current content, then make the edit.\n\nNow I'll make the edit to replace `TODO:placeholder` with `TODO:implemented-by-eval`.\n\nEdit done. `TODO:placeholder` has been replaced with `TODO:implemented-by-eval`, and the second line (`status=not-started`) is unchanged."
+          },
+          "id": "345431e3c46444468ffdb79cba92e2db",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "assistant_final"
+        },
+        {
+          "created_at": "2026-05-06T18:57:25.518979Z",
+          "data": {
+            "duration_ms": 0
+          },
+          "id": "41329e1921474116862f723d8ab5d63c",
+          "run_id": "91319e56d155455192117b112465cbf8",
+          "type": "run_completed"
+        }
+      ],
+      "stream_events": []
+    }
+  ],
+  "checks": [
+    {
+      "type": "status_is",
+      "passed": true,
+      "details": "expected succeeded, got succeeded",
+      "turn": null
+    },
+    {
+      "type": "expected_file_changed",
+      "passed": true,
+      "details": "expected file hash to change for D:\\openclaw\\opencloset\\evals\\fixtures\\scratchpad\\todo.txt",
+      "turn": null
+    },
+    {
+      "type": "final_text_contains",
+      "passed": true,
+      "details": "expected final text to contain 'done'",
+      "turn": null
+    }
+  ],
+  "metrics": {
+    "turn_count": 1,
+    "latency_ms_total": 12217,
+    "latency_ms_avg": 12217,
+    "input_tokens_total": 2817,
+    "output_tokens_total": 75,
+    "tool_call_count": 2
+  },
+  "judge": {
+    "enabled": false,
+    "status": "disabled",
+    "model": "qwen3.6-27b",
+    "rubric": []
+  },
+  "self_critique": {
+    "enabled": false,
+    "status": "disabled",
+    "model": "qwen3.6-27b"
+  },
+  "replay": {
+    "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\multi_turn_coding_patch.yaml",
+    "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+    "turns": [
+      {
+        "role": "user",
+        "content": "Edit `D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt` so `TODO:placeholder` becomes `TODO:implemented-by-eval`, keep the second line, and then tell me the edit is done.",
+        "run_id": "91319e56d155455192117b112465cbf8",
+        "tool_results": [
+          {
+            "call_id": "call_d30f80d79cdd",
+            "content": "TODO:placeholder\nstatus=not-started\n",
+            "error": null,
+            "error_code": null,
+            "status": "success",
+            "token_estimate": 9,
+            "tool_name": "read"
+          },
+          {
+            "call_id": "call_59a404701c78",
+            "content": "+1 -1 evals/fixtures/scratchpad/todo.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\fixtures\\scratchpad\\todo.txt",
+            "error": null,
+            "error_code": null,
+            "status": "success",
+            "token_estimate": 29,
+            "tool_name": "edit"
+          }
+        ]
+      }
+    ],
+    "messages": [
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "Edit `D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt` so `TODO:placeholder` becomes `TODO:implemented-by-eval`, keep the second line, and then tell me the edit is done.",
+        "created_at": "2026-05-06T18:57:13.305Z",
+        "id": "77c01449241e4c1ea6f40df6081df98b",
+        "position": 1,
+        "role": "user",
+        "token_estimate": 44
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "Edit done. `TODO:placeholder` has been replaced with `TODO:implemented-by-eval`, and the second line (`status=not-started`) is unchanged.",
+        "created_at": "2026-05-06T18:57:25.499Z",
+        "id": "51bd0e58fb9b488e9f519dfcd664e714",
+        "position": 2,
+        "role": "assistant",
+        "token_estimate": 45
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_d30f80d79cdd\\\", \\\"tool_name\\\": \\\"read\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"TODO:placeholder\\\\nstatus=not-started\\\\n\\\", \\\"error\\\": null}\"}}",
+        "created_at": "2026-05-06T18:57:25.505Z",
+        "id": "ecd4b8190d424cdf939a91a241259611",
+        "position": 3,
+        "role": "tool",
+        "token_estimate": 63
+      },
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_59a404701c78\\\", \\\"tool_name\\\": \\\"edit\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"+1 -1 evals/fixtures/scratchpad/todo.txt\\\\nApplied 1 edit(s) to D:\\\\\\\\openclaw\\\\\\\\opencloset\\\\\\\\evals\\\\\\\\fixtures\\\\\\\\scratchpad\\\\\\\\todo.txt\\\", \\\"error\\\": null}\"}}",
+        "created_at": "2026-05-06T18:57:25.509Z",
+        "id": "f0a6b5ba3d7f4f199aa10f16f916d7e7",
+        "position": 4,
+        "role": "tool",
+        "token_estimate": 88
+      }
+    ]
+  },
+  "paths": {
+    "artifact": "D:\\openclaw\\opencloset\\evals\\runs\\20260506\\multi-turn-coding-patch\\4e76bdb74e464c4aa050435f179c9d1b.json",
+    "replay": "D:\\openclaw\\opencloset\\evals\\runs\\20260506\\multi-turn-coding-patch\\4e76bdb74e464c4aa050435f179c9d1b.replay.json"
+  },
+  "messages": [
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Edit `D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt` so `TODO:placeholder` becomes `TODO:implemented-by-eval`, keep the second line, and then tell me the edit is done.",
+      "created_at": "2026-05-06T18:57:13.305Z",
+      "id": "77c01449241e4c1ea6f40df6081df98b",
+      "position": 1,
+      "role": "user",
+      "token_estimate": 44
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Edit done. `TODO:placeholder` has been replaced with `TODO:implemented-by-eval`, and the second line (`status=not-started`) is unchanged.",
+      "created_at": "2026-05-06T18:57:25.499Z",
+      "id": "51bd0e58fb9b488e9f519dfcd664e714",
+      "position": 2,
+      "role": "assistant",
+      "token_estimate": 45
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_d30f80d79cdd\\\", \\\"tool_name\\\": \\\"read\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"TODO:placeholder\\\\nstatus=not-started\\\\n\\\", \\\"error\\\": null}\"}}",
+      "created_at": "2026-05-06T18:57:25.505Z",
+      "id": "ecd4b8190d424cdf939a91a241259611",
+      "position": 3,
+      "role": "tool",
+      "token_estimate": 63
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_59a404701c78\\\", \\\"tool_name\\\": \\\"edit\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"+1 -1 evals/fixtures/scratchpad/todo.txt\\\\nApplied 1 edit(s) to D:\\\\\\\\openclaw\\\\\\\\opencloset\\\\\\\\evals\\\\\\\\fixtures\\\\\\\\scratchpad\\\\\\\\todo.txt\\\", \\\"error\\\": null}\"}}",
+      "created_at": "2026-05-06T18:57:25.509Z",
+      "id": "f0a6b5ba3d7f4f199aa10f16f916d7e7",
+      "position": 4,
+      "role": "tool",
+      "token_estimate": 88
+    }
+  ],
+  "session_events": [
+    {
+      "created_at": "2026-05-06T18:57:13.267620Z",
+      "data": {
+        "label": "eval:multi_turn_coding_patch",
+        "model": "qwen3.6-27b"
+      },
+      "id": "1aa1fe72455849efbfe37f1a24624555",
+      "run_id": null,
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "session_created"
+    },
+    {
+      "created_at": "2026-05-06T18:57:13.280413Z",
+      "data": {
+        "plan_id": "b4d8a416eaa24c09bc331fe95abddd6e",
+        "previous_plan_id": null,
+        "reason": "bootstrap",
+        "title": "Session Plan"
+      },
+      "id": "751a76493f6144c28548fc209c00038d",
+      "run_id": null,
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "plan_activated"
+    },
+    {
+      "created_at": "2026-05-06T18:57:13.308955Z",
+      "data": {
+        "run_id": "91319e56d155455192117b112465cbf8",
+        "turn_number": 1
+      },
+      "id": "38cdad09627143bb8724edf1062c9a41",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "run_queued"
+    },
+    {
+      "created_at": "2026-05-06T18:57:13.331050Z",
+      "data": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 179,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "id": "18dc054777af4223bd4a49fadd5049ee",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "provider_routed"
+    },
+    {
+      "created_at": "2026-05-06T18:57:13.360924Z",
+      "data": {
+        "run_id": "91319e56d155455192117b112465cbf8",
+        "turn_number": 1
+      },
+      "id": "6d90e6b8c4cc4e2f8df96f3071a47f0f",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "run_started"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.083555Z",
+      "data": {
+        "text": "\n\nI"
+      },
+      "id": "4a59701cfd644432a70ca3be8fadafe8",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.139880Z",
+      "data": {
+        "text": "'ll"
+      },
+      "id": "a436c1865f9748b7ae4750e5482a242b",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.193835Z",
+      "data": {
+        "text": " read"
+      },
+      "id": "19d885c79db347c3a6e716f6e9004ce1",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.241082Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "77c0841f1f664aeabb6a11a88dda3a5b",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.286348Z",
+      "data": {
+        "text": " file"
+      },
+      "id": "9ca56c27071e4a3dbc631d6c561dbf5b",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.337349Z",
+      "data": {
+        "text": " first"
+      },
+      "id": "848e90b5ffb0471cb906ae488d964362",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.385676Z",
+      "data": {
+        "text": " to"
+      },
+      "id": "6a45c8d7073e45d1ba721fb45be40729",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.432566Z",
+      "data": {
+        "text": " see"
+      },
+      "id": "d7f227d268264c82a3ab4491f29c909c",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.479551Z",
+      "data": {
+        "text": " its"
+      },
+      "id": "237a6bdcddcc4b478c55f6588262f0f0",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.528022Z",
+      "data": {
+        "text": " current"
+      },
+      "id": "6a8fc8569ebb4ae9a55f94712147d8f3",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.575928Z",
+      "data": {
+        "text": " content"
+      },
+      "id": "e235a5f5f1e0459a82671247c2396dc2",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.625926Z",
+      "data": {
+        "text": ","
+      },
+      "id": "a6fa150ccb0f4919ae99d005761062bf",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.672152Z",
+      "data": {
+        "text": " then"
+      },
+      "id": "53107e4ec87e4615893dcc1e60ab1bf7",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.717970Z",
+      "data": {
+        "text": " make"
+      },
+      "id": "42e2c962219a4219b0135f22093f8b05",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.767487Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "d4cb41f1b47c4992a7aa89eb1e270978",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.819577Z",
+      "data": {
+        "text": " edit"
+      },
+      "id": "63015f63e6c74c97bd0e90f569e62dc4",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.867167Z",
+      "data": {
+        "text": "."
+      },
+      "id": "bd9e0da63b4a43e290e2eb6796c36198",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:14.919104Z",
+      "data": {
+        "text": "\n\n"
+      },
+      "id": "574d5e2bf5eb44aaaf49e2c58a87d594",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:16.894037Z",
+      "data": {
+        "input": {
+          "path": "D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt"
+        },
+        "tool_id": "read"
+      },
+      "id": "b9a2305fc6094a8ba5517f1f71636068",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "tool_called"
+    },
+    {
+      "created_at": "2026-05-06T18:57:16.897712Z",
+      "data": {
+        "input": {
+          "path": "D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt"
+        },
+        "tool_name": "read"
+      },
+      "id": "c36759eb2a5f49e1826f2081ecf9112b",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.tool_call"
+    },
+    {
+      "created_at": "2026-05-06T18:57:16.989000Z",
+      "data": {
+        "input_tokens": 2596,
+        "output_tokens": 18
+      },
+      "id": "bf9effe743404cd6868fb81719584ccb",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.usage"
+    },
+    {
+      "created_at": "2026-05-06T18:57:16.994523Z",
+      "data": {
+        "content": "TODO:placeholder\nstatus=not-started\n",
+        "status": "success",
+        "tool_id": "call_d30f80d79cdd",
+        "tool_name": "read"
+      },
+      "id": "fb7c97af44bd457dbae174e486bbc047",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.tool_result"
+    },
+    {
+      "created_at": "2026-05-06T18:57:17.855033Z",
+      "data": {
+        "text": "\n\nNow"
+      },
+      "id": "4fba07e31b324858af95de469ec53aad",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:17.910378Z",
+      "data": {
+        "text": " I"
+      },
+      "id": "a11dbedb04b14d438b42a1da7e6da7b6",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:17.962900Z",
+      "data": {
+        "text": "'ll"
+      },
+      "id": "d194247628fc40ab857ce0ccf427923d",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.010654Z",
+      "data": {
+        "text": " make"
+      },
+      "id": "48783b084d0e40e282fc0c94f8ffc9ec",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.060204Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "83bc8a0599d4442997c97e4e059498d1",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.108229Z",
+      "data": {
+        "text": " edit"
+      },
+      "id": "f21f0eb51e4642a6b0bf9cd33e73a149",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.158333Z",
+      "data": {
+        "text": " to"
+      },
+      "id": "0147d6b9dc63498fa117af90be0b112e",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.207405Z",
+      "data": {
+        "text": " replace"
+      },
+      "id": "48f3b33a3f114a71973708bbef528b1b",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.256828Z",
+      "data": {
+        "text": " `"
+      },
+      "id": "0848f13ffcc7462b8b4b41e09c7d67f0",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.306018Z",
+      "data": {
+        "text": "TODO"
+      },
+      "id": "397d81221c344bdfae2fce9ddfd72a44",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.354614Z",
+      "data": {
+        "text": ":"
+      },
+      "id": "15cb557a9694470a9aeb69ea53241675",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.400879Z",
+      "data": {
+        "text": "placeholder"
+      },
+      "id": "b1e949f29226434095f30aeaba47ae29",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.448107Z",
+      "data": {
+        "text": "`"
+      },
+      "id": "72276d7c5ac34e589302b6957e19ed34",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.496150Z",
+      "data": {
+        "text": " with"
+      },
+      "id": "755707aeddf0466c9eb0e35a9c9934fc",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.543307Z",
+      "data": {
+        "text": " `"
+      },
+      "id": "4a87c71c5bf243a09a456c2016bcfee7",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.590737Z",
+      "data": {
+        "text": "TODO"
+      },
+      "id": "43206fe2d3264ba488d45fb7b1033772",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.640810Z",
+      "data": {
+        "text": ":"
+      },
+      "id": "51ba26b916d945e0b2fc2fa207c9daa8",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.689862Z",
+      "data": {
+        "text": "implemented"
+      },
+      "id": "94a4b8e036ef433193f80213ce33efd8",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.736986Z",
+      "data": {
+        "text": "-by"
+      },
+      "id": "014c1175c40b4b42be063548e3731cda",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.783635Z",
+      "data": {
+        "text": "-e"
+      },
+      "id": "d828822c918743d385d45aede172a3cc",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.835363Z",
+      "data": {
+        "text": "val"
+      },
+      "id": "974f6da1960c456386f957aef4edc5ca",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.880268Z",
+      "data": {
+        "text": "`."
+      },
+      "id": "a9c4fde9f5f94ec8b1de9994f57e2f4e",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:18.927757Z",
+      "data": {
+        "text": "\n\n"
+      },
+      "id": "a42f1e7d3d4d4a709a6348a5d0cb69f0",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:22.621765Z",
+      "data": {
+        "input": {
+          "edits": [
+            {
+              "newText": "TODO:implemented-by-eval",
+              "oldText": "TODO:placeholder"
+            }
+          ],
+          "path": "D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt"
+        },
+        "tool_id": "edit"
+      },
+      "id": "1266f8a762354c09bc99888e0aa85c46",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "tool_called"
+    },
+    {
+      "created_at": "2026-05-06T18:57:22.625584Z",
+      "data": {
+        "input": {
+          "edits": [
+            {
+              "newText": "TODO:implemented-by-eval",
+              "oldText": "TODO:placeholder"
+            }
+          ],
+          "path": "D:\\openclaw\\opencloset\\evals/fixtures/scratchpad/todo.txt"
+        },
+        "tool_name": "edit"
+      },
+      "id": "37fb0d3b404b4591b746478d789ffe20",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.tool_call"
+    },
+    {
+      "created_at": "2026-05-06T18:57:22.716758Z",
+      "data": {
+        "input_tokens": 2678,
+        "output_tokens": 23
+      },
+      "id": "5cb69267edfa4420ba5994933551bf82",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.usage"
+    },
+    {
+      "created_at": "2026-05-06T18:57:22.722515Z",
+      "data": {
+        "content": "+1 -1 evals/fixtures/scratchpad/todo.txt\nApplied 1 edit(s) to D:\\openclaw\\opencloset\\evals\\fixtures\\scratchpad\\todo.txt",
+        "status": "success",
+        "tool_id": "call_59a404701c78",
+        "tool_name": "edit"
+      },
+      "id": "52e43a2f395e4215b45bbfb4324c9478",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.tool_result"
+    },
+    {
+      "created_at": "2026-05-06T18:57:23.815467Z",
+      "data": {
+        "text": "\n\nEdit"
+      },
+      "id": "64f9f8564f3a47dc8feea96ce8ea73fa",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:23.869561Z",
+      "data": {
+        "text": " done"
+      },
+      "id": "1cda2a4d737a4b94b1d9efdd1b07d09f",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:23.921234Z",
+      "data": {
+        "text": "."
+      },
+      "id": "00beb2cea1de43209b491d89e9708735",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:23.970053Z",
+      "data": {
+        "text": " `"
+      },
+      "id": "ef920802453b48efab4fee731befe15d",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.014681Z",
+      "data": {
+        "text": "TODO"
+      },
+      "id": "60977e2403064777bef0d3779cc796ab",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.063485Z",
+      "data": {
+        "text": ":"
+      },
+      "id": "ec1f948a774c4ca1ae8b6d41165d9f00",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.112114Z",
+      "data": {
+        "text": "placeholder"
+      },
+      "id": "5d26459c2a0248c0ad04085d04db49e7",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.162027Z",
+      "data": {
+        "text": "`"
+      },
+      "id": "2f130b6dde5444bd954f06b98af6846b",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.210212Z",
+      "data": {
+        "text": " has"
+      },
+      "id": "af2a1974720749deb6a7c42f9991ad0e",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.259607Z",
+      "data": {
+        "text": " been"
+      },
+      "id": "444a5333158b4b55901463f87b95dac2",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.308594Z",
+      "data": {
+        "text": " replaced"
+      },
+      "id": "870dc616686446e8816bdca7507e1018",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.357212Z",
+      "data": {
+        "text": " with"
+      },
+      "id": "50208ca1b2154b89adda864d6b0bc319",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.407515Z",
+      "data": {
+        "text": " `"
+      },
+      "id": "12d61040e1274832a988caf486715da8",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.455545Z",
+      "data": {
+        "text": "TODO"
+      },
+      "id": "9ebfd56416534489991b59c0589c9697",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.503549Z",
+      "data": {
+        "text": ":"
+      },
+      "id": "0b5bbdf1991846b98c287af397768ca3",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.551485Z",
+      "data": {
+        "text": "implemented"
+      },
+      "id": "c94aa957e673472b85c7527ae256a33d",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.601530Z",
+      "data": {
+        "text": "-by"
+      },
+      "id": "a580643ffd314e7eba3ddec788ed6c0e",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.649154Z",
+      "data": {
+        "text": "-e"
+      },
+      "id": "5663f6dee96c44df91be9049d2c2415b",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.698158Z",
+      "data": {
+        "text": "val"
+      },
+      "id": "b9c9b640c4914543b1fa54d98c1af2fe",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.747227Z",
+      "data": {
+        "text": "`,"
+      },
+      "id": "ef37d7b7373547b5b1411aba8cc280eb",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.796351Z",
+      "data": {
+        "text": " and"
+      },
+      "id": "01fc6a0edb43499ea34cfcca760b8c64",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.847891Z",
+      "data": {
+        "text": " the"
+      },
+      "id": "a4dec7ddd9da4f92b4a8161c17715633",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.897448Z",
+      "data": {
+        "text": " second"
+      },
+      "id": "746bab9a17be41fcaad61be2adf8c42d",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.945591Z",
+      "data": {
+        "text": " line"
+      },
+      "id": "e1ecdc2e3587474697a2284ec3aace05",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:24.995184Z",
+      "data": {
+        "text": " (`"
+      },
+      "id": "a9194c7ea06a4a9bb7151d8f4cbf9909",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.043697Z",
+      "data": {
+        "text": "status"
+      },
+      "id": "4c2ca2f49acf4b459b750c9a1e8781a4",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.092456Z",
+      "data": {
+        "text": "="
+      },
+      "id": "eeddbe88291445f2a6a2d1744ac939ec",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.140768Z",
+      "data": {
+        "text": "not"
+      },
+      "id": "1877e23985aa42b7a639f517dc55125b",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.195972Z",
+      "data": {
+        "text": "-start"
+      },
+      "id": "ba18564584874d5a950db0745e681236",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.248942Z",
+      "data": {
+        "text": "ed"
+      },
+      "id": "bd1385ca58044aee9127b5b8cb2c060d",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.298828Z",
+      "data": {
+        "text": "`)"
+      },
+      "id": "4fc80faa28a2401ea6054da248a560ab",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.347702Z",
+      "data": {
+        "text": " is"
+      },
+      "id": "30e588e3ec994654b72597c556296255",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.397380Z",
+      "data": {
+        "text": " unchanged"
+      },
+      "id": "663d750141ba41d99af4d7251ca5f24b",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.446053Z",
+      "data": {
+        "text": "."
+      },
+      "id": "d7bb1429c7e5461f94a88f96367bf1a2",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_delta"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.496348Z",
+      "data": {
+        "input_tokens": 2784,
+        "output_tokens": 34
+      },
+      "id": "72941e9a64f44a54b5518dc3d5ccf250",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.usage"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.503020Z",
+      "data": {
+        "final_text": "\n\nEdit done. `TODO:placeholder` has been replaced with `TODO:implemented-by-eval`, and the second line (`status=not-started`) is unchanged.",
+        "finish_reason": "stop",
+        "status": "succeeded",
+        "transcript_persisted": true,
+        "transient_text": "\n\nI'll read the file first to see its current content, then make the edit.\n\nNow I'll make the edit to replace `TODO:placeholder` with `TODO:implemented-by-eval`.\n\nEdit done. `TODO:placeholder` has been replaced with `TODO:implemented-by-eval`, and the second line (`status=not-started`) is unchanged."
+      },
+      "id": "345431e3c46444468ffdb79cba92e2db",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "stream.assistant_final"
+    },
+    {
+      "created_at": "2026-05-06T18:57:25.518979Z",
+      "data": {
+        "duration_ms": 0
+      },
+      "id": "41329e1921474116862f723d8ab5d63c",
+      "run_id": "91319e56d155455192117b112465cbf8",
+      "session_id": "12a0901d6b864efb9161302cd2f2aa5d",
+      "type": "run_completed"
+    }
+  ]
+}

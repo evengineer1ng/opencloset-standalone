@@ -1,0 +1,36 @@
+{
+  "station": "Sports Wire Blend",
+  "feeds": {
+    "nba_results": {
+      "plugin": "sports_api",
+      "enabled": true,
+      "provider": "thesportsdb",
+      "endpoint": "eventspastleague",
+      "params": {
+        "id": "4387"
+      },
+      "limit": 6,
+      "priority": 0.88
+    },
+    "sports_news": {
+      "plugin": "rss",
+      "enabled": true,
+      "urls": [
+        "https://www.espn.com/espn/rss/news"
+      ],
+      "emit_limit": 4
+    }
+  },
+  "mix": {
+    "weights": {
+      "nba_results": 1.0,
+      "sports_news": 0.75
+    }
+  },
+  "scheduler": {
+    "source_quotas": {
+      "nba_results": 6,
+      "sports_news": 4
+    }
+  }
+}

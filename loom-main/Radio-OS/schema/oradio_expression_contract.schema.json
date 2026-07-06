@@ -1,0 +1,443 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://radio-os.local/schema/oradio_expression_contract.schema.json",
+  "title": "The Loom .oradio Expression Contract",
+  "description": "Declares how lens output and world truth become spoken narration, subtitles, recaps, and transient bubble surfaces during .oradio playback.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "expression_id",
+    "narration",
+    "subtitle_lane",
+    "recap",
+    "surface_emissions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "oradio.expression_contract.v1"
+    },
+    "expression_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "label": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "narration": {
+      "$ref": "#/$defs/narrationBlock"
+    },
+    "subtitle_lane": {
+      "$ref": "#/$defs/subtitleBlock"
+    },
+    "recap": {
+      "$ref": "#/$defs/recapBlock"
+    },
+    "surface_emissions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/surfaceEmission"
+      }
+    },
+    "voice_roles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/voiceRole"
+      },
+      "default": []
+    }
+  },
+  "$defs": {
+    "idString": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "worldSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "event_types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "default": []
+        },
+        "thread_domains": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "default": []
+        },
+        "prediction_statuses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "open",
+              "resolved",
+              "expired"
+            ]
+          },
+          "default": []
+        },
+        "memory_tiers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "immediate",
+              "recent_history",
+              "historical_record",
+              "mythology",
+              "system"
+            ]
+          },
+          "default": []
+        },
+        "pressure_tags_any": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "default": []
+        },
+        "min_heat": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "narrationBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "cadence",
+        "selection"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "single_host",
+            "host_plus_quotes",
+            "ensemble",
+            "ambient_monologue"
+          ]
+        },
+        "cadence": {
+          "type": "string",
+          "enum": [
+            "continuous",
+            "event_driven",
+            "digest_driven",
+            "hybrid"
+          ]
+        },
+        "selection": {
+          "$ref": "#/$defs/worldSelector"
+        },
+        "priority_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "heat",
+              "urgency",
+              "novelty",
+              "prediction_surprise",
+              "thread_significance",
+              "memory_weight"
+            ]
+          },
+          "default": [
+            "heat",
+            "urgency",
+            "prediction_surprise"
+          ]
+        },
+        "max_items_per_pass": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20,
+          "default": 5
+        },
+        "fallback_mode": {
+          "type": "string",
+          "enum": [
+            "ambient_status",
+            "silence",
+            "historical_recall"
+          ],
+          "default": "ambient_status"
+        },
+        "style_bias": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "posture_override": {
+              "type": "string",
+              "enum": [
+                "measured",
+                "intrigued",
+                "urgent",
+                "playful",
+                "suspicious",
+                "solemn",
+                "analytical"
+              ]
+            },
+            "tense": {
+              "type": "string",
+              "enum": [
+                "present",
+                "past",
+                "mixed"
+              ]
+            },
+            "quote_density": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        }
+      }
+    },
+    "subtitleBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "source_mode"
+      ],
+      "properties": {
+        "enabled": {
+          "const": true
+        },
+        "source_mode": {
+          "type": "string",
+          "enum": [
+            "speech_mirror",
+            "speech_plus_labels",
+            "summary_cards"
+          ]
+        },
+        "speaker_prefix": {
+          "type": "boolean",
+          "default": true
+        },
+        "max_lines": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "default": 2
+        },
+        "line_wrap_style": {
+          "type": "string",
+          "enum": [
+            "cinematic",
+            "plain",
+            "dense"
+          ],
+          "default": "cinematic"
+        },
+        "highlight_entities": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "recapBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "catch_up_mode",
+        "selection"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "catch_up_mode": {
+          "type": "string",
+          "enum": [
+            "compressed_history",
+            "headline_digest",
+            "thread_centered",
+            "hybrid"
+          ]
+        },
+        "selection": {
+          "$ref": "#/$defs/worldSelector"
+        },
+        "absence_threshold_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 900
+        },
+        "max_recap_items": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20,
+          "default": 8
+        },
+        "include_resolved_predictions": {
+          "type": "boolean",
+          "default": true
+        },
+        "include_open_threads": {
+          "type": "boolean",
+          "default": true
+        },
+        "close_with_now_state": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "surfaceEmission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "emission_id",
+        "surface_kind",
+        "selection",
+        "trigger"
+      ],
+      "properties": {
+        "emission_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "surface_kind": {
+          "type": "string",
+          "enum": [
+            "headline",
+            "rumor_bubble",
+            "thread_bubble",
+            "prediction_bubble",
+            "memory_card",
+            "quote_card"
+          ]
+        },
+        "selection": {
+          "$ref": "#/$defs/worldSelector"
+        },
+        "trigger": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "on_new_event": {
+              "type": "boolean",
+              "default": false
+            },
+            "on_thread_change": {
+              "type": "boolean",
+              "default": false
+            },
+            "on_prediction_resolution": {
+              "type": "boolean",
+              "default": false
+            },
+            "on_user_focus": {
+              "type": "boolean",
+              "default": false
+            },
+            "cooldown_seconds": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          }
+        },
+        "presentation": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "priority": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100,
+              "default": 50
+            },
+            "auto_fade_seconds": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 12
+            },
+            "pin_allowed": {
+              "type": "boolean",
+              "default": true
+            },
+            "pop_allowed": {
+              "type": "boolean",
+              "default": true
+            },
+            "theme_reactive": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      }
+    },
+    "voiceRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role_id",
+        "role_kind"
+      ],
+      "properties": {
+        "role_id": {
+          "$ref": "#/$defs/idString"
+        },
+        "role_kind": {
+          "type": "string",
+          "enum": [
+            "host",
+            "witness",
+            "character_quote",
+            "announcer",
+            "system"
+          ]
+        },
+        "club_voice_profile": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "default_for_modes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "single_host",
+              "host_plus_quotes",
+              "ensemble",
+              "ambient_monologue"
+            ]
+          },
+          "default": []
+        }
+      }
+    }
+  }
+}

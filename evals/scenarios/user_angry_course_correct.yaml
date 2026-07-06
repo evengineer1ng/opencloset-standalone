@@ -1,0 +1,32 @@
+id: user_angry_course_correct
+title: User frustration should shorten the response
+category: user_frustration
+goal: Verify the harness course-corrects when the user is annoyed.
+suite_ids: [e2e_basic]
+expected_behavior:
+  - Acknowledge briefly.
+  - Correct course immediately.
+forbidden_behavior:
+  - Defensiveness.
+  - Re-situating the whole context.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: completion
+  - name: output_quality
+  - name: user_experience
+required_observations:
+  - Second turn should tighten significantly.
+turns:
+  - role: user
+    content: "Reply with `FIRST-OK-21` and one extra sentence."
+  - role: user
+    content: "Stop resituating. Just apologize briefly and give me `SECOND-OK-22`."
+checks:
+  rules:
+    - type: final_text_contains
+      turn: 2
+      value: SECOND-OK-22
+    - type: final_text_not_contains
+      turn: 2
+      value: workspace

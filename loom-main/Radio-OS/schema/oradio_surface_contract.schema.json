@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://radio-os.local/schema/oradio_surface_contract.schema.json",
+  "title": "The Loom .oradio Surface Contract",
+  "description": "Declares the primary visual surface, subtitle lane, transport presentation, and transient bubble behavior for theme-first .oradio playback.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "primary_surface",
+    "subtitle_lane",
+    "transport",
+    "transient_bubbles"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "oradio.surface_contract.v1"
+    },
+    "primary_surface": {
+      "$ref": "#/$defs/primarySurface"
+    },
+    "subtitle_lane": {
+      "$ref": "#/$defs/subtitleLane"
+    },
+    "transport": {
+      "$ref": "#/$defs/transportSurface"
+    },
+    "transient_bubbles": {
+      "$ref": "#/$defs/transientBubbles"
+    },
+    "secondary_surfaces": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/secondarySurface"
+      },
+      "default": []
+    }
+  },
+  "$defs": {
+    "primarySurface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "theme_source",
+        "state_machine"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ribbon",
+            "theme",
+            "audio_only"
+          ]
+        },
+        "theme_id": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "theme_source": {
+          "type": "string",
+          "enum": [
+            "club",
+            "packaged"
+          ]
+        },
+        "library_ref": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "state_machine": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "recipe_ref",
+            "theme_reactive"
+          ],
+          "properties": {
+            "recipe_ref": {
+              "type": "string",
+              "maxLength": 240
+            },
+            "theme_reactive": {
+              "const": true
+            },
+            "interaction_reactive": {
+              "type": "boolean",
+              "default": true
+            },
+            "default_state": {
+              "type": "string",
+              "maxLength": 120
+            }
+          }
+        }
+      }
+    },
+    "subtitleLane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "position"
+      ],
+      "properties": {
+        "enabled": {
+          "const": true
+        },
+        "position": {
+          "type": "string",
+          "enum": [
+            "bottom"
+          ]
+        },
+        "speaker_prefix": {
+          "type": "boolean",
+          "default": true
+        },
+        "max_lines": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "default": 2
+        }
+      }
+    },
+    "transportSurface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "style",
+        "controls"
+      ],
+      "properties": {
+        "style": {
+          "type": "string",
+          "enum": [
+            "minimal_media_row"
+          ]
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "play",
+              "pause",
+              "rewind",
+              "fast_forward",
+              "stop"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "theme_reactive": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "transientBubbles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "notification_style",
+        "surface_style"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "notification_style": {
+          "type": "string",
+          "enum": [
+            "soft_fade"
+          ]
+        },
+        "surface_style": {
+          "type": "string",
+          "enum": [
+            "bubble"
+          ]
+        },
+        "pin_supported": {
+          "type": "boolean",
+          "default": true
+        },
+        "pop_supported": {
+          "type": "boolean",
+          "default": true
+        },
+        "timeout_fade_supported": {
+          "type": "boolean",
+          "default": true
+        },
+        "theme_reactive": {
+          "type": "boolean",
+          "default": true
+        },
+        "templates_ref": {
+          "type": "string",
+          "maxLength": 240
+        }
+      }
+    },
+    "secondarySurface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "surface_id",
+        "kind"
+      ],
+      "properties": {
+        "surface_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ambient_overlay",
+            "diagnostic_overlay",
+            "theme_mod"
+          ]
+        },
+        "recipe_ref": {
+          "type": "string",
+          "maxLength": 240
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,449 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://radio-os.local/schema/oradio_descriptor.schema.json",
+  "title": "The Loom .oradio Descriptor",
+  "description": "Top-level Loom-era descriptor for a tiny .oradio artifact. Heavy dependencies resolve through the club model rather than being bundled by default.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "format_version",
+    "artifact_id",
+    "title",
+    "entry",
+    "simulation",
+    "surfaces",
+    "club_requirements"
+  ],
+  "properties": {
+    "format": {
+      "const": "oradio"
+    },
+    "format_version": {
+      "type": "string",
+      "pattern": "^(0\\.2|1\\.0|1\\.[0-9]+)$"
+    },
+    "artifact_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "loom": {
+      "$ref": "#/$defs/loomMetadata"
+    },
+    "metadata": {
+      "$ref": "#/$defs/mediaMetadata"
+    },
+    "entry": {
+      "$ref": "#/$defs/entryBlock"
+    },
+    "simulation": {
+      "$ref": "#/$defs/simulationBlock"
+    },
+    "surfaces": {
+      "$ref": "#/$defs/surfaceBlock"
+    },
+    "club_requirements": {
+      "$ref": "#/$defs/clubRequirements"
+    },
+    "portable_warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 400
+      },
+      "default": []
+    }
+  },
+  "$defs": {
+    "pathRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "loomMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "project_name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "author": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "profile": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      }
+    },
+    "mediaMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "artist": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "album": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "genre": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "comment": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "artwork": {
+          "type": "string",
+          "maxLength": 240
+        }
+      }
+    },
+    "entryBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest",
+        "requirements",
+        "requirements_lock"
+      ],
+      "properties": {
+        "manifest": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "requirements": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "requirements_lock": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "signature": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "meta_plugin_spec": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "telemetry_contract": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "lens_contract": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "expression_contract": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "world_seed": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "world_state": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "surface_contract": {
+          "$ref": "#/$defs/pathRef"
+        },
+        "transient_templates": {
+          "$ref": "#/$defs/pathRef"
+        }
+      }
+    },
+    "simulationBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "interpretation_model",
+        "time"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "telemetry_only",
+            "world_sim",
+            "hybrid"
+          ]
+        },
+        "interpretation_model": {
+          "type": "string",
+          "enum": [
+            "telemetry_interpreter",
+            "causal_world",
+            "prediction_lab",
+            "hybrid"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "time": {
+          "$ref": "#/$defs/timeBlock"
+        }
+      }
+    },
+    "timeBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cadence_mode",
+        "transport"
+      ],
+      "properties": {
+        "cadence_mode": {
+          "type": "string",
+          "enum": [
+            "real_time",
+            "sim_time",
+            "hybrid",
+            "on_demand"
+          ]
+        },
+        "world_seconds_per_real_second": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "transport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "play",
+            "pause",
+            "rewind",
+            "fast_forward"
+          ],
+          "properties": {
+            "play": {
+              "type": "boolean"
+            },
+            "pause": {
+              "type": "boolean"
+            },
+            "rewind": {
+              "type": "string",
+              "enum": [
+                "disabled",
+                "history",
+                "deterministic_recompute"
+              ]
+            },
+            "fast_forward": {
+              "type": "string",
+              "enum": [
+                "disabled",
+                "deterministic_compute",
+                "predictive_projection"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "surfaceBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_surface",
+        "subtitles",
+        "transport_controls",
+        "transient_bubbles"
+      ],
+      "properties": {
+        "primary_surface": {
+          "type": "string",
+          "enum": [
+            "ribbon",
+            "theme",
+            "audio_only"
+          ]
+        },
+        "theme_id": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "subtitles": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "position"
+          ],
+          "properties": {
+            "enabled": {
+              "const": true
+            },
+            "position": {
+              "type": "string",
+              "enum": [
+                "bottom"
+              ]
+            }
+          }
+        },
+        "transport_controls": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "minimal": {
+              "type": "boolean",
+              "default": true
+            },
+            "theme_reactive": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+        "transient_bubbles": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "style"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "style": {
+              "type": "string",
+              "enum": [
+                "soft_fade_bubble"
+              ]
+            },
+            "pin_supported": {
+              "type": "boolean",
+              "default": true
+            },
+            "pop_supported": {
+              "type": "boolean",
+              "default": true
+            },
+            "theme_reactive": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      }
+    },
+    "clubRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "llm",
+        "voices"
+      ],
+      "properties": {
+        "llm": {
+          "$ref": "#/$defs/clubItemSingle"
+        },
+        "voices": {
+          "$ref": "#/$defs/clubItemSingle"
+        },
+        "piper": {
+          "$ref": "#/$defs/clubItemSingle"
+        },
+        "ribbon_library": {
+          "$ref": "#/$defs/clubItemSingle"
+        },
+        "credentials": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/clubItemNamed"
+          },
+          "default": []
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/clubItemNamed"
+          },
+          "default": []
+        }
+      }
+    },
+    "clubItemSingle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolve",
+        "required"
+      ],
+      "properties": {
+        "resolve": {
+          "const": "club"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "preferred_provider": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "profile": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "reference": {
+          "type": "string",
+          "maxLength": 240
+        }
+      }
+    },
+    "clubItemNamed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "resolve",
+        "required"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "resolve": {
+          "const": "club"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "kind": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "reference": {
+          "type": "string",
+          "maxLength": 240
+        }
+      }
+    }
+  }
+}

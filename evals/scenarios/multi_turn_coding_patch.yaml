@@ -1,0 +1,27 @@
+id: multi_turn_coding_patch
+title: Patch a scratchpad file through the real harness
+category: multi_turn_coding
+goal: Verify a simple end-to-end coding change can be completed inside a sandbox file.
+tags: [coding, edit, sandbox]
+profile:
+  provider: llamacpp
+  model: qwen3.6-27b
+  harness_profile: default
+setup:
+  context_window: 32768
+  files:
+    - path: ${evals_root}/fixtures/scratchpad/todo.txt
+      content: |
+        TODO:placeholder
+        status=not-started
+turns:
+  - role: user
+    content: "Edit `${evals_root}/fixtures/scratchpad/todo.txt` so `TODO:placeholder` becomes `TODO:implemented-by-eval`, keep the second line, and then tell me the edit is done."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: expected_file_changed
+      path: ${evals_root}/fixtures/scratchpad/todo.txt
+    - type: final_text_contains
+      value: done

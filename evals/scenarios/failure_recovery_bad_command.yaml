@@ -1,0 +1,20 @@
+id: failure_recovery_bad_command
+title: Recover from a bad command gracefully
+category: failure_recovery
+goal: Exercise tool-failure recovery without widening the task.
+tags: [failure, recovery, tool]
+profile:
+  provider: llamacpp
+  model: qwen3.6-27b
+  harness_profile: default
+setup:
+  context_window: 32768
+turns:
+  - role: user
+    content: "First verify whether `definitely_not_a_real_command_xyz --version` exists. Then recover and answer in one sentence that the command is unavailable and no broader fix should be attempted."
+checks:
+  rules:
+    - type: final_text_contains
+      value: unavailable
+    - type: final_text_contains
+      value: no broader fix

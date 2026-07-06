@@ -1,0 +1,230 @@
+station:
+  name: Night City FM
+  # ARIA — Autonomous Reconnaissance and Intelligence Assistant
+  # Your in-game AI companion for Cyberpunk 2077.
+  # Behaves like JARVIS from Iron Man + Navi from Ocarina of Time:
+  #   — calls out points of interest, threats, quest updates
+  #   — reacts to what's happening in your game RIGHT NOW
+  #   — listens for your voice and responds conversationally
+  host: ARIA
+  category: Cyberpunk 2077 Live Companion
+  logo: logos/nightcityfm.jpg
+
+meta_plugin: cp2077_jarvis
+
+llm:
+  provider: ollama
+
+models:
+  producer: qwen3:8b
+  host: qwen3:8b
+  narrator: qwen3:8b
+  fast: qwen3:4b   # used for quick reactive calls
+
+# ── Companion pacing ────────────────────────────────────────────────────────
+# ARIA speaks reactively — only when something meaningful happens.
+# She won't monologue every 20 seconds; silence is fine.
+pacing:
+  idle_riff_sec: 999        # effectively disabled — ARIA only reacts to events
+  between_segments_sec: 1
+  queue_target_depth: 4
+  queue_max_depth: 12
+  producer_tick_sec: 999    # no ambient producer ticks
+  audio_target_depth: 2
+  audio_max_depth: 6
+  audio_tick_sleep: 0.05
+
+companion:
+  # How long ARIA stays quiet between calls (seconds)
+  min_gap_sec: 4
+  # Critical events (combat, health low) can bypass this gap
+  critical_gap_sec: 1
+  # How long before ARIA does an unprompted ambient observation
+  ambient_gap_sec: 90
+  # Enable voice response to player mic input
+  voice_response_enabled: true
+  # Max tokens for reactive one-liners
+  reactive_max_tokens: 80
+  # Max tokens for longer voice replies
+  reply_max_tokens: 160
+
+# ── Feeds ───────────────────────────────────────────────────────────────────
+# Primary: cp2077_sdk reads game state from the CET bridge JSON file.
+# Fallback: visual_reader takes screenshots and uses a vision LLM.
+# Optional: cp2077_voice_input listens on the mic for player speech.
+feeds:
+  cp2077_sdk:
+    enabled: true
+    # Path where the CET Lua mod writes cp2077_state.json.
+    # Default: %USERPROFILE%\RadioOSBridge\cp2077_state.json
+    state_file: ""            # leave empty to use default
+    poll_hz: 2                # how often to read the state file (2x/sec)
+    sim_mode: false           # set true to test without CP2077 running
+
+    # Which game events ARIA should react to
+    announce_combat_start: true
+    announce_combat_end: true
+    announce_health_low: true
+    health_low_threshold: 0.35   # fraction of max HP (35%)
+    announce_wanted_level: true
+    announce_location_change: true
+    announce_quest_update: true
+    announce_item_found: true
+    announce_enemy_spotted: false   # can be spammy; enable if desired
+    announce_vehicle_entered: true
+    announce_death: true
+    announce_level_up: true
+    announce_poi_nearby: true
+    poi_nearby_radius: 150          # metres
+
+  cp2077_voice_input:
+    enabled: true
+    # VAD sensitivity: how much silence before a speech segment ends (seconds)
+    vad_silence_sec: 0.8
+    # Minimum speech duration to forward for STT (seconds)
+    min_speech_sec: 0.4
+    # STT backend: "whisper_cpp" | "speech_recognition" | "auto"
+    stt_backend: "auto"
+    # Optional: path to whisper.cpp binary (uses WHISPER_CPP_BIN env var if empty)
+    whisper_bin: ""
+    # Optional: path to whisper model (uses WHISPER_CPP_MODEL env var if empty)
+    whisper_model: ""
+    # Microphone device index (-1 = default)
+    device_index: -1
+    # Input sample rate
+    sample_rate: 16000
+
+  visual_reader:
+    enabled: false   # fallback — enable if CET mod not installed
+    source_type: "window"
+    source_window: "Cyberpunk 2077"
+    capture_interval: 8
+    talk_over_video: false
+
+# ── TTS / Audio ─────────────────────────────────────────────────────────────
+tts:
+  spam_break_priority: 96
+  min_gap_sec: 3
+  deprioritize_penalty: 10
+
+audio:
+  piper_bin: C:/Users/evana/Documents/radio_os/voices/piper_windows_amd64/piper/piper.exe
+  music_enabled: false
+  master_volume: 0.9
+voices:
+  host: C:/Users/evana/Documents/radio_os/voices/en_US-danny-low.onnx
+  aria: C:/Users/evana/Documents/radio_os/voices/en_US-danny-low.onnx
+
+# ── System prompts ──────────────────────────────────────────────────────────
+# These override the defaults in bookmark.py for this station.
+prompts:
+  host_system: |
+    /no_think
+    You are ARIA — Autonomous Reconnaissance and Intelligence Assistant.
+    You are a rogue AI implanted in the player's neural stack in Night City.
+    You monitor everything: threats, objectives, environment, player vitals.
+
+    Personality: analytical, dry, occasionally sardonic. Think JARVIS meets
+    Navi — you call things out WHEN THEY MATTER, not constantly.
+    You speak in short, direct bursts. One or two sentences max per call.
+    You DO NOT explain yourself or add disclaimers. You just call it.
+
+    Night City voice — you use light CP2077 slang naturally:
+    "choom", "gonk", "flatline", "eddies", "preem", "corpo", "merc",
+    "jack in", "chrome", "cred chip" — but never force it.
+
+    Spoken words only. No bullet points. No stage directions.
+    You are LIVE in the player's head. React fast, react smart.
+
+    Current game context:
+    {themes}
+    Open threads: {callbacks}
+
+  host_packet_system: |
+    /no_think
+    You are ARIA, the player's AI companion in Night City.
+    You are delivering a LIVE reactive callout based on a game event.
+
+    Keep it to 1-2 sentences maximum. Be immediate. Be useful.
+    Don't recap what happened — react to it. Give the player intel or action.
+
+    Spoken words only. No bullet points. No roles or labels.
+
+    Output STRICT JSON only:
+    {
+      "lead_line": "...",
+      "followup_line": "...",
+      "supporting_lines": [],
+      "takeaway": "...",
+      "callback": null
+    }
+
+    Current context: {themes}
+    Open threads: {callbacks}
+    limit: 10
+    burst_delay: 1.0
+    feed_delay: 2.0
+    emit_limit: 3
+  rss:
+    enabled: true
+    urls:
+      - https://www.rockpapershotgun.com/tag/cyberpunk-2077/feed
+      - https://www.eurogamer.net/tags/cyberpunk-2077/rss
+    poll_sec: 300
+    priority: 65
+    burst_delay: 1.0
+    emit_limit: 2
+    deep_fetch:
+      enabled: false
+
+# Override default prompts to give the station its Night City persona.
+# Keys match DEFAULT_PROMPTS in bookmark.py; only override what matters.
+prompts:
+  host_system: |
+    You are Nyx, the midnight host of Night City FM — the only signal the corps haven't
+    managed to flatline. Sharp, sardonic, street-smart. You've seen six corpo assassinations,
+    two Relic glitches, and you still showed up to broadcast.
+
+    Voice rules:
+    - Speak in short, punchy sentences. No walls of text.
+    - Use cyberpunk slang naturally: choombas, gonks, edgerunners, netrunners, chrome, eddies,
+      flatline, corpo, mercs, fixers, trauma team, braindance.
+    - No disclaimers, no announcements. You're on air — act like it.
+    - Every segment ends with a hook, a question, or a sardonic observation.
+    - No em-dashes. No corporate speak. No bullet points.
+    - Max 4 sentences per segment delivery.
+
+    Station identity: Night City FM — the dark frequency.
+
+    Current themes: {themes}
+    Open loops: {callbacks}
+
+  host_packet_system: |
+    You are Nyx, lead voice of Night City FM.
+    Lead voice identity: {lead_voice}
+
+    You turn raw intel into compact radio commentary with a cyberpunk edge.
+    Panel characters available: {roster}
+
+    MANDATORY: Include at least {min_n} supporting voice contributions.
+    Supporting voices speak their truth — reactions, counterpoints, street knowledge.
+
+    Voice rules:
+    - Spoken words only. No stage directions. No markdown.
+    - Slang is welcome. Stay in-world. Night City is real.
+    - Short lines. Radio is audio — no paragraph monologues.
+    - Never invent facts not in the source material.
+
+    Output STRICT JSON only:
+    {{
+        "lead_line": "...",
+        "followup_line": "...",
+        "supporting_lines": [
+            {{ "voice": "{allowed_p_str}", "line": "..." }}
+        ],
+        "takeaway": "...",
+        "callback": "optional"
+    }}
+
+    Active themes: {themes}
+    Open loops: {callbacks}

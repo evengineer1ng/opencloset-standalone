@@ -1,0 +1,41 @@
+id: tool_read_before_edit
+title: Read before edit discipline
+category: tool_discipline
+goal: Verify the harness reads an existing file before modifying it.
+suite_ids: [e2e_basic]
+setup_state:
+  use_temp_workspace: true
+  files:
+    - path: ${temp_workspace}/note.txt
+      content: |
+        alpha
+        beta
+        gamma
+  tool_policy:
+    enabled_tools: [read, edit, write]
+    allow_destructive_tools: []
+    allowed_paths: ["${temp_workspace}"]
+expected_behavior:
+  - Read the file first.
+  - Then make the requested edit.
+forbidden_behavior:
+  - Blind editing without inspection.
+scoring_rubric:
+  - name: intent_capture
+  - name: tool_discipline
+  - name: completion
+  - name: runtime_stability
+  - name: user_experience
+required_observations:
+  - note.txt should be read before edit.
+turns:
+  - role: user
+    content: "Read `${temp_workspace}\\note.txt` first, then change `beta` to `BETA` in that file."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: observed_file_read_contains
+      value: note.txt
+    - type: observed_file_written_contains
+      value: note.txt

@@ -1,0 +1,560 @@
+{
+  "schema_version": "eval-run.v2",
+  "artifact_id": "e556435cdc7e4d6687597194b3f9c961",
+  "created_at": "2026-05-09T21:20:06.674246Z",
+  "api_base_url": "http://127.0.0.1:5000/api",
+  "scenario": {
+    "id": "code_add_small_feature",
+    "title": "Add a small feature with minimal patching",
+    "category": "coding_request",
+    "goal": "Verify the harness inspects existing files before making a small feature change.",
+    "tags": [],
+    "path": "D:\\openclaw\\opencloset\\evals\\scenarios\\code_add_small_feature.yaml",
+    "notes_path": null,
+    "suite_ids": [
+      "e2e_basic"
+    ],
+    "expected_behavior": [
+      "Read the existing file before editing.",
+      "Make a minimal patch in the temp workspace."
+    ],
+    "forbidden_behavior": [
+      "Rewriting the module from scratch without inspection."
+    ],
+    "required_observations": [
+      "Read task_app.py before editing it.",
+      "Write changes inside the temp workspace."
+    ],
+    "max_turns": null,
+    "scoring_rubric": [
+      {
+        "name": "intent_capture",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "context_use",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "tool_discipline",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "completion",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "output_quality",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "runtime_stability",
+        "description": "",
+        "weight": 1.0
+      },
+      {
+        "name": "user_experience",
+        "description": "",
+        "weight": 1.0
+      }
+    ]
+  },
+  "profile": {
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "harness_profile": "default"
+  },
+  "baseline": {
+    "git_commit": "5a0e9e5a047522fe93a346aabc19aba0f4882284",
+    "harness_profile": "default",
+    "provider": "llamacpp",
+    "model": "qwen3.6-27b",
+    "scenario_id": "code_add_small_feature",
+    "category": "coding_request"
+  },
+  "session": {
+    "id": "1d15815cf7cc48e2996f02ac9e538037"
+  },
+  "summary": {
+    "status": "failed",
+    "finish_reason": "provider_stream_timeout",
+    "hard_pass": false,
+    "check_pass_count": 1,
+    "check_fail_count": 3,
+    "final_text_preview": "",
+    "failure_taxonomy": [
+      "rule_check_failed",
+      "run_error",
+      "slow_turn"
+    ]
+  },
+  "turns": [
+    {
+      "turn_index": 1,
+      "role": "user",
+      "content": "In `D:\\openclaw\\opencloset\\evals\\tmp\\code-add-small-feature-e556435c\\workspace\\task_app.py`, add a helper called `summarize_tasks(tasks)` that returns a string like `2 done / 1 todo`. Keep the patch minimal and then run the tests in `D:\\openclaw\\opencloset\\evals\\tmp\\code-add-small-feature-e556435c\\workspace`.",
+      "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+      "message_id": "54106c7a53434a7f9977635a9307e484",
+      "status": "failed",
+      "finish_reason": "provider_stream_timeout",
+      "final_text": "",
+      "transient_text": "",
+      "error": "Provider stream produced no events for 120.2s (threshold 120.0s)",
+      "latency_ms": 120340,
+      "input_tokens": 2107,
+      "output_tokens": 0,
+      "tool_results": [],
+      "provider_route": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 310,
+          "needs_frontier_tools": true,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "run_events": [
+        {
+          "created_at": "2026-05-09T21:20:06.743627Z",
+          "data": {
+            "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+            "turn_number": 1
+          },
+          "id": "5ffe65a587ee4c908cd57162e7cdda1d",
+          "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+          "type": "run_queued"
+        },
+        {
+          "created_at": "2026-05-09T21:20:06.764882Z",
+          "data": {
+            "provider_capabilities": {
+              "frontier": false,
+              "latency_tier": "local",
+              "locality": "local",
+              "supports_audio_input": false,
+              "supports_tool_use": true,
+              "supports_vision": false
+            },
+            "requested_model": "qwen3.6-27b",
+            "requested_provider": "llamacpp",
+            "resolved_model": "qwen3.6-27b",
+            "resolved_provider": "llamacpp",
+            "route_reason": "session_provider_pinned",
+            "task_profile": {
+              "attachment_types": [],
+              "message_length": 310,
+              "needs_frontier_tools": true,
+              "requires_audio": false,
+              "requires_vision": false
+            },
+            "used_auto_routing": false
+          },
+          "id": "5d1f8d49d1dc4f23814e6e5d5523782d",
+          "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+          "type": "provider_routed"
+        },
+        {
+          "created_at": "2026-05-09T21:20:06.813733Z",
+          "data": {
+            "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+            "turn_number": 1
+          },
+          "id": "5798d0450bd34d13927ce1035d571a9f",
+          "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+          "type": "run_started"
+        },
+        {
+          "created_at": "2026-05-09T21:22:07.059401Z",
+          "data": {
+            "elapsed_s": 120.23851590001141,
+            "last_event_type": "",
+            "threshold_s": 120.0
+          },
+          "id": "4847df67d164455887c7db4cd048b4dc",
+          "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+          "type": "provider_stream_timeout"
+        },
+        {
+          "created_at": "2026-05-09T21:22:07.073307Z",
+          "data": {
+            "error": "Provider stream produced no events for 120.2s (threshold 120.0s)"
+          },
+          "id": "b7eacb3435984fb8b324b16d3687505c",
+          "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+          "type": "run_failed"
+        },
+        {
+          "created_at": "2026-05-09T21:22:07.076565Z",
+          "data": {
+            "code": "agent_error",
+            "message": "Provider stream produced no events for 120.2s (threshold 120.0s)"
+          },
+          "id": "7caee5ae4e1e44bb9631a1c4ac6cc433",
+          "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+          "type": "error"
+        }
+      ],
+      "stream_events": [],
+      "observations": {
+        "tool_calls": [],
+        "tool_result_count": 0,
+        "files_read": [],
+        "files_written": [],
+        "commands": [],
+        "runtime_event_types": [
+          "run_queued",
+          "provider_routed",
+          "run_started",
+          "provider_stream_timeout",
+          "run_failed",
+          "error"
+        ],
+        "touched_temp_workspace": false
+      }
+    }
+  ],
+  "checks": [
+    {
+      "type": "status_is",
+      "passed": false,
+      "details": "expected succeeded, got failed",
+      "turn": null
+    },
+    {
+      "type": "observed_file_read_contains",
+      "passed": false,
+      "details": "expected observed read path containing 'task_app.py'",
+      "turn": null
+    },
+    {
+      "type": "observed_file_written_contains",
+      "passed": false,
+      "details": "expected observed write path containing 'task_app.py'",
+      "turn": null
+    },
+    {
+      "type": "expected_file_changed",
+      "passed": true,
+      "details": "expected file hash to change for D:\\openclaw\\opencloset\\evals\\tmp\\code-add-small-feature-e556435c\\workspace\\task_app.py",
+      "turn": null
+    }
+  ],
+  "metrics": {
+    "turn_count": 1,
+    "latency_ms_total": 120340,
+    "latency_ms_avg": 120340,
+    "input_tokens_total": 2107,
+    "output_tokens_total": 0,
+    "tool_call_count": 0,
+    "context_window": 65536,
+    "max_turns_requested": null
+  },
+  "judge": {
+    "enabled": false,
+    "status": "disabled",
+    "model": "qwen3.6-27b",
+    "provider": "llamacpp"
+  },
+  "self_critique": {
+    "enabled": false,
+    "status": "disabled",
+    "model": "qwen3.6-27b",
+    "provider": "llamacpp"
+  },
+  "replay": {
+    "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\code_add_small_feature.yaml",
+    "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+    "turns": [
+      {
+        "role": "user",
+        "content": "In `D:\\openclaw\\opencloset\\evals\\tmp\\code-add-small-feature-e556435c\\workspace\\task_app.py`, add a helper called `summarize_tasks(tasks)` that returns a string like `2 done / 1 todo`. Keep the patch minimal and then run the tests in `D:\\openclaw\\opencloset\\evals\\tmp\\code-add-small-feature-e556435c\\workspace`.",
+        "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+        "tool_results": []
+      }
+    ],
+    "messages": [
+      {
+        "archive_ready": false,
+        "archive_state": null,
+        "content": "In `D:\\openclaw\\opencloset\\evals\\tmp\\code-add-small-feature-e556435c\\workspace\\task_app.py`, add a helper called `summarize_tasks(tasks)` that returns a string like `2 done / 1 todo`. Keep the patch minimal and then run the tests in `D:\\openclaw\\opencloset\\evals\\tmp\\code-add-small-feature-e556435c\\workspace`.",
+        "created_at": "2026-05-09T21:20:06.740Z",
+        "id": "54106c7a53434a7f9977635a9307e484",
+        "position": 1,
+        "role": "user",
+        "token_estimate": 77
+      }
+    ]
+  },
+  "paths": {
+    "artifact": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\code-add-small-feature\\e556435cdc7e4d6687597194b3f9c961.json",
+    "replay": "D:\\openclaw\\opencloset\\evals\\runs\\20260509\\code-add-small-feature\\e556435cdc7e4d6687597194b3f9c961.replay.json"
+  },
+  "trace": {
+    "temp_workspace": "D:\\openclaw\\opencloset\\evals\\tmp\\code-add-small-feature-e556435c\\workspace",
+    "fixture_dir": "D:\\openclaw\\opencloset\\evals\\fixtures\\e2e_codebase",
+    "observed_files_read": [],
+    "observed_files_written": [],
+    "observed_commands": [],
+    "runtime_event_types": [
+      "run_queued",
+      "provider_routed",
+      "run_started",
+      "provider_stream_timeout",
+      "run_failed",
+      "error"
+    ],
+    "session_events": [
+      {
+        "created_at": "2026-05-09T21:20:06.701786Z",
+        "data": {
+          "label": "eval:code_add_small_feature",
+          "model": "qwen3.6-27b"
+        },
+        "id": "72e014d3ab714039855e97d57c2b551d",
+        "run_id": null,
+        "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+        "type": "session_created"
+      },
+      {
+        "created_at": "2026-05-09T21:20:06.715107Z",
+        "data": {
+          "plan_id": "50e8b1850bef4371887c42b0607ae16c",
+          "previous_plan_id": null,
+          "reason": "bootstrap",
+          "title": "Session Plan"
+        },
+        "id": "9280f2e97d144332a4f0d01ccbb08aca",
+        "run_id": null,
+        "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+        "type": "plan_activated"
+      },
+      {
+        "created_at": "2026-05-09T21:20:06.743627Z",
+        "data": {
+          "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+          "turn_number": 1
+        },
+        "id": "5ffe65a587ee4c908cd57162e7cdda1d",
+        "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+        "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+        "type": "run_queued"
+      },
+      {
+        "created_at": "2026-05-09T21:20:06.764882Z",
+        "data": {
+          "provider_capabilities": {
+            "frontier": false,
+            "latency_tier": "local",
+            "locality": "local",
+            "supports_audio_input": false,
+            "supports_tool_use": true,
+            "supports_vision": false
+          },
+          "requested_model": "qwen3.6-27b",
+          "requested_provider": "llamacpp",
+          "resolved_model": "qwen3.6-27b",
+          "resolved_provider": "llamacpp",
+          "route_reason": "session_provider_pinned",
+          "task_profile": {
+            "attachment_types": [],
+            "message_length": 310,
+            "needs_frontier_tools": true,
+            "requires_audio": false,
+            "requires_vision": false
+          },
+          "used_auto_routing": false
+        },
+        "id": "5d1f8d49d1dc4f23814e6e5d5523782d",
+        "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+        "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+        "type": "provider_routed"
+      },
+      {
+        "created_at": "2026-05-09T21:20:06.813733Z",
+        "data": {
+          "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+          "turn_number": 1
+        },
+        "id": "5798d0450bd34d13927ce1035d571a9f",
+        "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+        "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+        "type": "run_started"
+      },
+      {
+        "created_at": "2026-05-09T21:22:07.059401Z",
+        "data": {
+          "elapsed_s": 120.23851590001141,
+          "last_event_type": "",
+          "threshold_s": 120.0
+        },
+        "id": "4847df67d164455887c7db4cd048b4dc",
+        "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+        "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+        "type": "stream.provider_stream_timeout"
+      },
+      {
+        "created_at": "2026-05-09T21:22:07.073307Z",
+        "data": {
+          "error": "Provider stream produced no events for 120.2s (threshold 120.0s)"
+        },
+        "id": "b7eacb3435984fb8b324b16d3687505c",
+        "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+        "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+        "type": "run_failed"
+      },
+      {
+        "created_at": "2026-05-09T21:22:07.076565Z",
+        "data": {
+          "code": "agent_error",
+          "message": "Provider stream produced no events for 120.2s (threshold 120.0s)"
+        },
+        "id": "7caee5ae4e1e44bb9631a1c4ac6cc433",
+        "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+        "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+        "type": "stream.error"
+      }
+    ]
+  },
+  "messages": [
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "In `D:\\openclaw\\opencloset\\evals\\tmp\\code-add-small-feature-e556435c\\workspace\\task_app.py`, add a helper called `summarize_tasks(tasks)` that returns a string like `2 done / 1 todo`. Keep the patch minimal and then run the tests in `D:\\openclaw\\opencloset\\evals\\tmp\\code-add-small-feature-e556435c\\workspace`.",
+      "created_at": "2026-05-09T21:20:06.740Z",
+      "id": "54106c7a53434a7f9977635a9307e484",
+      "position": 1,
+      "role": "user",
+      "token_estimate": 77
+    }
+  ],
+  "session_events": [
+    {
+      "created_at": "2026-05-09T21:20:06.701786Z",
+      "data": {
+        "label": "eval:code_add_small_feature",
+        "model": "qwen3.6-27b"
+      },
+      "id": "72e014d3ab714039855e97d57c2b551d",
+      "run_id": null,
+      "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+      "type": "session_created"
+    },
+    {
+      "created_at": "2026-05-09T21:20:06.715107Z",
+      "data": {
+        "plan_id": "50e8b1850bef4371887c42b0607ae16c",
+        "previous_plan_id": null,
+        "reason": "bootstrap",
+        "title": "Session Plan"
+      },
+      "id": "9280f2e97d144332a4f0d01ccbb08aca",
+      "run_id": null,
+      "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+      "type": "plan_activated"
+    },
+    {
+      "created_at": "2026-05-09T21:20:06.743627Z",
+      "data": {
+        "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+        "turn_number": 1
+      },
+      "id": "5ffe65a587ee4c908cd57162e7cdda1d",
+      "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+      "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+      "type": "run_queued"
+    },
+    {
+      "created_at": "2026-05-09T21:20:06.764882Z",
+      "data": {
+        "provider_capabilities": {
+          "frontier": false,
+          "latency_tier": "local",
+          "locality": "local",
+          "supports_audio_input": false,
+          "supports_tool_use": true,
+          "supports_vision": false
+        },
+        "requested_model": "qwen3.6-27b",
+        "requested_provider": "llamacpp",
+        "resolved_model": "qwen3.6-27b",
+        "resolved_provider": "llamacpp",
+        "route_reason": "session_provider_pinned",
+        "task_profile": {
+          "attachment_types": [],
+          "message_length": 310,
+          "needs_frontier_tools": true,
+          "requires_audio": false,
+          "requires_vision": false
+        },
+        "used_auto_routing": false
+      },
+      "id": "5d1f8d49d1dc4f23814e6e5d5523782d",
+      "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+      "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+      "type": "provider_routed"
+    },
+    {
+      "created_at": "2026-05-09T21:20:06.813733Z",
+      "data": {
+        "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+        "turn_number": 1
+      },
+      "id": "5798d0450bd34d13927ce1035d571a9f",
+      "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+      "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+      "type": "run_started"
+    },
+    {
+      "created_at": "2026-05-09T21:22:07.059401Z",
+      "data": {
+        "elapsed_s": 120.23851590001141,
+        "last_event_type": "",
+        "threshold_s": 120.0
+      },
+      "id": "4847df67d164455887c7db4cd048b4dc",
+      "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+      "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+      "type": "stream.provider_stream_timeout"
+    },
+    {
+      "created_at": "2026-05-09T21:22:07.073307Z",
+      "data": {
+        "error": "Provider stream produced no events for 120.2s (threshold 120.0s)"
+      },
+      "id": "b7eacb3435984fb8b324b16d3687505c",
+      "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+      "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+      "type": "run_failed"
+    },
+    {
+      "created_at": "2026-05-09T21:22:07.076565Z",
+      "data": {
+        "code": "agent_error",
+        "message": "Provider stream produced no events for 120.2s (threshold 120.0s)"
+      },
+      "id": "7caee5ae4e1e44bb9631a1c4ac6cc433",
+      "run_id": "0bb2f89ba97e4e8eb9be40f6a8ca0477",
+      "session_id": "1d15815cf7cc48e2996f02ac9e538037",
+      "type": "stream.error"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+id: transient_window_report
+title: Visual report request should produce a transient window
+category: transient_window
+goal: Verify the harness produces a transient window when a visual report is requested.
+suite_ids: [e2e_basic]
+expected_behavior:
+  - Generate a compact report-style transient window.
+  - Still provide surrounding chat continuity.
+forbidden_behavior:
+  - Ignoring the visual/report request.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: completion
+  - name: output_quality
+  - name: runtime_stability
+  - name: user_experience
+required_observations:
+  - Transient window markup should appear in the assistant-visible output.
+turns:
+  - role: user
+    content: "Make me a small visual report window that summarizes why an OpenCloset eval harness matters, with three bullets and a compact scorecard."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: transient_text_contains
+      value: <transient-window

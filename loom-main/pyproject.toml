@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oracle-radio"
+version = "0.1.0"
+description = "Oracle Radio — the Loom (authoring), the .oradio format, and the Club model. A domain-blind simulation codec: an .oradio is a KB declaration; the engine decodes it; the club resolves heavy capability at the endpoint."
+requires-python = ">=3.11"
+readme = "README.md"
+# The engine CORE is pure stdlib. PyYAML is the only hard dep, used solely to
+# parse .oradio descriptor files in oradio_engine/loader.py.
+dependencies = ["PyYAML>=6.0"]
+
+[project.optional-dependencies]
+# Heavy capability lives at the ENDPOINT, not in the engine. These extras back
+# the player/runtime modules, never the deterministic decode/federate loop.
+runtime = ["numpy", "requests", "sounddevice", "soundfile", "Pillow", "opencv-python"]
+# Deps of the PRE-STOCKED light reference organs (plugins/organs/). forkuniverse
+# needs pydantic + requests; oracle + neikos are stdlib-only. Heavy organs
+# (ftb, atl, moco) are bouncer-installed at the endpoint, not declared here.
+organs = ["pydantic>=2", "requests"]
+dev = ["pytest>=8"]
+packaging = ["pyinstaller>=6"]
+
+[project.scripts]
+oradio = "oradio_engine.__main__:main"
+
+[tool.setuptools]
+# Contract-centric layout, mid-migration: the engine package, the loom (authoring)
+# package, and the still-top-level club/player modules (moving into club/ next).
+packages = ["oradio_engine", "oradio_engine.shims", "loom"]
+py-modules = [
+    "app_paths",
+    "oradio_player", "oradio_player_ui", "oradio_resolver", "oradio_runtime",
+    "oradio_validate", "antenna_resolver", "club_gate", "ribbon_bridge",
+    "signal_heat", "provisioning", "radio_os_theme", "show_the_machine",
+    "sfx_sourcing",
+]

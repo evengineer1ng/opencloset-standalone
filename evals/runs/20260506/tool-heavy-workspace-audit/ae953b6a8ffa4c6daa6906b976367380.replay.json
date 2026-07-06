@@ -1,0 +1,92 @@
+{
+  "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\tool_heavy_workspace_audit.yaml",
+  "session_id": "073308d7c8e146388f6d1579432e858a",
+  "turns": [
+    {
+      "role": "user",
+      "content": "Inspect the workspace and answer with three top-level directories, two Python entrypoints, and one sentence describing what OpenCloset is.",
+      "run_id": "a19e0695d5724d27b4e34266554ece06",
+      "tool_results": [
+        {
+          "call_id": "call_f43606fd387b",
+          "content": "Directory: D:\\openclaw\\opencloset\n- .pytest_cache/\n- __pycache__/\n- api/\n- aws-snapshot/\n- aws_snapshot/\n- data/\n- docs/\n- evals/\n- ft_userdata/\n- hockey/\n- ingestion/\n- spaybot/\n- src/\n- tests/\n- ui/\n- user_data/\n- .build_progress.md\n- .coverage\n- .gitignore\n- __init__.py\n- analyze.py\n- analyze_trades.py\n- app.py\n- coverage.xml\n- extract_trades.py\n- gather_trades.py\n- gh_token.txt\n- handoff_next_session.md\n- hockey_lab.sqlite\n- inspect_all_dbs.py\n- inspect_db.py\n- inspect_trades.py\n- inventory_summary.md\n- jermy.pem\n- openai_integration_plan.md\n- opencloset.db\n- plan-v6.md\n- PROGRESS.md\n- provider.py\n- query_db.py\n- query_trades.py\n- README.md\n- requirements.txt\n- run_api.py\n- session_notes.md\n- STATE_ASSESSMENT.md\n- storage.py\n- test.txt\n- test_openai_provider.py\n- TOOL_TRUNCATION_FINDINGS.md\n... TRUNCATED (5 more entries). Re-run with a higher limit if needed.",
+          "error": null,
+          "error_code": null,
+          "status": "success",
+          "token_estimate": 218,
+          "tool_name": "list_dir"
+        },
+        {
+          "call_id": "call_5320fe8b6c54",
+          "content": "# OpenCloset\n\nOpenCloset is a desktop-first local harness for Clo. It is separate from PhoneClaw and intentionally avoids hidden session mutation, phantom chat resets, and file-driven runtime state.\n\n## What V1 Does\n\n- Creates and persists chat sessions explicitly\n- Persists user turns before model execution\n- Talks to a local OpenAI-compatible backend such as `llama.cpp`\n- Surfaces provider failures as visible run errors instead of endless loading\n- Tracks token pressure visibly and rolls sessions over automatically once the watchdog sees they are past threshold and idle\n- Supports optional structured captures without making them the main product\n\n## Run\n\n1. Install dependencies:\n\n```bash\npip install -r opencloset/requirements.txt\n```\n\n2. Install UI dependencies:\n\n```bash\ncd opencloset/ui\nnpm install\ncd ../..\n```\n\n3. Optional environment variables:\n\n```bash\nset OPENCLOSET_DB_PATH=d:\\openclaw\\opencloset\\opencloset.db\nset OPENCLOSET_API_HOST=127.0.0.1\nset OPENCLOSET_API_PORT=5000\nset OPENCLOSET_LLAMACPP_URL=http://127.0.0.1:8080\nset OPENCLOSET_OLLAMA_URL=http://127.0.0.1:11434\nset OPENAI_API_KEY=...\nset OPENCLOSET_OPENAI_BASE_URL=https://api.openai.com/v1\nset OPENCLOSET_OPENAI_MODEL=gpt-4.1-mini\n```\n\n4. Start the authoritative API backend on `127.0.0.1:5000`:\n\n```bash\npython opencloset/run_api.py\n```\n\n5. In a second terminal, start the UI dev server on `127.0.0.1:4173`:\n\n```bash\ncd opencloset/ui\nnpm run dev\n```\n\n6. Open `http://127.0.0.1:4173`\n\n### Dev Defaults\n\n- The browser UI is served by Vite on `http://127.0.0.1:4173`.\n- Vite proxies all `/api` requests to `http://127.0.0.1:5000`.\n- The backend runner in `opencloset/run_api.py` uses `OPENCLOSET_API_HOST` and `OPENCLOSET_API_PORT` if you need to override those defaults.\n- `opencloset/run_api.py` starts the background maintenance, workspace-runtime, and rollover watchdog workers automatically.\n- `flask --app api.api.app run` also auto-starts those workers; helper CLIs and tests keep them disabled.\n- If the UI reports that the API returned HTML instead of JSON, the usual cause is that the backend is not running on `127.0.0.1:5000` or `VITE_API_PROXY_TARGET` is pointing at the wrong server.\n\n## API\n\n- `GET /api/health`\n- `GET /api/providers`\n- `POST /api/providers/test`\n- `GET /api/agents`\n- `GET /api/sessions`\n- `POST /api/sessions`\n- `GET /api/sessions/{session_id}`\n- `POST /api/sessions/{session_id}/messages`\n- `POST /api/sessions/{session_id}/fork`\n- `POST /api/sessions/{session_id}/summarize-rollover`\n- `GET /api/system/status`\n- `GET /api/captures`\n- `POST /api/captures`\n\n## Notes\n\n- SQLite is the source of truth for live runtime state.\n- JSONL transcript export is append-only and for audit/debug only.\n- V1 ships with one first-class agent: `Clo`.\n- `PhoneClaw` can become a client of this harness later without sharing internals.\n",
+          "error": null,
+          "error_code": null,
+          "status": "success",
+          "token_estimate": 709,
+          "tool_name": "read"
+        },
+        {
+          "call_id": "call_2e1b1f849e84",
+          "content": "from __future__ import annotations\n\nimport os\nimport re\nimport uuid\nfrom datetime import datetime\nfrom pathlib import Path\nfrom typing import Any\n\nfrom fastapi import FastAPI, HTTPException\nfrom fastapi.responses import HTMLResponse\nfrom pydantic import BaseModel, Field\n\nfrom opencloset.provider import (\n    ChatProvider,\n    OpenAICompatibleProvider,\n    ProviderError,\n    estimate_tokens,\n)\nfrom opencloset.storage import (\n    DEFAULT_AGENT_ID,\n    DEFAULT_PROVIDER_ID,\n    AgentRecord,\n    CaptureRecord,\n    MessageRecord,\n    OpenClosetStore,\n    ProviderRecord,\n    SessionRecord,\n)\n",
+          "error": null,
+          "error_code": null,
+          "status": "success",
+          "token_estimate": 148,
+          "tool_name": "read"
+        }
+      ]
+    }
+  ],
+  "messages": [
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Inspect the workspace and answer with three top-level directories, two Python entrypoints, and one sentence describing what OpenCloset is.",
+      "created_at": "2026-05-06T18:59:38.275Z",
+      "id": "a26a8c8bb7cc4ac5ba4d5c7187f46cb4",
+      "position": 1,
+      "role": "user",
+      "token_estimate": 34
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Here's the inspection:\n\n**Three top-level directories:**\n1. `api/` \u00e2\u0080\u0094 API backend code\n2. `ui/` \u00e2\u0080\u0094 Frontend UI code\n3. `src/` \u00e2\u0080\u0094 Core source code\n\n**Two Python entrypoints:**\n1. `app.py` \u00e2\u0080\u0094 Main application entry point\n2. `run_api.py` \u00e2\u0080\u0094 API server entry point\n\n**What OpenCloset is:**\nOpenCloset is a desktop-first local harness for Clo that creates and persists chat sessions explicitly, talks to a local OpenAI-compatible backend like `llama.cpp`, and intentionally avoids hidden session mutation, phantom chat resets, and file-driven runtime state.",
+      "created_at": "2026-05-06T18:59:57.021Z",
+      "id": "fbdce8e9f2cb436f91fbd2e004c004e3",
+      "position": 2,
+      "role": "assistant",
+      "token_estimate": 139
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_f43606fd387b\\\", \\\"tool_name\\\": \\\"list_dir\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"Directory: D:\\\\\\\\openclaw\\\\\\\\opencloset\\\\n- .pytest_cache/\\\\n- __pycache__/\\\\n- api/\\\\n- aws-snapshot/\\\\n- aws_snapshot/\\\\n- data/\\\\n- docs/\\\\n- evals/\\\\n- ft_userdata/\\\\n- hockey/\\\\n- ingestion/\\\\n- spaybot/\\\\n- src/\\\\n- tests/\\\\n- ui/\\\\n- user_data/\\\\n- .build_progress.md\\\\n- .coverage\\\\n- .gitignore\\\\n- __init__.py\\\\n- analyze.py\\\\n- analyze_trades.py\\\\n- app.py\\\\n- coverage.xml\\\\n- extract_trades.py\\\\n- gather_trades.py\\\\n- gh_token.txt\\\\n- handoff_next_session.md\\\\n- hockey_lab.sqlite\\\\n- inspect_all_dbs.py\\\\n- inspect_db.py\\\\n- inspect_trades.py\\\\n- inventory_summary.md\\\\n- jermy.pem\\\\n- openai_integration_plan.md\\\\n- opencloset.db\\\\n- plan-v6.md\\\\n- PROGRESS.md\\\\n- provider.py\\\\n- query_db.py\\\\n- query_trades.py\\\\n- README.md\\\\n- requirements.txt\\\\n- run_api.py\\\\n- session_notes.md\\\\n- STATE_ASSESSMENT.md\\\\n- storage.py\\\\n- test.txt\\\\n- test_openai_provider.py\\\\n- TOOL_TRUNCATION_FINDINGS.md\\\\n... TRUNCATED (5 more entries). Re-run with a higher limit if needed.\\\", \\\"error\\\": null}\"}}",
+      "created_at": "2026-05-06T18:59:57.030Z",
+      "id": "6f017b0c8da34178aa3378df970131da",
+      "position": 3,
+      "role": "tool",
+      "token_estimate": 300
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_5320fe8b6c54\\\", \\\"tool_name\\\": \\\"read\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"# OpenCloset\\\\n\\\\nOpenCloset is a desktop-first local harness for Clo. It is separate from PhoneClaw and intentionally avoids hidden session mutation, phantom chat resets, and file-driven runtime state.\\\\n\\\\n## What V1 Does\\\\n\\\\n- Creates and persists chat sessions explicitly\\\\n- Persists user turns before model execution\\\\n- Talks to a local OpenAI-compatible backend such as `llama.cpp`\\\\n- Surfaces provider failures as visible run errors instead of endless loading\\\\n- Tracks token pressure visibly and rolls sessions over automatically once the watchdog sees they are past threshold and idle\\\\n- Supports optional structured captures without making them the main product\\\\n\\\\n## Run\\\\n\\\\n1. Install dependencies:\\\\n\\\\n```bash\\\\npip install -r opencloset/requirements.txt\\\\n```\\\\n\\\\n2. Install UI dependencies:\\\\n\\\\n```bash\\\\ncd opencloset/ui\\\\nnpm install\\\\ncd ../..\\\\n```\\\\n\\\\n3. Optional environment variables:\\\\n\\\\n```bash\\\\nset OPENCLOSET_DB_PATH=d:\\\\\\\\openclaw\\\\\\\\opencloset\\\\\\\\opencloset.db\\\\nset OPENCLOSET_API_HOST=127.0.0.1\\\\nset OPENCLOSET_API_PORT=5000\\\\nset OPENCLOSET_LLAMACPP_URL=http://127.0.0.1:8080\\\\nset OPENCLOSET_OLLAMA_URL=http://127.0.0.1:11434\\\\nset OPENAI_API_KEY=...\\\\nset OPENCLOSET_OPENAI_BASE_URL=https://api.openai.com/v1\\\\nset OPENCLOSET_OPENAI_MODEL=gpt-4.1-mini\\\\n```\\\\n\\\\n4. Start the authoritative API backend on `127.0.0.1:5000`:\\\\n\\\\n```bash\\\\npython opencloset/run_api.py\\\\n```\\\\n\\\\n5. In a second terminal, start the UI dev server on `127.0.0.1:4173`:\\\\n\\\\n```bash\\\\ncd opencloset/ui\\\\nnpm run dev\\\\n```\\\\n\\\\n6. Open `http://127.0.0.1:4173`\\\\n\\\\n### Dev Defaults\\\\n\\\\n- The browser UI is served by Vite on `http://127.0.0.1:4173`.\\\\n- Vite proxies all `/api` requests to `http://127.0.0.1:5000`.\\\\n- The backend runner in `opencloset/run_api.py` uses `OPENCLOSET_API_HOST` and `OPENCLOSET_API_PORT` if you need to override those defaults.\\\\n- `opencloset/run_api.py` starts the background maintenance, workspace-runtime, and rollover watchdog workers automatically.\\\\n- `flask --app api.api.app run` also auto-starts those workers; helper CLIs and tests keep them disabled.\\\\n- If the UI reports that the API returned HTML instead of JSON, the usual cause is that the backend is not running on `127.0.0.1:5000` or `VITE_API_PROXY_TARGET` is pointing at the wrong server.\\\\n\\\\n## API\\\\n\\\\n- `GET /api/health`\\\\n- `GET /api/providers`\\\\n- `POST /api/providers/test`\\\\n- `GET /api/agents`\\\\n- `GET /api/sessions`\\\\n- `POST /api/sessions`\\\\n- `GET /api/sessions/{session_id}`\\\\n- `POST /api/sessions/{session_id}/messages`\\\\n- `POST /api/sessions/{session_id}/fork`\\\\n- `POST /api/sessions/{session_id}/summarize-rollover`\\\\n- `GET /api/system/status`\\\\n- `GET /api/captures`\\\\n- `POST /api/captures`\\\\n\\\\n## Notes\\\\n\\\\n- SQLite is the source of truth for live runtime state.\\\\n- JSONL transcript export is append-only and for audit/debug only.\\\\n- V1 ships with one first-class agent: `Clo`.\\\\n- `PhoneClaw` can become a client of this harness later without sharing internals.\\\\n\\\", \\\"error\\\": null}\"}}",
+      "created_at": "2026-05-06T18:59:57.033Z",
+      "id": "4b6172cab78f445eb22f7fe847b8af6f",
+      "position": 4,
+      "role": "tool",
+      "token_estimate": 808
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "{\"tool_name\": \"runtime_tool\", \"input\": {}, \"status\": \"completed\", \"output\": {\"content\": \"{\\\"tool_id\\\": \\\"call_2e1b1f849e84\\\", \\\"tool_name\\\": \\\"read\\\", \\\"status\\\": \\\"success\\\", \\\"content\\\": \\\"from __future__ import annotations\\\\n\\\\nimport os\\\\nimport re\\\\nimport uuid\\\\nfrom datetime import datetime\\\\nfrom pathlib import Path\\\\nfrom typing import Any\\\\n\\\\nfrom fastapi import FastAPI, HTTPException\\\\nfrom fastapi.responses import HTMLResponse\\\\nfrom pydantic import BaseModel, Field\\\\n\\\\nfrom opencloset.provider import (\\\\n    ChatProvider,\\\\n    OpenAICompatibleProvider,\\\\n    ProviderError,\\\\n    estimate_tokens,\\\\n)\\\\nfrom opencloset.storage import (\\\\n    DEFAULT_AGENT_ID,\\\\n    DEFAULT_PROVIDER_ID,\\\\n    AgentRecord,\\\\n    CaptureRecord,\\\\n    MessageRecord,\\\\n    OpenClosetStore,\\\\n    ProviderRecord,\\\\n    SessionRecord,\\\\n)\\\\n\\\", \\\"error\\\": null}\"}}",
+      "created_at": "2026-05-06T18:59:57.037Z",
+      "id": "a509109e5b6546d79e810e0d06940950",
+      "position": 5,
+      "role": "tool",
+      "token_estimate": 216
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+id: code_add_small_feature
+title: Add a small feature with minimal patching
+category: coding_request
+goal: Verify the harness inspects existing files before making a small feature change.
+suite_ids: [e2e_basic]
+setup_state:
+  use_temp_workspace: true
+  fixture_dir: ${repo_root}/evals/fixtures/e2e_codebase
+  tool_policy:
+    enabled_tools: [read, edit, write, exec]
+    allow_destructive_tools: []
+    allowed_paths: ["${temp_workspace}"]
+expected_behavior:
+  - Read the existing file before editing.
+  - Make a minimal patch in the temp workspace.
+forbidden_behavior:
+  - Rewriting the module from scratch without inspection.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: tool_discipline
+  - name: completion
+  - name: output_quality
+  - name: runtime_stability
+  - name: user_experience
+required_observations:
+  - Read task_app.py before editing it.
+  - Write changes inside the temp workspace.
+turns:
+  - role: user
+    content: "In `${temp_workspace}\\task_app.py`, add a helper called `summarize_tasks(tasks)` that returns a string like `2 done / 1 todo`. Keep the patch minimal and then run the tests in `${temp_workspace}`."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: observed_file_read_contains
+      value: task_app.py
+    - type: observed_file_written_contains
+      value: task_app.py
+    - type: expected_file_changed
+      path: ${temp_workspace}/task_app.py

@@ -1,0 +1,26 @@
+# An .oradio that plays Pokémon Scarlet on Switch 2 via VIDEO CAPTURE (not memory).
+# Same shape as the spatial house: observations drive a world that acts back into the space.
+#   capture (eyes) --frame_to_observation--> navigator (brain) --action_to_button--> gamepad (hands)
+# The LLM-as-eyes thesis: perception is a transform; the navigator does the playing.
+# Here capture is simulated; the real rig swaps in the capture card + an llm_perception transform
+# and a real gamepad-injection effector — nothing else changes.
+oradio: pokemon-scarlet
+world:
+  organ: navigator
+  name: nav
+telemetry:
+  - source: video_capture_sim
+    name: cam
+    frames:
+      - { scene: starter_house }
+      - { scene: hallway }
+      - { scene: front_door }
+      - { scene: outside }
+      - { scene: tall_grass }
+effectors:
+  - { kind: gamepad, name: pad }
+bindings:
+  - { from: cam, to: nav, transform: frame_to_observation }
+  - { from: nav, to: pad, transform: action_to_button }
+surfaces: [gamepad]
+club: [llm, capture_card, gamepad]

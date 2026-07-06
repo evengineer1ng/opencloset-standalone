@@ -1,0 +1,32 @@
+id: recommendation_games_vibes
+title: Recommendation should land cleanly
+category: recommendation
+goal: Verify recommendation answers stay contextual and do not sprawl into bonus taxonomies.
+suite_ids: [e2e_basic]
+expected_behavior:
+  - Pick a best recommendation.
+  - Give short decisive reasons.
+  - Stop cleanly unless more breadth is requested.
+forbidden_behavior:
+  - Turning a recommendation into a system-by-system encyclopedia.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: tool_discipline
+  - name: completion
+  - name: output_quality
+  - name: runtime_stability
+  - name: user_experience
+required_observations:
+  - No unnecessary tools.
+turns:
+  - role: user
+    content: "I’m in a Nintendo mood. Treat everything as a blank slate and tell me what single game I should play next, with the short reason, and stop there unless I ask for more."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: final_text_not_contains
+      value: bigger Nintendo pantheon
+    - type: tool_name_not_used
+      value: read

@@ -1,0 +1,31 @@
+id: simple_question
+title: Simple conceptual question without tools
+category: direct_qna
+goal: Verify clear direct answers avoid unnecessary tool use.
+suite_ids: [e2e_basic]
+expected_behavior:
+  - Answer the conceptual question clearly.
+  - Avoid unnecessary tools for a plain knowledge request.
+forbidden_behavior:
+  - Tool use without clear need.
+scoring_rubric:
+  - name: intent_capture
+  - name: context_use
+  - name: tool_discipline
+  - name: completion
+  - name: output_quality
+  - name: runtime_stability
+  - name: user_experience
+required_observations:
+  - No tool calls for a direct conceptual question.
+turns:
+  - role: user
+    content: "In plain English, what does idempotent mean in programming? Keep it to two short paragraphs."
+checks:
+  rules:
+    - type: status_is
+      value: succeeded
+    - type: tool_name_not_used
+      value: read
+    - type: tool_name_not_used
+      value: exec

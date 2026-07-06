@@ -1,0 +1,15 @@
+# A motorsport ladder you tune into. Pure simulation (no external telemetry).
+# The declared lens tames FTB's play-by-play flood WITHOUT touching ftb_game.py.
+oradio: motorsport-ladder
+world:
+  organ: ftb
+  seed: 42
+  ratio: 7            # one clock tick = a sim week
+telemetry: []         # pure sim
+lens:
+  name: ladder
+  ops:
+    - { op: drop_types, types: [audio, outcome] }   # drop pbp micro-frames
+    - { op: cap, n: 20 }                            # keep the 20 loudest beats/tick
+surfaces: [voice, ribbon]
+club: [llm, voices]

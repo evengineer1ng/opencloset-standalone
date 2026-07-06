@@ -1,0 +1,34 @@
+{
+  "scenario_path": "D:\\openclaw\\opencloset\\evals\\scenarios\\architecture_spec_opencloset.yaml",
+  "session_id": "f6266fd8f6164e6b98790d5d5858d045",
+  "turns": [
+    {
+      "role": "user",
+      "content": "Design a local-first eval harness for OpenCloset that tests harness behavior, not just model cleverness. Give me architecture, tradeoffs, and an implementation path.",
+      "run_id": "3b9a3dceea6e40878b6e978f0a2a126c",
+      "tool_results": []
+    }
+  ],
+  "messages": [
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Design a local-first eval harness for OpenCloset that tests harness behavior, not just model cleverness. Give me architecture, tradeoffs, and an implementation path.",
+      "created_at": "2026-05-12T14:03:04.684Z",
+      "id": "6d660cb2352a4274925d7aa445a944e6",
+      "position": 1,
+      "role": "user",
+      "token_estimate": 41
+    },
+    {
+      "archive_ready": false,
+      "archive_state": null,
+      "content": "Hereâs a concrete design for a local-first eval harness that measures *system behavior* rather than model output quality.\n\n---\n\n## Architecture\n\n**Three layers:**\n\n1. **Scenario layer** â deterministic input fixtures that exercise specific harness behaviors (e.g., \"user asks for outfit with missing size data\", \"user requests item that doesn't exist\", \"user gives ambiguous query\"). Each scenario is a JSON file with inputs, expected harness actions, and tolerance windows.\n\n2. **Execution layer** â a runner that feeds scenarios through the actual OpenCloset pipeline (retrieval â prompt construction â model call â response parsing) and captures *intermediate artifacts*: which items were retrieved, what prompt was sent, how the response was parsed, what tool calls were made.\n\n3. **Assertion layer** â checks that focus on harness mechanics:\n   - Did retrieval return the right items given the query?\n   - Was the prompt constructed correctly (no hallucinated fields, correct schema)?\n   - Did response parsing handle edge cases (empty model output, malformed JSON)?\n   - Were tool calls issued with correct arguments?\n   - Did the system fall back gracefully on failure?\n\n**Key principle:** The model's *answer quality* is irrelevant. We're testing whether the harness correctly routes data, constructs prompts, parses responses, and handles errors.\n\n---\n\n## Tradeoffs\n\n| Choice | Option A | Option B | Why A |\n|---|---|---|---|\n| Model dependency | Real model calls | Mock model responses | Mock is faster, deterministic, and isolates harness from model variance. Use real model only for integration smoke tests. |\n| Storage | JSON fixtures | Database | JSON is local-first, versionable, and requires no infrastructure. |\n| Assertions | Custom check functions | Framework (pytest, etc.) | Custom checks keep it lightweight and tied to harness semantics. Can wrap in pytest later if needed. |\n| Reporting | Text summary | Dashboard | Text is sufficient for local-first; can add a transient window for visual reports if the eval suite grows large. |\n| Scenario authoring | Hand-written JSON | Generated from logs | Hand-written ensures intentional coverage. Can later add log-to-scenario conversion. |\n\n**Main risk:** Mocking the model means you don't catch prompt-quality issues that only surface with real model behavior. Mitigation: run a small subset of scenarios against the real model weekly as an integration check.\n\n---\n\n## Implementation Path\n\n### Phase 1: Skeleton (1â2 hours)\n\n1. Create `eval/` directory with:\n   - `scenarios/` â JSON fixtures\n   - `runner.py` â executes a scenario through the pipeline\n   - `assertions.py` â check functions\n   - `main.py` â CLI entry point\n\n2. Define the scenario schema:\n```json\n{\n  \"id\": \"missing_size_data\",\n  \"description\": \"User requests outfit but requested item has no size recorded\",\n  \"input\": {\n    \"query\": \"What can I wear to a casual dinner?\",\n    \"user_profile\": { \"size\": \"M\", \"style\": \"casual\" },\n    \"wardrobe\": [ /* fixture items */ ]\n  },\n  \"expected\": {\n    \"retrieved_items\": [\"item_1\", \"item_3\"],\n    \"prompt_contains\": [\"size field omitted\"],\n    \"parse_succeeds\": true\n  }\n}\n```\n\n3. Build `runner.py` to:\n   - Load a scenario\n   - Call the actual retrieval function (or a test double)\n   - Capture the constructed prompt\n   - Call a mock model (return canned responses)\n   - Capture the parsed response\n   - Return all artifacts for assertion\n\n### Phase 2: Assertions (2â3 hours)\n\nImplement checks in `assertions.py`:\n- `check_retrieval(items, expected_ids)` â did retrieval return the right items?\n- `check_prompt(prompt, expected_substrings)` â does the prompt contain required fields?\n- `check_parse(parsed, should_succeed)` â did parsing handle the model output correctly?\n- `check_tool_calls(calls, expected_calls)` â were tools invoked with correct args?\n- `check_fallback(response, scenario)` â did the system degrade gracefully?\n\n### Phase 3: Scenario Library (ongoing)\n\nWrite 10â15 scenarios covering:\n- **Retrieval edge cases:** empty wardrobe, ambiguous query, conflicting filters\n- **Prompt construction:** missing fields, extra fields, schema violations\n- **Response parsing:** empty output, malformed JSON, unexpected format\n- **Tool use:** correct args, missing args, wrong tool selected\n- **Error handling:** model timeout, retrieval failure, parse failure\n\n### Phase 4: Reporting (1 hour)\n\n`main.py` runs all scenarios, collects pass/fail per assertion, and prints a summary:\n```\nScenario: missing_size_data\n  â retrieval returned expected items\n  â prompt constructed correctly\n  â response parsed successfully\n  â fallback triggered as expected\n\nScenario: empty_wardrobe\n  â retrieval returned empty list\n  â prompt did not include fallback message\n  ...\n```\n\n---\n\n## Why This Tests the Harness, Not the Model\n\n- **Mock model responses** eliminate model variance. The harness is tested with known inputs and known model outputs.\n- **Intermediate artifact capture** lets you verify each stage independently (retrieval, prompt, parse).\n- **Assertions target mechanics** (correct data flow, error handling, schema compliance) not answer quality.\n- **Deterministic fixtures** mean results are reproducible without network calls or API keys.\n\nThis gives you a fast, local, version-controlled test suite that catches harness bugs before they reach users. Want me to scaffold the code?",
+      "created_at": "2026-05-12T14:13:43.109Z",
+      "id": "8462dbaa2c3547c480dfac13ba63fb78",
+      "position": 2,
+      "role": "assistant",
+      "token_estimate": 1356
+    }
+  ]
+}

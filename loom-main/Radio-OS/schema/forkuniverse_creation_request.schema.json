@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "forkuniverse_creation_request.schema.json",
+  "title": "ForkUniverse Creation Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "universe_title",
+    "premise",
+    "setting_kind",
+    "time_period",
+    "story_mode",
+    "world_scale",
+    "starting_population",
+    "seed_mode"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "forkuniverse.creation_request.v1"
+    },
+    "universe_title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "premise": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 4000
+    },
+    "setting_kind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "time_period": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "story_mode": {
+      "type": "string",
+      "enum": ["episodic", "longform", "continuous"]
+    },
+    "world_scale": {
+      "type": "string",
+      "enum": ["micro", "site", "district", "city", "regional"]
+    },
+    "starting_population": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 1000
+    },
+    "seed_mode": {
+      "type": "string",
+      "enum": ["preset", "custom", "random"]
+    },
+    "preset_id": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "custom_seed": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "location_flavor": {
+      "type": "string",
+      "maxLength": 240
+    },
+    "genre_mix": {
+      "$ref": "#/$defs/weight_map"
+    },
+    "tone_mix": {
+      "$ref": "#/$defs/weight_map"
+    },
+    "starting_context": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "operator_insert_mode": {
+      "type": "string",
+      "enum": ["observer", "participant", "hidden_force", "oracle_like"]
+    },
+    "operator_role_hint": {
+      "type": "string",
+      "maxLength": 240
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "violence_ceiling": { "$ref": "#/$defs/unit_float" },
+        "romance_ceiling": { "$ref": "#/$defs/unit_float" },
+        "absurdity_ceiling": { "$ref": "#/$defs/unit_float" },
+        "institutional_density": { "$ref": "#/$defs/unit_float" },
+        "economic_harshness": { "$ref": "#/$defs/unit_float" },
+        "entropy_rate": { "$ref": "#/$defs/unit_float" }
+      }
+    },
+    "time_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "execution_model": {
+          "type": "string",
+          "enum": ["on_demand", "realtime_daemon", "hybrid"]
+        },
+        "preset": {
+          "type": "string",
+          "enum": ["fixed_slow", "fixed_medium", "fixed_fast", "adaptive_light", "adaptive_medium", "adaptive_heavy"]
+        },
+        "world_seconds_per_real_second": {
+          "type": "number",
+          "exclusiveMinimum": 0.0
+        }
+      }
+    }
+  },
+  "$defs": {
+    "unit_float": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "weight_map": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/unit_float"
+      }
+    }
+  }
+}

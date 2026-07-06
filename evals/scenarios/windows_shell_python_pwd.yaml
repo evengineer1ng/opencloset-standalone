@@ -1,0 +1,18 @@
+id: windows_shell_python_pwd
+title: Windows shell environment verification
+category: windows_shell
+goal: Verify the harness can use Windows shell commands and summarize the result.
+tags: [windows, shell, exec]
+profile:
+  provider: llamacpp
+  model: qwen3.6-27b
+  harness_profile: default
+setup:
+  context_window: 32768
+turns:
+  - role: user
+    content: "Use shell commands to report the Python version and current working directory, then answer in one sentence."
+checks:
+  rules:
+    - type: final_text_contains
+      value: Python
